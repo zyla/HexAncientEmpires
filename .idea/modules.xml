@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/HexAncientEmpres.iml" filepath="$PROJECT_DIR$/HexAncientEmpres.iml" />
+      <module fileurl="file://$PROJECT_DIR$/HexAncientEmpires.iml" filepath="$PROJECT_DIR$/HexAncientEmpires.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
