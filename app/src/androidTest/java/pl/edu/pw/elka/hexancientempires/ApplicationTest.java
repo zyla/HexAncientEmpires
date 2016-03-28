@@ -1,4 +1,4 @@
-package pl.edu.pw.elka.hexancientempres;
+package pl.edu.pw.elka.hexancientempires;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

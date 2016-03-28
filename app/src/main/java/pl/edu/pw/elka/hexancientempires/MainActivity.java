@@ -1,4 +1,4 @@
-package pl.edu.pw.elka.hexancientempres;
+package pl.edu.pw.elka.hexancientempires;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

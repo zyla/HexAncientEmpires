@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "pl.edu.pw.elka.hexancientempres"
+        applicationId "pl.edu.pw.elka.hexancientempires"
         minSdkVersion 15
         targetSdkVersion 23
         versionCode 1

@@ -1,4 +1,4 @@
-package pl.edu.pw.elka.hexancientempres;
+package pl.edu.pw.elka.hexancientempires;
 
 import org.junit.Test;
 
