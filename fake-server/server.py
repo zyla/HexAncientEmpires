@@ -1,9 +1,10 @@
 # Based on: https://github.com/karulis/pybluez/blob/master/examples/simple/rfcomm-server.py
 
+import sys
 from bluetooth import *
+import thread
 
 uuid = "3d9ee4b4-f508-11e5-8a8f-b74a5cbde83f"
-# uuid = "fa87c0d0-afac-11de-8a39-0800200c9a66" # BT chat
 
 server_sock=BluetoothSocket( RFCOMM )
 server_sock.bind(("",PORT_ANY))
@@ -18,6 +19,17 @@ advertise_service( server_sock, "SampleServer",
                     )
                    
 print("RFCOMM channel=%d, UUID=%s" % (port, uuid))
+
+client_sock = None
+
+def handle_input():
+    while True:
+        line = sys.stdin.readline()
+        if client_sock:
+            print('< %s' % line)
+            client_sock.send(line)
+
+thread.start_new_thread(handle_input, ())
 
 while True:
 
@@ -34,6 +46,7 @@ while True:
     print("disconnected")
 
     client_sock.close()
+    client_sock = None
 
 server_sock.close()
 print("all done")

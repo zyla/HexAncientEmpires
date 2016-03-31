@@ -60,17 +60,21 @@ public class ConnectActivity extends AppCompatActivity {
         }
     }
 
-    private void startGameWithDevice(BluetoothDevice device) {
+    private void startGameWithDevice(final BluetoothDevice device) {
         bluetoothAdapter.cancelDiscovery();
         setProgressBarIndeterminateVisibility(false);
 
         Intent intent = new Intent(getApplicationContext(), ConnectionService.class);
-        intent.putExtra(BluetoothDevice.EXTRA_DEVICE, device);
 
         boolean bound = bindService(intent, new ServiceConnection() {
             @Override
-            public void onServiceConnected(ComponentName name, IBinder service) {
+            public void onServiceConnected(ComponentName name, IBinder binder) {
                 Log.d("ConnectActivity", "Service connected");
+
+                ConnectionService connection = ((ConnectionService.Binder) binder).getService();
+                connection.connect(device);
+
+                startActivity(new Intent(getApplicationContext(), GameActivity.class));
             }
 
             @Override

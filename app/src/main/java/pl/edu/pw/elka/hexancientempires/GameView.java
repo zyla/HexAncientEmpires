@@ -11,7 +11,7 @@ import android.view.View;
  * Created by zyla on 3/29/16.
  */
 public class GameView extends View {
-    int drawCounter;
+    public String text = "";
 
     public GameView(Context context) {
         super(context);
@@ -24,7 +24,12 @@ public class GameView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         Paint paint = new Paint();
-        paint.setColor(0xff0000);
-        canvas.drawText("LOL" + ++drawCounter, 100, 100, paint);
+        paint.setColor(0xffff0000);
+
+        canvas.drawRect(0, 0, getWidth(), getHeight(), paint);
+
+        paint.setColor(0xff00ff00);
+        paint.setTextSize(30);
+        canvas.drawText(text, 0, 30, paint);
     }
 }
