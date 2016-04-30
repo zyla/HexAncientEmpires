@@ -104,6 +104,22 @@ public class GameView extends View {
         );
     }
 
+    Paint paint = new Paint();
+
+    private final Path tilePath;
+    {
+        float xgap = TILE_SIZE / 4;
+
+        tilePath = new Path();
+        tilePath.moveTo(xgap, 0);
+        tilePath.lineTo(TILE_SIZE - xgap, 0);
+        tilePath.lineTo(TILE_SIZE, TILE_SIZE / 2);
+        tilePath.lineTo(TILE_SIZE - xgap, TILE_SIZE);
+        tilePath.lineTo(xgap, TILE_SIZE);
+        tilePath.lineTo(0, TILE_SIZE / 2);
+        tilePath.lineTo(xgap, 0);
+    }
+
     private void drawTile(Canvas canvas, int mapX, int mapY) {
         float xOffset = TILE_COLUMN_OFFSET * mapX + (mapY & 1) * TILE_ODD_ROW_EXTRA_X_OFFSET;
         float yOffset = TILE_ROW_OFFSET * mapY;
@@ -114,31 +130,18 @@ public class GameView extends View {
 
         numTilesRendered++;
 
-        Paint paint = new Paint();
-
-        float xgap = TILE_SIZE / 4;
-
-        Path path = new Path();
-        path.moveTo(xgap, 0);
-        path.lineTo(TILE_SIZE - xgap, 0);
-        path.lineTo(TILE_SIZE, TILE_SIZE / 2);
-        path.lineTo(TILE_SIZE - xgap, TILE_SIZE);
-        path.lineTo(xgap, TILE_SIZE);
-        path.lineTo(0, TILE_SIZE / 2);
-        path.lineTo(xgap, 0);
-
         canvas.save();
         {
             canvas.translate(xOffset, yOffset);
 
             paint.setColor(0xffffffff);
             paint.setStyle(Paint.Style.FILL);
-            canvas.drawPath(path, paint);
+            canvas.drawPath(tilePath, paint);
 
             paint.setColor(0xff000000);
             paint.setStyle(Paint.Style.STROKE);
             paint.setStrokeWidth(5);
-            canvas.drawPath(path, paint);
+            canvas.drawPath(tilePath, paint);
 
             paint.setStrokeWidth(1);
             paint.setStyle(Paint.Style.FILL);
