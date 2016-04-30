@@ -127,8 +127,6 @@ public class GameView extends View {
         path.lineTo(0, TILE_SIZE / 2);
         path.lineTo(xgap, 0);
 
-        numTilesRendered++;
-
         canvas.save();
         {
             canvas.translate(xOffset, yOffset);
