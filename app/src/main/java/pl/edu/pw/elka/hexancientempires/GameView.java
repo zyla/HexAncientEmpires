@@ -1,5 +1,6 @@
 package pl.edu.pw.elka.hexancientempires;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -9,6 +10,9 @@ import android.graphics.PathEffect;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.DragEvent;
@@ -19,10 +23,10 @@ import android.view.View;
  * Created by zyla on 3/29/16.
  */
 public class GameView extends View {
-    private static final float TILE_SIZE = 256;
-    private static final float TILE_COLUMN_OFFSET = TILE_SIZE * 1.5f;
-    private static final float TILE_ROW_OFFSET = TILE_SIZE / 2;
-    private static final float TILE_ODD_ROW_EXTRA_X_OFFSET = TILE_SIZE * 0.75f;
+    private static final int TILE_SIZE = 200;
+    private static final int TILE_COLUMN_OFFSET = TILE_SIZE * 3 / 2;
+    private static final int TILE_ROW_OFFSET = TILE_SIZE / 2;
+    private static final int TILE_ODD_ROW_EXTRA_X_OFFSET = TILE_SIZE * 3 / 4;
 
     public String text = "";
 
@@ -32,8 +36,13 @@ public class GameView extends View {
     // DEBUG INFO
     private int numTilesRendered;
 
+    private Drawable sprite;
+    private Point spritePos = new Point();
+
     public GameView(Context context) {
         super(context);
+
+        sprite = context.getResources().getDrawable(R.drawable.random);
     }
 
     @Override
@@ -47,6 +56,9 @@ public class GameView extends View {
                 cameraOffset.y += event.getY() - lastTouchDown.y;
                 lastTouchDown.set(event.getX(), event.getY());
                 postInvalidate();
+                return true;
+            case MotionEvent.ACTION_UP:
+                spritePos = tileHitTest((int) event.getX(), (int) event.getY());
                 return true;
         }
         return false;
@@ -71,6 +83,8 @@ public class GameView extends View {
         {
             canvas.translate(cameraOffset.x, cameraOffset.y);
             drawMap(canvas);
+
+            drawSprite(canvas, tileCenter(spritePos.x, spritePos.y));
         }
         canvas.restore();
 
@@ -93,6 +107,15 @@ public class GameView extends View {
                 drawTile(canvas, x, y);
             }
         }
+    }
+
+    private void drawSprite(Canvas canvas, Point center) {
+        final int anchorX = 64 * TILE_SIZE / 139, anchorY = 84 * TILE_SIZE / 139;
+
+        int x = center.x - anchorX, y = center.y - anchorY;
+
+        sprite.setBounds(x, y, x + TILE_SIZE, y + TILE_SIZE);
+        sprite.draw(canvas);
     }
 
     Rect visibleTiles() {
@@ -120,19 +143,36 @@ public class GameView extends View {
         tilePath.lineTo(xgap, 0);
     }
 
-    private void drawTile(Canvas canvas, int mapX, int mapY) {
-        float xOffset = TILE_COLUMN_OFFSET * mapX + (mapY & 1) * TILE_ODD_ROW_EXTRA_X_OFFSET;
-        float yOffset = TILE_ROW_OFFSET * mapY;
+    private Point tileCenter(int mapX, int mapY) {
+        Point pt = tileLocation(mapX, mapY);
+        pt.x += TILE_SIZE / 2;
+        pt.y += TILE_SIZE / 2;
+        return pt;
+    }
 
-        if(xOffset + cameraOffset.x + TILE_SIZE < 0 || xOffset + cameraOffset.x > getWidth()
-                || yOffset + cameraOffset.y + TILE_SIZE < 0 || yOffset + cameraOffset.y > getHeight())
+    private Point tileLocation(int mapX, int mapY) {
+        return new Point(TILE_COLUMN_OFFSET * mapX + (mapY & 1) * TILE_ODD_ROW_EXTRA_X_OFFSET, TILE_ROW_OFFSET * mapY);
+    }
+
+    private Point tileHitTest(int screenX, int screenY) {
+        return new Point(
+                (int) Math.floor((screenX - cameraOffset.x) / TILE_COLUMN_OFFSET),
+                (int) Math.floor((screenY - cameraOffset.y) / TILE_ROW_OFFSET)
+        );
+    }
+
+    private void drawTile(Canvas canvas, int mapX, int mapY) {
+        Point loc = tileLocation(mapX, mapY);
+
+        if(loc.x + cameraOffset.x + TILE_SIZE < 0 || loc.x + cameraOffset.x > getWidth()
+                || loc.y + cameraOffset.y + TILE_SIZE < 0 || loc.y + cameraOffset.y > getHeight())
             return;
 
         numTilesRendered++;
 
         canvas.save();
         {
-            canvas.translate(xOffset, yOffset);
+            canvas.translate(loc.x, loc.y);
 
             paint.setColor(0xffffffff);
             paint.setStyle(Paint.Style.FILL);
