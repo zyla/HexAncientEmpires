@@ -1,0 +1,10 @@
+#1 better coordinate system for tiles?
+#2 design real tiles and a map
+#3 map rendering (dep: #2)
+#4 cache units located in a map tile?
+#5 unit rendering (dep: #3, #4)
+#6 path search
+#7 movement animations
+#8 tile hit test
+#9 smooth camera movement
+#10 basic gameplay (pick unit, pick place, play movement animation) (dep: #5, #6, #7, #8)
