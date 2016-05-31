@@ -147,9 +147,11 @@ public class GameView extends View {
                 || loc.y + cameraOffset.y + TILE_HEIGHT < 0 || loc.y + cameraOffset.y > getHeight())
             return;
 */
+        /*
         //ask Map if File is an element of the mao
         if(Map.getType(mapX,mapY) == Tile.NONE)
           return; //or draw empty tile instead
+          */
         numTilesRendered++;
 
         canvas.save();

@@ -18,7 +18,7 @@ public class GameMap {
         //reading from some file here to make map
         int mapWidth  = 2;
         int mapHeight = 2;
-        tiles = new ArrayList<>(mapWidth * mapHeight);
+        tiles = new ArrayList<>();
         /*and now tiles*/
         for(int i = 0;i < 4; i++)
             tiles.add(new Tile(Tile.GRASS));
