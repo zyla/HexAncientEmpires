@@ -38,7 +38,7 @@ public class GameMap {
     }
 
     public int getType(int mapX, int mapY){
-        if((mapY * mapWidth +  mapX) < 0 || (mapY * mapWidth +  mapX) > (mapWidth* mapHeight)) {
+        if(mapX < 0 || mapY < 0 || mapX >= 2 || mapY >=2 ) {
             return Tile.NONE;
         }
         return tiles.get(mapY * mapWidth +  mapX).type;
