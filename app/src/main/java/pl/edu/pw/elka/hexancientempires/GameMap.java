@@ -11,13 +11,26 @@ import java.util.Vector;
 public class GameMap {
     //TODO we should read file with map
     ArrayList<Tile> tiles;
-    int mapWidth;
-    int mapHeight;
+    int mapWidth = 2;
+    int mapHeight = 2;
 
     public GameMap(){
-        //reading from some file here to make map
-        int mapWidth  = 2;
-        int mapHeight = 2;
+/*
+        String result;
+        try {
+            Resources res = getResources();
+            InputStream in_s = res.openRawResource(R.raw.yourfile);
+
+            byte[] b = new byte[in_s.available()];
+            in_s.read(b);
+            result = new String(b);
+        } catch (Exception e) {
+            // e.printStackTrace();
+            result = "Error: can't show file.";
+        }*/
+        /*int mapWidth  = new int(2);
+        int mapHeight = new int(2);
+        */
         tiles = new ArrayList<>();
         /*and now tiles*/
         for(int i = 0;i < 4; i++)

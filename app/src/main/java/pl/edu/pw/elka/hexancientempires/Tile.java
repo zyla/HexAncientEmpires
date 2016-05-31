@@ -5,12 +5,12 @@ package pl.edu.pw.elka.hexancientempires;
  */
 public class Tile {
     public static final int NONE = 0;
-    public static final int ROAD = 0;
-    public static final int WATER = 0;
-    public static final int MOUNTAIN = 0;
-    public static final int GRASS = 0;
-    public static final int CASTLE = 0;
-    public static final int TREE = 0;
+    public static final int ROAD = 1;
+    public static final int WATER = 2;
+    public static final int MOUNTAIN = 3;
+    public static final int GRASS = 4;
+    public static final int CASTLE = 5;
+    public static final int TREE = 6;
 
 
     /*public enum TileType {
