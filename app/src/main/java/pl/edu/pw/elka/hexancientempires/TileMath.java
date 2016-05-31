@@ -16,13 +16,22 @@ public class TileMath {
     public static final int TILE_SIDE = 64;
     public static final int TILE_WIDTH = TILE_SIDE * 2;
     public static final int TILE_HEIGHT = (int) (TILE_SIDE * 1.73);
+    public static final int MARGIN = 1;
+
+    public static final int TOPSIDE = 0;
+    public static final int TOPRIGHT = 1;
+    public static final int BOTRIGHT = 2;
+    public static final int BOTSIDE = 3;
+    public static final int BOTLEFT = 4;
+    public static final int TOPLEFT = 5;
+
 
     public static Rect visibleTiles(Rect visibleArea) {
         // TODO test _visibleTiles
         Point topLeft = tileHitTest(visibleArea.left, visibleArea.top);
         Point botRight = tileHitTest(visibleArea.right, visibleArea.bottom);
 
-        return new Rect(topLeft.x-1,topLeft.y-1, botRight.x+2, botRight.y+2);
+        return new Rect(topLeft.x-MARGIN,topLeft.y-MARGIN, botRight.x+2*MARGIN , botRight.y+2*MARGIN);
     }
 
     public static Point tileCenter(int mapX, int mapY) {
@@ -33,6 +42,29 @@ public class TileMath {
     public static Point tileLocation(int mapX, int mapY) {
         return new Point(TILE_WIDTH * 3 / 4 * mapX,
                 TILE_HEIGHT * mapY + (mapX & 1) * TILE_HEIGHT / 2);
+    }
+
+    public static Point neighbour(int mapX, int mapY, int side) {
+        // TODO use it in A*
+        int even = 0; //crazy optimization from ARKO
+        if(mapX % 2 == 0) {
+            even = 1;
+        }
+        switch(side) {
+            case TOPSIDE:
+                return new Point(mapX , mapY - 1);
+            case TOPRIGHT:
+                return new Point(mapX + 1 , mapY - even);
+            case BOTRIGHT:
+                return new Point(mapX + 1 , mapY + 1 - even );
+            case BOTSIDE:
+                return new Point(mapX , mapY + 1);
+            case BOTLEFT:
+                return new Point(mapX - 1 , mapY + 1 - even );
+            case TOPLEFT:
+                return new Point(mapX - 1 , mapY - even );
+        }
+        return new Point(0,0); //should throw exception or something
     }
 
     public static Point tileHitTest(int x, int y) {

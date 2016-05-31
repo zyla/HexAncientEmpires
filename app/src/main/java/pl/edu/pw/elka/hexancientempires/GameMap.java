@@ -11,8 +11,8 @@ import java.util.Vector;
 public class GameMap {
     //TODO we should read file with map
     ArrayList<Tile> tiles;
-    int mapWidth = 2;
-    int mapHeight = 2;
+    int mapWidth = 10;
+    int mapHeight = 10;
 
     public GameMap(){
 /*
@@ -33,12 +33,12 @@ public class GameMap {
         */
         tiles = new ArrayList<>();
         /*and now tiles*/
-        for(int i = 0;i < 4; i++)
+        for(int i = 0;i < mapHeight * mapWidth; i++)
             tiles.add(new Tile(Tile.GRASS));
     }
 
     public int getType(int mapX, int mapY){
-        if(mapX < 0 || mapY < 0 || mapX >= 2 || mapY >=2 ) {
+        if(mapX < 0 || mapY < 0 || mapX >= mapWidth || mapY >=mapHeight ) {
             return Tile.NONE;
         }
         return tiles.get(mapY * mapWidth +  mapX).type;
