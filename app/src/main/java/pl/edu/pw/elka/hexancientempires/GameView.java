@@ -29,6 +29,7 @@ public class GameView extends View {
     private PointF cameraOffset = new PointF();
     private PointF lastTouchDown = new PointF();
 
+    private GameMap Map = new GameMap();
     // DEBUG INFO
     private int numTilesRendered;
 
@@ -141,11 +142,14 @@ public class GameView extends View {
 
     private void drawTile(Canvas canvas, int mapX, int mapY) {
         Point loc = TileMath.tileLocation(mapX, mapY);
-
+/* no need to check every tile
         if(loc.x + cameraOffset.x + TILE_WIDTH < 0 || loc.x + cameraOffset.x > getWidth()
                 || loc.y + cameraOffset.y + TILE_HEIGHT < 0 || loc.y + cameraOffset.y > getHeight())
             return;
-
+*/
+        //ask Map if File is an element of the mao
+        if(Map.getType(mapX,mapY) == Tile.NONE)
+          return; //or draw empty tile instead
         numTilesRendered++;
 
         canvas.save();
