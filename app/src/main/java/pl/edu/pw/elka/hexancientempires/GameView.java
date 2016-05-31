@@ -39,7 +39,7 @@ public class GameView extends View {
     public GameView(Context context) {
         super(context);
 
-        sprite = context.getResources().getDrawable(R.drawable.random);
+        sprite = context.getResources().getDrawable(R.drawable.cursor);
     }
 
     @Override
