@@ -19,6 +19,8 @@ public class TileMath {
 
     public static Rect visibleTiles(Rect visibleArea) {
         // TODO broken
+        int topLeftTile = 
+
         return new Rect(-10, -10, 10, 10);
     }
 
@@ -33,7 +35,32 @@ public class TileMath {
     }
 
     public static Point tileHitTest(int x, int y) {
-        // TODO broken
-        return new Point(0, 0);
+        // TODO broken trying to fix
+        //source http://stackoverflow.com/questions/7705228/hexagonal-grids-how-do-you-find-which-hexagon-a-point-is-in
+        int col =  x / (TILE_WIDTH*3/4);
+        int row =  (y - (col & 1)* TILE_HEIGHT/2) / TILE_HEIGHT;
+
+        int relX = x - (col * (TILE_WIDTH*3/4));
+        int relY = y - row * TILE_HEIGHT - (col & 1) * (TILE_HEIGHT / 2);
+
+        // y = a * x + b;
+        double b =TILE_HEIGHT / 2;
+        double a = -2 * TILE_HEIGHT / TILE_WIDTH;
+        // double a2 =  2 * TILE_HEIGHT / TILE_WIDTH; //== -a
+        // Work out if the point is on left side either of the hexagon's left edges
+        if (relY < (a * relX) + b) // top left edge
+        {
+            if (col % 2 == 0)
+                row--;
+            col--;
+        }
+        else if (relY > ( -a * relX) - b) // bottom left edge
+        {
+            if (col % 2 != 0)
+                row++;
+            col--;
+        }
+
+        return new Point(col,row);
     }
 }
