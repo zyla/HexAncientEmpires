@@ -19,7 +19,7 @@ public class TileMath {
 
     public static Rect visibleTiles(Rect visibleArea) {
         // TODO broken
-        int topLeftTile = 
+       // int topLeftTile =
 
         return new Rect(-10, -10, 10, 10);
     }
@@ -54,7 +54,7 @@ public class TileMath {
                 row--;
             col--;
         }
-        else if (relY > ( -a * relX) - b) // bottom left edge
+        else if (relY > ( -a * relX) + b) // bottom left edge
         {
             if (col % 2 != 0)
                 row++;
