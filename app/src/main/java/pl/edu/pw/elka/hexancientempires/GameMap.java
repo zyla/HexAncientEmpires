@@ -1,6 +1,8 @@
 package pl.edu.pw.elka.hexancientempires;
 
 import java.util.ArrayList;
+import java.util.Objects;
+
 /**
  * Class that represents board
  * Created by tomek on 29.04.16.
@@ -31,7 +33,7 @@ public class GameMap {
         mapWidth  = 10;//Integer.parseInt(tokens[0]);
         mapHeight = 10;// Integer.parseInt(tokens[1]);
 
-        tiles = new ArrayList<>();
+        tiles = new ArrayList<>( mapHeight * mapWidth );
         for (int i = 2; i < (mapHeight * mapWidth + 2); i++) {
             switch (tokens[i]) {
                 case "c": tiles.add(new Tile(Tile.CASTLE));

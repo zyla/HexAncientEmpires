@@ -17,6 +17,8 @@ import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.ArrayList;
+
 import static pl.edu.pw.elka.hexancientempires.TileMath.TILE_WIDTH;
 import static pl.edu.pw.elka.hexancientempires.TileMath.TILE_HEIGHT;
 
@@ -30,6 +32,8 @@ public class GameView extends View {
     private PointF lastTouchDown = new PointF();
 
     private GameMap Map = new GameMap();
+    private ArrayList<Drawable> terrain;
+
     // DEBUG INFO
     private int numTilesRendered;
 
@@ -38,6 +42,13 @@ public class GameView extends View {
 
     public GameView(Context context) {
         super(context);
+        terrain = new ArrayList<>(6);
+        terrain.add(context.getResources().getDrawable(R.drawable.c));
+        terrain.add(context.getResources().getDrawable(R.drawable.g));
+        terrain.add(context.getResources().getDrawable(R.drawable.m));
+        terrain.add(context.getResources().getDrawable(R.drawable.r));
+        terrain.add(context.getResources().getDrawable(R.drawable.t));
+        terrain.add(context.getResources().getDrawable(R.drawable.w));
 
         sprite = context.getResources().getDrawable(R.drawable.cursor);
     }
@@ -156,6 +167,11 @@ public class GameView extends View {
         canvas.save();
         {
             canvas.translate(loc.x, loc.y);
+
+            //final int anchorX = , anchorY = 84;
+            //int x = center.x - anchorX, y = center.y - anchorY;
+            sprite.setBounds(loc.x, loc.y,loc.x + TILE_WIDTH, loc.y + TILE_HEIGHT);
+            terrain.get(type - 1).draw(canvas);
 
             paint.setColor(0xffffffff);
             paint.setStyle(Paint.Style.FILL);
