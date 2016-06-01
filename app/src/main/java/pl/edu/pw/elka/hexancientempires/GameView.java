@@ -25,6 +25,7 @@ public class GameView extends View {
 
     private GameMap Map = new GameMap();
     private ArrayList<Drawable> terrain;
+    private ArrayList<Drawable> units;
 
     // DEBUG INFO
     private int numTilesRendered;
@@ -42,11 +43,16 @@ public class GameView extends View {
         terrain.add(context.getResources().getDrawable(R.drawable.t));
         terrain.add(context.getResources().getDrawable(R.drawable.w));
 
-        cursor = context.getResources().getDrawable(R.drawable.cursor);
-
         for(int i = 0 ; i < terrain.size(); i++) {
             terrain.get(i).setBounds(0, 0, TILE_WIDTH, TILE_HEIGHT);
         }
+
+        units = new ArrayList<>(3);
+        units.add(context.getResources().getDrawable(R.drawable.units1));
+        units.add(context.getResources().getDrawable(R.drawable.units2));
+        units.add(context.getResources().getDrawable(R.drawable.units3));
+
+        cursor = context.getResources().getDrawable(R.drawable.cursor);
     }
 
     @Override
@@ -149,13 +155,13 @@ public class GameView extends View {
 
     private void drawTile(Canvas canvas, int mapX, int mapY) {
         Point loc = TileMath.tileLocation(mapX, mapY);
-        int type = Map.getType(mapX,mapY);
+        Tile tile = Map.getTile(mapX,mapY);
 /* no need to check every tile
         if(loc.x + cameraOffset.x + TILE_WIDTH < 0 || loc.x + cameraOffset.x > getWidth()
                 || loc.y + cameraOffset.y + TILE_HEIGHT < 0 || loc.y + cameraOffset.y > getHeight())
             return;*/
         //ask Map if File is an element of the map
-        if(type == Tile.NONE)
+        if(tile.type == Tile.NONE)
           return; //or draw empty tile instead
 
         numTilesRendered++;
@@ -163,24 +169,29 @@ public class GameView extends View {
         canvas.save();
         {
             canvas.translate(loc.x, loc.y);
-/*
-            paint.setColor(0xffffffff);
+/*          paint.setColor(0xffffffff);
             paint.setStyle(Paint.Style.FILL);
-            canvas.drawPath(tilePath, paint);
-*/
+            canvas.drawPath(tilePath, paint); */
+
             paint.setColor(0xff000000);
             paint.setStyle(Paint.Style.STROKE);
             paint.setStrokeWidth(5);
             canvas.drawPath(tilePath, paint);
 
-            terrain.get(type - 1).draw(canvas);
+            terrain.get(tile.type - 1).draw(canvas);
+            if(tile.unit != null) {
+                //TODO this thing
+            //    units.get(tile.unit.playerID).setBounds(
+             //           tile.unit.type * 128, 0, tile.unit.type * 128 + 128, 128);
+                units.get(tile.unit.playerID).draw(canvas);
+            }
 
             paint.setStrokeWidth(1);
             paint.setStyle(Paint.Style.FILL);
             paint.setTextSize(32);
             paint.setTextAlign(Paint.Align.CENTER);
 
-            canvas.drawText(String.format("(%d,%d,%d)", mapX, mapY,type), TILE_WIDTH / 2, TILE_HEIGHT / 2, paint);
+            canvas.drawText(String.format("(%d,%d,%d)", mapX, mapY,tile.type), TILE_WIDTH / 2, TILE_HEIGHT / 2, paint);
         }
         canvas.restore();
     }

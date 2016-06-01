@@ -19,9 +19,13 @@ public class Tile {
     }//none is added to make holes is the map idk If useful
     */
     public int type;
+    public Unit unit;
 
     public Tile(int type) {
         this.type = type;
+    }
+    public Tile(Tile t) {
+        this.type = t.type;
     }
 
 }

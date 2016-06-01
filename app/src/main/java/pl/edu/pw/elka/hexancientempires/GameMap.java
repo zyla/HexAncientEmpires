@@ -53,12 +53,13 @@ public class GameMap {
                     break;
             }
         }
+        tiles.get(1).unit = new Unit(0,0);
     }
 
-    public int getType(int mapX, int mapY){
+    public Tile getTile(int mapX, int mapY){
         if(mapX < 0 || mapY < 0 || mapX >= mapWidth || mapY >=mapHeight ) {
-            return Tile.NONE;
+            return new Tile(Tile.NONE);
         }
-        return tiles.get(mapY * mapWidth +  mapX).type;
+        return new Tile (tiles.get(mapY * mapWidth +  mapX));
     }
 }
