@@ -1,19 +1,11 @@
 package pl.edu.pw.elka.hexancientempires;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.PathEffect;
 import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
-import android.os.Build;
-import android.util.AttributeSet;
-import android.util.Log;
-import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -37,7 +29,7 @@ public class GameView extends View {
     // DEBUG INFO
     private int numTilesRendered;
 
-    private Drawable sprite;
+    private Drawable cursor;
     private Point spritePos = new Point(0, 0);
 
     public GameView(Context context) {
@@ -50,7 +42,7 @@ public class GameView extends View {
         terrain.add(context.getResources().getDrawable(R.drawable.t));
         terrain.add(context.getResources().getDrawable(R.drawable.w));
 
-        sprite = context.getResources().getDrawable(R.drawable.cursor);
+        cursor = context.getResources().getDrawable(R.drawable.cursor);
     }
 
     @Override
@@ -92,7 +84,7 @@ public class GameView extends View {
             canvas.translate(cameraOffset.x, cameraOffset.y);
             drawMap(canvas);
 
-            drawSprite(canvas, TileMath.tileCenter(spritePos.x, spritePos.y));
+            drawCursor(canvas, TileMath.tileCenter(spritePos.x, spritePos.y));
         }
         canvas.restore();
 
@@ -126,12 +118,18 @@ public class GameView extends View {
         }
     }
 
-    private void drawSprite(Canvas canvas, Point center) {
+    private void drawCursor(Canvas canvas, Point center) {
         final int anchorX = 64, anchorY = 84;
 
         int x = center.x - anchorX, y = center.y - anchorY;
 
-        sprite.setBounds(x, y, x + 139, y + 139);
+        cursor.setBounds(x, y, x + 139, y + 139);
+        cursor.draw(canvas);
+    }
+
+    private void drawSprite(Canvas canvas, Point loc,Drawable sprite) {
+
+        sprite.setBounds(loc.x, loc.y, loc.x + TILE_WIDTH, loc.y + TILE_HEIGHT);
         sprite.draw(canvas);
     }
 
@@ -167,25 +165,23 @@ public class GameView extends View {
         canvas.save();
         {
             canvas.translate(loc.x, loc.y);
-
-            //final int anchorX = , anchorY = 84;
-            //int x = center.x - anchorX, y = center.y - anchorY;
-            sprite.setBounds(loc.x, loc.y,loc.x + TILE_WIDTH, loc.y + TILE_HEIGHT);
-            terrain.get(type - 1).draw(canvas);
-
+/*
             paint.setColor(0xffffffff);
             paint.setStyle(Paint.Style.FILL);
             canvas.drawPath(tilePath, paint);
-
+*/
             paint.setColor(0xff000000);
             paint.setStyle(Paint.Style.STROKE);
             paint.setStrokeWidth(5);
             canvas.drawPath(tilePath, paint);
 
+            drawSprite(canvas,loc,terrain.get(type - 1));
+
             paint.setStrokeWidth(1);
             paint.setStyle(Paint.Style.FILL);
             paint.setTextSize(32);
             paint.setTextAlign(Paint.Align.CENTER);
+
             canvas.drawText(String.format("(%d,%d,%d)", mapX, mapY,type), TILE_WIDTH / 2, TILE_HEIGHT / 2, paint);
         }
         canvas.restore();
