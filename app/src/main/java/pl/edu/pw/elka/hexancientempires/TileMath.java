@@ -69,17 +69,16 @@ public class TileMath {
 
     public static Point tileHitTest(int x, int y) {
         // TODO test _tileHitTest
-        int col =  x / (TILE_WIDTH*3/4);
-        int row =  (y - (col & 1)* TILE_HEIGHT/2) / TILE_HEIGHT;
-
+        int col = x / (TILE_WIDTH*3/4);
+        int row = (y - (col & 1)* TILE_HEIGHT/2) / TILE_HEIGHT;
+       // +((y>=0)?1:-1)*
         int relX = x - (col * (TILE_WIDTH*3/4));
         int relY = y - row * TILE_HEIGHT - (col & 1) * (TILE_HEIGHT / 2);
 
         // y = a * x + b;
         double b = TILE_HEIGHT / 2;
         double a = -2 * TILE_HEIGHT / TILE_WIDTH;
-        // double a2 =  2 * TILE_HEIGHT / TILE_WIDTH; //== -a
-        // Work out if the point is on left side either of the hexagon's left edges
+        // double a2 =  2 * TILE_HEIGHT / TILE_WIDTH; //== -a // Work out if the point is on left side either of the hexagon's left edges
         if (relY < (a * relX) + b) // top left edge
         {
             if (col % 2 == 0)

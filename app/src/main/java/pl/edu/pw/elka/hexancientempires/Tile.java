@@ -18,7 +18,6 @@ public class Tile {
 
     }//none is added to make holes is the map idk If useful
     */
-
     public int type;
 
     public Tile(int type) {

@@ -31,8 +31,8 @@ public class GameMap {
         String separators = "[ ]+";
         String[] tokens = savedmap.split(separators);
 
-        mapWidth  = 10;//Integer.parseInt(tokens[0]);
-        mapHeight = 10;// Integer.parseInt(tokens[1]);
+        mapWidth  = Integer.parseInt(tokens[0]);
+        mapHeight = Integer.parseInt(tokens[1]);
 
         tiles = new ArrayList<>( mapHeight * mapWidth );
         for (int i = 2; i < (mapHeight * mapWidth + 2); i++) {
