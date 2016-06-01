@@ -31,7 +31,7 @@ public class TileMath {
         Point topLeft = tileHitTest(visibleArea.left, visibleArea.top);
         Point botRight = tileHitTest(visibleArea.right, visibleArea.bottom);
 
-        return new Rect(topLeft.x-MARGIN,topLeft.y-MARGIN, botRight.x+2*MARGIN , botRight.y+2*MARGIN);
+        return new Rect(topLeft.x-MARGIN,topLeft.y-MARGIN, botRight.x+MARGIN , botRight.y+MARGIN);
     }
 
     public static Point tileCenter(int mapX, int mapY) {

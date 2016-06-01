@@ -108,8 +108,8 @@ public class GameView extends View {
 
     private void drawMap(Canvas canvas) {
         Rect visibleTiles = TileMath.visibleTiles(visibleArea());
-        for(int x = visibleTiles.left; x < visibleTiles.right; x++) {
-            for(int y = visibleTiles.top; y < visibleTiles.bottom; y++) {
+        for(int x = visibleTiles.left; x <= visibleTiles.right; x++) {
+            for(int y = visibleTiles.top; y <= visibleTiles.bottom; y++) {
                 drawTile(canvas, x, y);
             }
         }
