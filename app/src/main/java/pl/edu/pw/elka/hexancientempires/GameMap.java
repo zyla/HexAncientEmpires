@@ -1,40 +1,55 @@
 package pl.edu.pw.elka.hexancientempires;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Vector;
 /**
  * Class that represents board
  * Created by tomek on 29.04.16.
  * I have no idea what I am doing lol
  */
 public class GameMap {
-    //TODO we should read file with map
     ArrayList<Tile> tiles;
-    int mapWidth = 10;
-    int mapHeight = 10;
+    int mapWidth ;
+    int mapHeight ;
+    private static final String savedmap = "10 10" +
+            " g g g g g g g g g g" +
+            " g g g g g g g g g g" +
+            " g g g g g g g g g g" +
+            " g g g g g g g g g g" +
+            " g g g g g g g g g g" +
+            " g g g g g g g g g g" +
+            " g g g g g g g g g g" +
+            " g g g g g g g g g g" +
+            " g g g g g g g g g g" +
+            " g g g g g g g g g g";
 
+    /*context.getResources().getString(R.string.map1);
+*/
     public GameMap(){
-/*
-        String result;
-        try {
-            Resources res = getResources();
-            InputStream in_s = res.openRawResource(R.raw.yourfile);
+        String separators = "[ ]+";
+        String[] tokens = savedmap.split(separators);
 
-            byte[] b = new byte[in_s.available()];
-            in_s.read(b);
-            result = new String(b);
-        } catch (Exception e) {
-            // e.printStackTrace();
-            result = "Error: can't show file.";
-        }*/
-        /*int mapWidth  = new int(2);
-        int mapHeight = new int(2);
-        */
+        mapWidth  = Integer.parseInt(tokens[0]);
+        mapHeight = Integer.parseInt(tokens[1]);
+
         tiles = new ArrayList<>();
-        /*and now tiles*/
-        for(int i = 0;i < mapHeight * mapWidth; i++)
-            tiles.add(new Tile(Tile.GRASS));
+        for (int i = 2; i < (mapHeight * mapWidth); i++) {
+            switch (tokens[i]) {
+                case "c": tiles.add(new Tile(Tile.CASTLE));
+                    break;
+                case "g": tiles.add(new Tile(Tile.GRASS));
+                    break;
+                case "m": tiles.add(new Tile(Tile.MOUNTAIN));
+                    break;
+                case "r": tiles.add(new Tile(Tile.ROAD));
+                    break;
+                case "t": tiles.add(new Tile(Tile.TREE));
+                    break;
+                case "w": tiles.add(new Tile(Tile.WATER));
+                    break;
+                default: tiles.add(new Tile(Tile.NONE));
+                    break;
+            }
+        }
     }
 
     public int getType(int mapX, int mapY){

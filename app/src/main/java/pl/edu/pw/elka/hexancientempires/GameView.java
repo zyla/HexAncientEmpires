@@ -142,13 +142,13 @@ public class GameView extends View {
 
     private void drawTile(Canvas canvas, int mapX, int mapY) {
         Point loc = TileMath.tileLocation(mapX, mapY);
+        int type = Map.getType(mapX,mapY);
 /* no need to check every tile
         if(loc.x + cameraOffset.x + TILE_WIDTH < 0 || loc.x + cameraOffset.x > getWidth()
                 || loc.y + cameraOffset.y + TILE_HEIGHT < 0 || loc.y + cameraOffset.y > getHeight())
-            return;
-*/
-        //ask Map if File is an element of the mao
-        if(Map.getType(mapX,mapY) == Tile.NONE)
+            return;*/
+        //ask Map if File is an element of the map
+        if(type == Tile.NONE)
           return; //or draw empty tile instead
 
         numTilesRendered++;
@@ -170,7 +170,7 @@ public class GameView extends View {
             paint.setStyle(Paint.Style.FILL);
             paint.setTextSize(32);
             paint.setTextAlign(Paint.Align.CENTER);
-            canvas.drawText(String.format("(%d, %d)", mapX, mapY), TILE_WIDTH / 2, TILE_HEIGHT / 2, paint);
+            canvas.drawText(String.format("(%d, %d, %d)", mapX, mapY,type), TILE_WIDTH / 2, TILE_HEIGHT / 2, paint);
         }
         canvas.restore();
     }

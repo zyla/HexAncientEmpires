@@ -64,12 +64,11 @@ public class TileMath {
             case TOPLEFT:
                 return new Point(mapX - 1 , mapY - even );
         }
-        return new Point(0,0); //should throw exception or something
+        return new Point(99999,99999); //should throw exception or something
     }
 
     public static Point tileHitTest(int x, int y) {
         // TODO test _tileHitTest
-        //source http://stackoverflow.com/questions/7705228/hexagonal-grids-how-do-you-find-which-hexagon-a-point-is-in
         int col =  x / (TILE_WIDTH*3/4);
         int row =  (y - (col & 1)* TILE_HEIGHT/2) / TILE_HEIGHT;
 
