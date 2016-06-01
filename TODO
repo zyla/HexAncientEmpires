@@ -5,6 +5,6 @@
 #5 unit rendering (dep: #3, #4)
 #6 path search
 #7 movement animations
-#8 tile hit test
+#8 tile hit test for negative coordinates
 #9 smooth camera movement
 #10 basic gameplay (pick unit, pick place, play movement animation) (dep: #5, #6, #7, #8)

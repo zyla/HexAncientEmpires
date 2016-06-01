@@ -12,17 +12,18 @@ public class GameMap {
     ArrayList<Tile> tiles;
     int mapWidth ;
     int mapHeight ;
-    private static final String savedmap = "10 10" +
-            " g g g g g g g g g g" +
-            " g r r r r r r r r g" +
-            " g r g g g g g g r g" +
-            " g r g g g g g g r g" +
-            " g r g w w w w g r g" +
-            " g r g g w w g g r g" +
-            " g r g g w w g g r g" +
-            " g c g t m m t g c g" +
-            " g g t t m m t t g g" +
-            " g g t t m m t t g g";
+    private static final String savedmap = "11 11" +
+            " g g g g g g g g g g g" +
+            " g r r r r r r r r r g" +
+            " g r g g g g g g g r g" +
+            " g r g w g g g w g r g" +
+            " g r g g w w w g g r g" +
+            " g r g t g w g t g r g" +
+            " g r g g w m w g g r g" +
+            " g c g g m m m g g c g" +
+            " g g g t m m m t g g g" +
+            " g g t t m m m t t g g" +
+            " t g g g t t t g g g t";
 
     /*context.getResources().getString(R.string.map1);
 */
