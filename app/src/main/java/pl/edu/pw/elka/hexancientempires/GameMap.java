@@ -14,15 +14,15 @@ public class GameMap {
     int mapHeight ;
     private static final String savedmap = "10 10" +
             " g g g g g g g g g g" +
-            " g g g g g g g g g g" +
-            " g g g g g g g g g g" +
-            " g g g g g g g g g g" +
-            " g g g g g g g g g g" +
-            " g g g g g g g g g g" +
-            " g g g g g g g g g g" +
-            " g g g g g g g g g g" +
-            " g g g g g g g g g g" +
-            " g g g g g g g g g g";
+            " g r r r r r r r r g" +
+            " g r g g g g g g r g" +
+            " g r g g g g g g r g" +
+            " g r g w w w w g r g" +
+            " g r g g w w g g r g" +
+            " g r g g w w g g r g" +
+            " g c g t m m t g c g" +
+            " g g t t m m t t g g" +
+            " g g t t m m t t g g";
 
     /*context.getResources().getString(R.string.map1);
 */

@@ -43,6 +43,10 @@ public class GameView extends View {
         terrain.add(context.getResources().getDrawable(R.drawable.w));
 
         cursor = context.getResources().getDrawable(R.drawable.cursor);
+
+        for(int i = 0 ; i < terrain.size(); i++) {
+            terrain.get(i).setBounds(0, 0, TILE_WIDTH, TILE_HEIGHT);
+        }
     }
 
     @Override
@@ -127,12 +131,6 @@ public class GameView extends View {
         cursor.draw(canvas);
     }
 
-    private void drawSprite(Canvas canvas, Point loc,Drawable sprite) {
-
-        sprite.setBounds(loc.x, loc.y, loc.x + TILE_WIDTH, loc.y + TILE_HEIGHT);
-        sprite.draw(canvas);
-    }
-
     Paint paint = new Paint();
 
     private final Path tilePath;
@@ -175,7 +173,7 @@ public class GameView extends View {
             paint.setStrokeWidth(5);
             canvas.drawPath(tilePath, paint);
 
-            drawSprite(canvas,loc,terrain.get(type - 1));
+            terrain.get(type - 1).draw(canvas);
 
             paint.setStrokeWidth(1);
             paint.setStyle(Paint.Style.FILL);
