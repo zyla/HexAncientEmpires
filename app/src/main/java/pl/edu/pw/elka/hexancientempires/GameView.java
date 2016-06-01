@@ -170,7 +170,7 @@ public class GameView extends View {
             paint.setStyle(Paint.Style.FILL);
             paint.setTextSize(32);
             paint.setTextAlign(Paint.Align.CENTER);
-            canvas.drawText(String.format("(%d, %d, %d)", mapX, mapY,type), TILE_WIDTH / 2, TILE_HEIGHT / 2, paint);
+            canvas.drawText(String.format("(%d,%d,%d)", mapX, mapY,type), TILE_WIDTH / 2, TILE_HEIGHT / 2, paint);
         }
         canvas.restore();
     }

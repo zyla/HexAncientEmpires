@@ -28,11 +28,11 @@ public class GameMap {
         String separators = "[ ]+";
         String[] tokens = savedmap.split(separators);
 
-        mapWidth  = Integer.parseInt(tokens[0]);
-        mapHeight = Integer.parseInt(tokens[1]);
+        mapWidth  = 10;//Integer.parseInt(tokens[0]);
+        mapHeight = 10;// Integer.parseInt(tokens[1]);
 
         tiles = new ArrayList<>();
-        for (int i = 2; i < (mapHeight * mapWidth); i++) {
+        for (int i = 2; i < (mapHeight * mapWidth + 2); i++) {
             switch (tokens[i]) {
                 case "c": tiles.add(new Tile(Tile.CASTLE));
                     break;
