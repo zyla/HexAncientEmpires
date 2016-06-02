@@ -1,6 +1,8 @@
 package pl.edu.pw.elka.hexancientempires;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -25,7 +27,7 @@ public class GameView extends View {
 
     private GameMap Map = new GameMap();
     private ArrayList<Drawable> terrain;
-    private ArrayList<Drawable> units;
+    private ArrayList<Bitmap> units;
 
     // DEBUG INFO
     private int numTilesRendered;
@@ -48,9 +50,9 @@ public class GameView extends View {
         }
 
         units = new ArrayList<>(3);
-        units.add(context.getResources().getDrawable(R.drawable.units1));
-        units.add(context.getResources().getDrawable(R.drawable.units2));
-        units.add(context.getResources().getDrawable(R.drawable.units3));
+        units.add(BitmapFactory.decodeResource(getResources(), R.drawable.units1));
+        units.add(BitmapFactory.decodeResource(getResources(), R.drawable.units2));
+        units.add(BitmapFactory.decodeResource(getResources(), R.drawable.units3));
 
         cursor = context.getResources().getDrawable(R.drawable.cursor);
     }
@@ -170,10 +172,15 @@ public class GameView extends View {
             terrain.get(tile.type - 1).draw(canvas);
 
             if(tile.unit != null) {
-                //TODO this thing
-            //    units.get(tile.unit.playerID).setBounds(
-             //           tile.unit.type * 128, 0, tile.unit.type * 128 + 128, 128);
-                units.get(tile.unit.playerID).draw(canvas);
+                Rect areaToCrop = new Rect(128*tile.unit.type,0,128*tile.unit.type+128,128);
+                Rect areaToDraw = new Rect(0,0,128,128);
+
+                canvas.drawBitmap(units.get(tile.unit.playerID),areaToCrop,areaToDraw,null);/*
+                        units.get(tile.unit.playerID),
+                        new Rect(tile.unit.type * 128,0,tile.unit.type * 128 + 128,128),
+                        new Rect(0,0,128,128),
+                        null
+                );*/
             }
 
             paint.setStrokeWidth(1);
