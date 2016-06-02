@@ -52,6 +52,10 @@ public class GameView extends View {
         units.add(context.getResources().getDrawable(R.drawable.units2));
         units.add(context.getResources().getDrawable(R.drawable.units3));
 
+        for(int i = 0 ; i < units.size(); i++) {
+            units.get(i).setBounds(0, 0, TILE_WIDTH, TILE_HEIGHT);
+        }
+
         cursor = context.getResources().getDrawable(R.drawable.cursor);
     }
 
@@ -173,16 +177,15 @@ public class GameView extends View {
             paint.setStyle(Paint.Style.FILL);
             canvas.drawPath(tilePath, paint); */
             terrain.get(tile.type - 1).draw(canvas);
-/*
-            paint.setColor(0xff000000);
+
+/*          paint.setColor(0xff000000);
             paint.setStyle(Paint.Style.STROKE);
             paint.setStrokeWidth(3);
-            canvas.drawPath(tilePath, paint);
-*/
+            canvas.drawPath(tilePath, paint);*/
             if(tile.unit != null) {
-                //TODO this thing
-            //    units.get(tile.unit.playerID).setBounds(
-             //           tile.unit.type * 128, 0, tile.unit.type * 128 + 128, 128);
+                //TODO drawing units
+                units.get(tile.unit.playerID).setBounds(
+                        128 * tile.unit.type,0,128 * tile.unit.type,128);
                 units.get(tile.unit.playerID).draw(canvas);
             }
 

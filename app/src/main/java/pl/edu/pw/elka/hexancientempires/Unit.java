@@ -1,6 +1,7 @@
 package pl.edu.pw.elka.hexancientempires;
 
 /**
+ * simple class representing unit
  * Created by tomek on 01.06.16.
  */
 public class Unit {

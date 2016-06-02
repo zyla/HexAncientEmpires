@@ -1,12 +1,10 @@
 package pl.edu.pw.elka.hexancientempires;
 
-import java.util.ArrayList;
-
 /**
- * Created by tomek on 02.06.16.
  * this class is whole about fighting
  * but fighting is highly dependant on tile that unit is standing at
  * so more of a tile.unit fighting
+ * Created by tomek on 02.06.16.
  */
 public class UnitMath {
     public static final int STARTING_HP = 100;
@@ -15,7 +13,7 @@ public class UnitMath {
     public static final int NOONE_DIE = 0;
 
 
-    public static final int[] unitDamege = {
+    public static final int[] unitDamage = {
         50,//WARRIOR
         50,//ARCHER
         50,//WATERELEM
@@ -57,18 +55,37 @@ public class UnitMath {
         3 //KING
     };
 
-    //i have to change value of hp in one unit, but idk if possible in java
-    public int atack(Tile attacking, Tile attacked){
-        int attackValue1 = unitDamege[attacking.unit.type];
+    public static final int[] tileDefense = {
+            0,//NONE
+            15,//CASTLE
+            5,//GRASS
+            15,//MOUNTAIN
+            0,//ROAD
+            10,//TREE
+            0//WATER
+    };
+
+    //I have to change value of hp in one unit, but idk if possible in java
+    public int attack(Tile attacking, Tile attacked, int distance){
+        int attackValue1 = unitDamage[attacking.unit.type];
         int attackedHp = attacked.unit.hp;
-        if(attackedHp <= attackValue1)
+        int attackedDef = tileDefense[attacked.type];
+
+        if(attackedHp <= attackValue1 - attackedDef)
             return ATACKED_DIE;
-        attacked.unit.hp = attackedHp -attackValue1;
+        attacked.unit.hp = attackedHp + attackedDef - attackValue1;
+
+        if(distance > unitRange[attacked.unit.type])
+            return NOONE_DIE;
+
         int attackingHp = attacking.unit.hp;
-        int attackValue2 = unitDamege[attacked.unit.type];
-        if(attackingHp <= attackValue2)
+        int attackValue2 = unitDamage[attacked.unit.type];
+        int attackingDef = tileDefense[attacking.type];
+
+        if(attackingHp <= attackValue2 - attackingDef)
             return ATACKING_DIE;
-        attacking.unit.hp = attackingHp - attackValue2;
+
+        attacking.unit.hp = attackingHp + attackingDef - attackValue2;
         return NOONE_DIE;
     }
 }

@@ -5,8 +5,8 @@ import java.util.Objects;
 
 /**
  * Class that represents board
+ * loads map from string
  * Created by tomek on 29.04.16.
- * I have no idea what I am doing lol
  */
 public class GameMap {
     ArrayList<Tile> tiles;
@@ -57,7 +57,7 @@ public class GameMap {
     }
 
     public Tile getTile(int mapX, int mapY){
-        if(mapX < 0 || mapY < 0 || mapX >= mapWidth || mapY >=mapHeight ) {
+        if(mapX < 0 || mapY < 0 || mapX >= mapWidth || mapY >= mapHeight ) {
             return new Tile(Tile.NONE);
         }
         return new Tile (tiles.get(mapY * mapWidth +  mapX));

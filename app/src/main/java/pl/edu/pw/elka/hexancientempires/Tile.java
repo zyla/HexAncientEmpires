@@ -1,6 +1,7 @@
 package pl.edu.pw.elka.hexancientempires;
 
-/*
+/**
+ * Simple class representing tile
  * Created by Tomek on 31.05.16.
  */
 public class Tile {
