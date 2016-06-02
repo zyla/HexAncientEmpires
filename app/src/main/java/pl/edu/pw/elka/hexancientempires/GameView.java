@@ -172,13 +172,13 @@ public class GameView extends View {
 /*          paint.setColor(0xffffffff);
             paint.setStyle(Paint.Style.FILL);
             canvas.drawPath(tilePath, paint); */
-
+            terrain.get(tile.type - 1).draw(canvas);
+/*
             paint.setColor(0xff000000);
             paint.setStyle(Paint.Style.STROKE);
-            paint.setStrokeWidth(5);
+            paint.setStrokeWidth(3);
             canvas.drawPath(tilePath, paint);
-
-            terrain.get(tile.type - 1).draw(canvas);
+*/
             if(tile.unit != null) {
                 //TODO this thing
             //    units.get(tile.unit.playerID).setBounds(

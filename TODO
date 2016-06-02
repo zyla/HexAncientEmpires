@@ -1,7 +1,7 @@
-#1 better coordinate system for tiles?
-#2 design real tiles and a map
-#3 map rendering (dep: #2)
-#4 cache units located in a map tile?
+#1 better coordinate system for tiles? nope
+#2 design real tiles and a map! done
+#3 map rendering (dep: #2)! kinda
+#4 cache units located in a map tile? !sort of
 #5 unit rendering (dep: #3, #4)
 #6 path search
 #7 movement animations

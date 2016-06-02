@@ -15,13 +15,17 @@ public class Unit {
     public static final int DRAGON      = 8;
     public static final int SKELETON    = 9;
     public static final int KING        = 10;
+    public static final int STARTING_HP = 100;
 
 
     public int type;
     public int playerID;
+    public int hp;
 
     public Unit(int type, int id) {
-        this.type = type; this.playerID = id;
+        this.type = type;
+        this.playerID = id;
+        this.hp = STARTING_HP;
     }
 
 }
