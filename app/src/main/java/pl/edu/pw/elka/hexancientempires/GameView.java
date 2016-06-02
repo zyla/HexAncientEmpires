@@ -129,11 +129,12 @@ public class GameView extends View {
     }
 
     private void drawCursor(Canvas canvas, Point center) {
-        final int anchorX = 64, anchorY = 84;
+		final int width = TILE_WIDTH + 10, height = TILE_HEIGHT + 10;
+        final int anchorX = width/2, anchorY = height/2;
 
         int x = center.x - anchorX, y = center.y - anchorY;
 
-        cursor.setBounds(x, y, x + 139, y + 139);
+        cursor.setBounds(x, y, x + width, y + height);
         cursor.draw(canvas);
     }
 
