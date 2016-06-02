@@ -46,10 +46,7 @@ public class TileMath {
 
     public static Point neighbour(int mapX, int mapY, int side) {
         // TODO use it in A*
-        int even = 0; //crazy optimization from ARKO
-        if(mapX % 2 == 0) {
-            even = 1;
-        }
+        int even = (mapX + 1) % 2;
         switch(side) {
             case TOPSIDE:
                 return new Point(mapX , mapY - 1);
