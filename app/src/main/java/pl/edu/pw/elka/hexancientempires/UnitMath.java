@@ -65,6 +65,17 @@ public class UnitMath {
             0//WATER
     };
 
+    //strange naming for value of speed that you have to pay to get on the tile
+    public static final int[] tileDistance = {
+            Integer.MAX_VALUE,//NONE
+            3,//CASTLE
+            2,//GRASS
+            5,//MOUNTAIN
+            1,//ROAD
+            3,//TREE
+            5//WATER
+    };
+
     //I have to change value of hp in one unit, but idk if possible in java
     public int attack(Tile attacking, Tile attacked, int distance){
         int attackValue1 = unitDamage[attacking.unit.type];

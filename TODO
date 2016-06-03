@@ -8,3 +8,4 @@
 #8 tile hit test for negative coordinates
 #9 smooth camera movement
 #10 basic gameplay (pick unit, pick place, play movement animation) (dep: #5, #6, #7, #8)
+#11 if someone clicks on screen animation should immediately end to make game feel more responsive (dep: #10)
