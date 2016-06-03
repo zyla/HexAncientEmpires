@@ -171,11 +171,13 @@ public class GameView extends View {
             canvas.translate(loc.x, loc.y);
             terrain.get(tile.type - 1).draw(canvas);
 
-            if(tile.unit != null) {
-                Rect areaToCrop = new Rect(128*tile.unit.type,0,128*tile.unit.type+128,128);
-                Rect areaToDraw = new Rect(0,0,128,128);
+            if (tile.unit != null) {
+                Rect areaToCrop = new Rect(128 * 0, 0, 128 * 0 + 128, 128);
+                Rect areaToDraw = new Rect(loc.x, loc.y, loc.x + 128, loc.y + 128);
 
-                canvas.drawBitmap(units.get(tile.unit.playerID),areaToCrop,areaToDraw,null);/*
+                // canvas.drawBitmap(units.get(0),null,areaToDraw,null);
+                // canvas.drawBitmap();
+                /*
                         units.get(tile.unit.playerID),
                         new Rect(tile.unit.type * 128,0,tile.unit.type * 128 + 128,128),
                         new Rect(0,0,128,128),
@@ -187,8 +189,9 @@ public class GameView extends View {
             paint.setStyle(Paint.Style.FILL);
             paint.setTextSize(32);
             paint.setTextAlign(Paint.Align.CENTER);
-
-            canvas.drawText(String.format("(%d,%d,%d)", mapX, mapY,tile.type), TILE_WIDTH / 2, TILE_HEIGHT / 2, paint);
+            if (tile.unit != null) {
+                canvas.drawText(String.format("(%d)", tile.unit.type), TILE_WIDTH / 2, TILE_HEIGHT / 2, paint);
+            }
         }
         canvas.restore();
     }

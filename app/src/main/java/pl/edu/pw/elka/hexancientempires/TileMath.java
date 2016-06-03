@@ -67,7 +67,8 @@ public class TileMath {
     public static Point tileHitTest(int x, int y) {
         // TODO test _tileHitTest
         int col = (int) (((double) x) / (TILE_WIDTH * 3/4)+((x>=0)?0:-0.5));
-        int row = (int) (((double)y - (col & 1)* TILE_HEIGHT/2) / TILE_HEIGHT+((y>=0)?0:-0.5));
+        int row = (int) (((double)y - (col & 1)* TILE_HEIGHT/2) / TILE_HEIGHT
+                + ((y - (col & 1)* TILE_HEIGHT/2>=0)?0:-0.5));
        // +((y>=0)?1:-1)*
         int relX = x - (col * (TILE_WIDTH*3/4));
         int relY = y - row * TILE_HEIGHT - (col & 1) * (TILE_HEIGHT / 2);

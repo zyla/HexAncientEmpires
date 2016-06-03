@@ -53,7 +53,7 @@ public class GameMap {
                     break;
             }
         }
-        tiles.get(1).unit = new Unit(0,0);
+        tiles.set(1,new Tile(tiles.get(1),new Unit(1,1)));
     }
 
     public Tile getTile(int mapX, int mapY){

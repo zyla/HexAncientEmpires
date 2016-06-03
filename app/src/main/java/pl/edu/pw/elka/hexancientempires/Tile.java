@@ -29,4 +29,8 @@ public class Tile {
         this.type = t.type;
     }
 
+    public Tile(Tile tile, Unit unit) {
+        this.type = tile.type;
+        this.unit = unit;
+    }
 }
