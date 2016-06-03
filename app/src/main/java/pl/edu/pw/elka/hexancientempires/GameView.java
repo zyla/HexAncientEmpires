@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 import android.view.View;
@@ -172,26 +173,19 @@ public class GameView extends View {
             terrain.get(tile.type - 1).draw(canvas);
 
             if (tile.unit != null) {
-                Rect areaToCrop = new Rect(128 * 0, 0, 128 * 0 + 128, 128);
-                Rect areaToDraw = new Rect(loc.x, loc.y, loc.x + 128, loc.y + 128);
+                Unit unit = tile.unit;
+                Bitmap bitmap = units.get(unit.playerID - 1);
+                int unitWidth = bitmap.getWidth() / 12, unitHeight = bitmap.getHeight() / 2;
+                android.graphics.Rect areaToCrop = new android.graphics.Rect(unit.type * unitWidth, 0, (unit.type + 1) * unitWidth, unitHeight);
+                RectF areaToDraw = new RectF(0, 0, TILE_WIDTH, TILE_HEIGHT);
 
-                // canvas.drawBitmap(units.get(0),null,areaToDraw,null);
-                // canvas.drawBitmap();
-                /*
-                        units.get(tile.unit.playerID),
-                        new Rect(tile.unit.type * 128,0,tile.unit.type * 128 + 128,128),
-                        new Rect(0,0,128,128),
-                        null
-                );*/
+                canvas.drawBitmap(bitmap, areaToCrop, areaToDraw, null);
             }
 
             paint.setStrokeWidth(1);
             paint.setStyle(Paint.Style.FILL);
             paint.setTextSize(32);
             paint.setTextAlign(Paint.Align.CENTER);
-            if (tile.unit != null) {
-                canvas.drawText(String.format("(%d)", tile.unit.type), TILE_WIDTH / 2, TILE_HEIGHT / 2, paint);
-            }
         }
         canvas.restore();
     }
