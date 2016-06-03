@@ -56,10 +56,32 @@ public class GameMap {
         tiles.set(1,new Tile(tiles.get(1),new Unit(1,1)));
     }
 
+    public void clearBFSdistances()
+    {
+        for(int i = 0;i < mapHeight * mapWidth; i++)
+        {
+            tiles.set(i,new Tile( tiles.get(i),Integer.MAX_VALUE));
+        }
+    }
     public Tile getTile(int mapX, int mapY){
         if(mapX < 0 || mapY < 0 || mapX >= mapWidth || mapY >= mapHeight ) {
             return new Tile(Tile.NONE);
         }
         return new Tile (tiles.get(mapY * mapWidth +  mapX));
+    }
+    public Tile getTile(Point loc){
+        if(loc.x < 0 || loc.y < 0 || loc.x >= mapWidth || loc.y >= mapHeight ) {
+            return new Tile(Tile.NONE);
+        }
+        return new Tile (tiles.get(loc.y * mapWidth +  loc.x));
+    }
+
+    public void setBFSdistance(Point origin, int distance) {
+        int i = tileMapIndex(origin);
+        tiles.set(i,new Tile( tiles.get(i),distance));
+    }
+
+    private int tileMapIndex(Point origin) {
+        return origin.y*mapWidth + origin.x;
     }
 }
