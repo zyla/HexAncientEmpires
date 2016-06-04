@@ -217,6 +217,11 @@ public class GameView extends View {
                 canvas.drawBitmap(bitmap, areaToCrop, areaToDraw, null);
             }
 
+            if(tile.isDisplayRange() == true) {
+                paint.setColor(0x80ff0000);
+                paint.setStyle(Paint.Style.FILL);
+                canvas.drawPath(tilePath, paint);
+            }
             paint.setStrokeWidth(1);
             paint.setStyle(Paint.Style.FILL);
             paint.setTextSize(32);

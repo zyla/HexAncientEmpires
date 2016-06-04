@@ -16,6 +16,7 @@ public class GameMap {
     ArrayList<Tile> tiles;
     int mapWidth ;
     int mapHeight ;
+    int mapSize;
     ArrayList<UnitRangeBFS.Node> currentlyDisplying;
     private static final String savedmap = "11 11" +
             " g g g g g g g g g g g" +
@@ -36,9 +37,10 @@ public class GameMap {
 
         mapWidth  = Integer.parseInt(tokens[0]);
         mapHeight = Integer.parseInt(tokens[1]);
+        mapSize = mapHeight * mapWidth;
 
-        tiles = new ArrayList<>( mapHeight * mapWidth );
-        for (int i = 2; i < (mapHeight * mapWidth + 2); i++) {
+        tiles = new ArrayList<>( mapSize );
+        for (int i = 2; i < (mapSize + 2); i++) {
             switch (tokens[i]) {
                 case "c": tiles.add(new Tile(Tile.CASTLE));
                     break;
@@ -57,6 +59,9 @@ public class GameMap {
             }
         }
         tiles.set(1,new Tile(tiles.get(1),new Unit(1,1)));
+        UnitRangeBFS bfs = new UnitRangeBFS(this);
+        this.setRangeDisplay(bfs.getReachableTiles(new Point (1,0)));
+       // tiles.set(1,new Tile(tiles.get(1),true,null));
     }
 
     public Tile getTile(int mapX, int mapY){
@@ -70,6 +75,12 @@ public class GameMap {
             return new Tile(Tile.NONE);
         }
         return new Tile (tiles.get(loc.y * mapWidth +  loc.x));
+    }
+
+    public Tile getTile(int index){
+        if(index < 0 || index >= mapSize)
+            return new Tile(Tile.NONE);//TODO should throw exception
+        return new Tile (tiles.get(index));
     }
 
     public int getSize() {
@@ -87,7 +98,7 @@ public class GameMap {
     public int getMapIndex(Point loc)
     {
         int index = loc.y * mapWidth + loc.x;
-        if(index < 0 || index >= mapWidth * mapHeight)
+        if(index < 0 || index >= mapSize)
             return 0; //TODO throw impossible exception
         return  index;
     }
@@ -110,5 +121,9 @@ public class GameMap {
             int mapIndex = getMapIndex(currentlyDisplying.get(i).loc);
             tiles.set(mapIndex, new Tile(tiles.get(mapIndex),false,null));
         }
+    }
+
+    public Point getMapLoc(int i) {
+        return new Point(i % mapWidth, i / mapWidth);
     }
 }

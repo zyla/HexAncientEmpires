@@ -52,12 +52,10 @@ public class UnitRangeBFS {
     }
     private ArrayList< Node> getGraph(){
         int size = gameMap.getSize();
-        int W = gameMap.getWidth();
 
         ArrayList<Node> graph = new ArrayList<>(size);
         for(int i  = 0; i < size; i++ ) {
-            Point loc  = new Point (i % W, i/W);
-            graph.add(i, new UnitRangeBFS.Node(gameMap.getTile(loc),loc));
+            graph.add(i, new UnitRangeBFS.Node(gameMap.getTile(i),gameMap.getMapLoc(i)));
         }
         return graph;
     }
@@ -83,13 +81,13 @@ public class UnitRangeBFS {
             for(int i = 0; i < 6 ; i++)
             {
                 Point mateLoc = TileMath.neighbour(current.loc,i);
-                Node mate = graph.get(mateLoc.y * gameMap.getWidth() + mateLoc.x);
+                Node mate = graph.get(gameMap.getMapIndex(mateLoc));
                 if(mate.allowed == false)
                     continue;
                 if( current.distance + mate.cost < mate.distance ) {
                     mate.distance = current.distance + mate.cost;
                     mate.parent = current.loc;
-                    graph.set(mateLoc.y * gameMap.getWidth() + mateLoc.x,mate);
+                    graph.set(gameMap.getMapIndex(mateLoc),mate);
                     if (mate.distance < range)
                         queue.add(mate);
                 }
