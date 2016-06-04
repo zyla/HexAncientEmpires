@@ -40,7 +40,7 @@ public class GameView extends View {
     private int numTilesRendered;
 
     private Drawable cursor;
-    private Point spritePos = new Point(0, 0);
+    private Point cursorPos = new Point(0, 0);
 
     public GameView(Context context) {
         super(context);
@@ -89,12 +89,16 @@ public class GameView extends View {
                 return true;
             case MotionEvent.ACTION_UP:
                 if (!isMovement) {
-                    spritePos = TileMath.tileHitTest((int) (event.getX() - cameraOffset.x), (int) (event.getY() - cameraOffset.y));
-                    postInvalidate();
+                    tileClicked(TileMath.tileHitTest((int) (event.getX() - cameraOffset.x), (int) (event.getY() - cameraOffset.y)));
                 }
                 return true;
         }
         return false;
+    }
+
+    private void tileClicked(Point tilePos) {
+        cursorPos = tilePos;
+        postInvalidate();
     }
 
     /** Squared magnitude of a two-dimensional vector (x, y) */
@@ -122,7 +126,7 @@ public class GameView extends View {
             canvas.translate(cameraOffset.x, cameraOffset.y);
             drawMap(canvas);
 
-            drawCursor(canvas, TileMath.tileCenter(spritePos.x, spritePos.y));
+            drawCursor(canvas, TileMath.tileCenter(cursorPos.x, cursorPos.y));
         }
         canvas.restore();
 
