@@ -25,7 +25,7 @@ public class UnitRangeBFS {
     public class Node{
         Point loc;      //location of node in the map
         int distance;   //distance measured with game speed currency
-        Node parent;    // how we get there
+        Point parent;    // how we get there
         boolean allowed;
         int cost;
 
@@ -62,13 +62,13 @@ public class UnitRangeBFS {
         return graph;
     }
 
-    public LinkedList<Node> getReachableTiles(Point origin) {
+    public ArrayList<Node> getReachableTiles(Point origin) {
         Tile tile  = gameMap.getTile(origin.x,origin.y);
         if(tile.type == Tile.NONE || tile.unit == null)
             throw new IllegalArgumentException("tile not good for BFS");
 
         ArrayList<Node> graph = getGraph();
-        LinkedList<Node> visited = new LinkedList<>();
+        ArrayList<Node> visited = new ArrayList<>();
         LinkedList<Node> queue = new LinkedList<>();
         int range = UnitMath.unitSpeed[tile.unit.type];
 
@@ -88,7 +88,7 @@ public class UnitRangeBFS {
                     continue;
                 if( current.distance + mate.cost < mate.distance ) {
                     mate.distance = current.distance + mate.cost;
-                    mate.parent = current;
+                    mate.parent = current.loc;
                     graph.set(mateLoc.y * gameMap.getWidth() + mateLoc.x,mate);
                     if (mate.distance < range)
                         queue.add(mate);

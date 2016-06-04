@@ -1,6 +1,7 @@
 package pl.edu.pw.elka.hexancientempires;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Objects;
 
 import static pl.edu.pw.elka.hexancientempires.UnitRangeBFS.*;
@@ -15,6 +16,7 @@ public class GameMap {
     ArrayList<Tile> tiles;
     int mapWidth ;
     int mapHeight ;
+    ArrayList<UnitRangeBFS.Node> currentlyDisplying;
     private static final String savedmap = "11 11" +
             " g g g g g g g g g g g" +
             " g r r r r r r r r r g" +
@@ -82,4 +84,31 @@ public class GameMap {
         return mapHeight;
     }
 
+    public int getMapIndex(Point loc)
+    {
+        int index = loc.y * mapWidth + loc.x;
+        if(index < 0 || index >= mapWidth * mapHeight)
+            return 0; //TODO throw impossible exception
+        return  index;
+    }
+
+    public void setRangeDisplay(ArrayList<UnitRangeBFS.Node> inRange ) {
+        currentlyDisplying = inRange;
+        for(int i = 0 ; i < inRange.size(); i++){
+            int mapIndex = getMapIndex(inRange.get(i).loc);
+            Point previous = inRange.get(i).parent;
+            tiles.set(mapIndex, new Tile(tiles.get(mapIndex),true,previous));
+        }
+        return;
+    }
+
+    public void clearRangeDisplay() {
+        if(currentlyDisplying == null)
+            return;
+        currentlyDisplying = null;
+        for(int i = 0; i < currentlyDisplying.size(); i++){
+            int mapIndex = getMapIndex(currentlyDisplying.get(i).loc);
+            tiles.set(mapIndex, new Tile(tiles.get(mapIndex),false,null));
+        }
+    }
 }
