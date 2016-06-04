@@ -26,6 +26,12 @@ public class GameView extends View {
     private PointF cameraOffset = new PointF();
     private PointF lastTouchDown = new PointF();
 
+    /** True if current touch stroke is a movement, not a click */
+    private boolean isMovement;
+
+    /** Maximum movement distance for a click event, squared */
+    private static final float MAX_CLICK_EVENT_DISTANCE_SQ = 100;
+
     private GameMap Map = new GameMap();
     private ArrayList<Drawable> terrain;
     private ArrayList<Bitmap> units;
@@ -60,21 +66,40 @@ public class GameView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        float offsetX, offsetY;
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 lastTouchDown.set(event.getX(), event.getY());
+                isMovement = false;
                 return true;
             case MotionEvent.ACTION_MOVE:
-                cameraOffset.x += event.getX() - lastTouchDown.x;
-                cameraOffset.y += event.getY() - lastTouchDown.y;
-                lastTouchDown.set(event.getX(), event.getY());
-                postInvalidate();
+                offsetX = event.getX() - lastTouchDown.x;
+                offsetY = event.getY() - lastTouchDown.y;
+
+                if (!isMovement && mag2(offsetX, offsetY) >= MAX_CLICK_EVENT_DISTANCE_SQ) {
+                    isMovement = true;
+                }
+
+                if (isMovement) {
+                    cameraOffset.x += offsetX;
+                    cameraOffset.y += offsetY;
+                    lastTouchDown.set(event.getX(), event.getY());
+                    postInvalidate();
+                }
                 return true;
             case MotionEvent.ACTION_UP:
-                spritePos = TileMath.tileHitTest((int) (event.getX() - cameraOffset.x), (int) (event.getY() - cameraOffset.y));
+                if (!isMovement) {
+                    spritePos = TileMath.tileHitTest((int) (event.getX() - cameraOffset.x), (int) (event.getY() - cameraOffset.y));
+                    postInvalidate();
+                }
                 return true;
         }
         return false;
+    }
+
+    /** Squared magnitude of a two-dimensional vector (x, y) */
+    private static float mag2(float x, float y) {
+        return x*x + y*y;
     }
 
     @Override
@@ -132,7 +157,7 @@ public class GameView extends View {
     }
 
     private void drawCursor(Canvas canvas, Point center) {
-		final int width = TILE_WIDTH + 10, height = TILE_HEIGHT + 10;
+        final int width = TILE_WIDTH + 10, height = TILE_HEIGHT + 10;
         final int anchorX = width/2, anchorY = height/2;
 
         int x = center.x - anchorX, y = center.y - anchorY;
