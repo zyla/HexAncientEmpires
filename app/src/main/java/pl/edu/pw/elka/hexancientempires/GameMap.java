@@ -78,4 +78,8 @@ public class GameMap {
         return mapWidth;
     }
 
+    public int getHeight() {
+        return mapHeight;
+    }
+
 }

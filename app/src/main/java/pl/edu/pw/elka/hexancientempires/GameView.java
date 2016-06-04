@@ -23,7 +23,7 @@ import static pl.edu.pw.elka.hexancientempires.TileMath.TILE_HEIGHT;
 public class GameView extends View {
     public String text = "";
 
-    private PointF cameraOffset = new PointF();
+    private PointF cameraOffset = new PointF(-TILE_WIDTH/4, -TILE_HEIGHT/2);
     private PointF lastTouchDown = new PointF();
 
     /** True if current touch stroke is a movement, not a click */
@@ -81,8 +81,7 @@ public class GameView extends View {
                 }
 
                 if (isMovement) {
-                    cameraOffset.x += offsetX;
-                    cameraOffset.y += offsetY;
+                    setCameraOffset(cameraOffset.x + offsetX, cameraOffset.y + offsetY);
                     lastTouchDown.set(event.getX(), event.getY());
                     postInvalidate();
                 }
@@ -94,6 +93,13 @@ public class GameView extends View {
                 return true;
         }
         return false;
+    }
+
+    private void setCameraOffset(float x, float y) {
+        // TODO refactor
+        Point lastTile = TileMath.tileLocation(Map.getWidth(), Map.getHeight());
+        cameraOffset.x = Math.max(Math.min(x, -TILE_WIDTH/4), -lastTile.x + getWidth());
+        cameraOffset.y = Math.max(Math.min(y, -TILE_HEIGHT/2), -lastTile.y + TILE_HEIGHT/2 + getHeight());
     }
 
     private void tileClicked(Point tilePos) {
