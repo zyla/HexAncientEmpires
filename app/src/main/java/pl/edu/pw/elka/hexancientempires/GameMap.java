@@ -3,6 +3,9 @@ package pl.edu.pw.elka.hexancientempires;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import static pl.edu.pw.elka.hexancientempires.UnitRangeBFS.*;
+
+
 /**
  * Class that represents board
  * loads map from string
@@ -24,7 +27,6 @@ public class GameMap {
             " g g g t m m m t g g g" +
             " g g t t m m m t t g g" +
             " t g g g t t t g g g t";
-
 
     public GameMap(){
         String separators = "[ ]+";
@@ -67,4 +69,13 @@ public class GameMap {
         }
         return new Tile (tiles.get(loc.y * mapWidth +  loc.x));
     }
+
+    public int getSize() {
+        return mapHeight * mapWidth;
+    }
+
+    public int getWidth() {
+        return mapWidth;
+    }
+
 }

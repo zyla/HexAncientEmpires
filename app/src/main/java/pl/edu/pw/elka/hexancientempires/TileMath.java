@@ -44,22 +44,22 @@ public class TileMath {
                 TILE_HEIGHT * mapY + (mapX & 1) * TILE_HEIGHT / 2);
     }
 
-    public static Point neighbour(int mapX, int mapY, int side) {
+    public static Point neighbour(Point loc, int side) {
         // TODO use it in A*
-        int even = (mapX + 1) % 2;
+        int even = (loc.x + 1) % 2;
         switch(side) {
             case TOPSIDE:
-                return new Point(mapX , mapY - 1);
+                return new Point(loc.x , loc.y - 1);
             case TOPRIGHT:
-                return new Point(mapX + 1 , mapY - even);
+                return new Point(loc.x + 1 , loc.y - even);
             case BOTRIGHT:
-                return new Point(mapX + 1 , mapY + 1 - even );
+                return new Point(loc.x + 1 , loc.y + 1 - even );
             case BOTSIDE:
-                return new Point(mapX , mapY + 1);
+                return new Point(loc.x , loc.y + 1);
             case BOTLEFT:
-                return new Point(mapX - 1 , mapY + 1 - even );
+                return new Point(loc.x - 1 , loc.y + 1 - even );
             case TOPLEFT:
-                return new Point(mapX - 1 , mapY - even );
+                return new Point(loc.x - 1 , loc.y - even );
         }
         return new Point(99999,99999); //should throw exception or something
     }
