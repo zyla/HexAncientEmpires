@@ -17,7 +17,6 @@ import java.util.LinkedList;
  */
 public class UnitRangeBFS {
     GameMap gameMap;
-    int range;
 
     public UnitRangeBFS(GameMap gameMap) {
         this.gameMap = gameMap;
@@ -34,7 +33,7 @@ public class UnitRangeBFS {
             this.loc = loc;
             this.distance = Integer.MAX_VALUE;
             this.cost = UnitMath.tileDistance[tile.type];
-            if(tile.unit == null || tile.type == Tile.NONE) {
+            if(tile.unit != null || tile.type == Tile.NONE) {
                 allowed = false;
             }
             else {
@@ -99,5 +98,4 @@ public class UnitRangeBFS {
         }
         return visited;
     }
-
 }
