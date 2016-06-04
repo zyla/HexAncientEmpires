@@ -88,7 +88,7 @@ public class UnitRangeBFS {
                 Node mate = graph.get(mateLoc.y * gameMap.getWidth() + mateLoc.x);
                 if(mate.allowed == false)
                     continue;
-                if(mate.distance == Integer.MAX_VALUE) {
+                if( current.distance + mate.cost < mate.distance ) {
                     mate.distance = current.distance + mate.cost;
                     mate.parent = current;
                     graph.set(mateLoc.y * gameMap.getWidth() + mateLoc.x,mate);
