@@ -21,27 +21,17 @@ public class Tile {
     */
     public int type;
     public Unit unit;
-    int distanceBFS;
 
     public Tile(int type) {
         this.type = type;
-        distanceBFS = Integer.MAX_VALUE;
     }
     public Tile(Tile tile) {
         this.type = tile.type;
         this.unit = tile.unit;
-        distanceBFS = Integer.MAX_VALUE;
     }
 
     public Tile(Tile tile, Unit unit) {
         this.type = tile.type;
         this.unit = unit;
-        distanceBFS = Integer.MAX_VALUE;
-    }
-
-    public Tile(Tile tile, int distance) {
-        this.type = tile.type;
-        this.unit = tile.unit;
-        this.distanceBFS = distance;
     }
 }

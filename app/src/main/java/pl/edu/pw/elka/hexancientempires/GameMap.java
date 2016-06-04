@@ -25,8 +25,7 @@ public class GameMap {
             " g g t t m m m t t g g" +
             " t g g g t t t g g g t";
 
-    /*context.getResources().getString(R.string.map1);
-*/
+
     public GameMap(){
         String separators = "[ ]+";
         String[] tokens = savedmap.split(separators);
@@ -56,13 +55,6 @@ public class GameMap {
         tiles.set(1,new Tile(tiles.get(1),new Unit(1,1)));
     }
 
-    public void clearBFSdistances()
-    {
-        for(int i = 0;i < mapHeight * mapWidth; i++)
-        {
-            tiles.set(i,new Tile( tiles.get(i),Integer.MAX_VALUE));
-        }
-    }
     public Tile getTile(int mapX, int mapY){
         if(mapX < 0 || mapY < 0 || mapX >= mapWidth || mapY >= mapHeight ) {
             return new Tile(Tile.NONE);
@@ -74,14 +66,5 @@ public class GameMap {
             return new Tile(Tile.NONE);
         }
         return new Tile (tiles.get(loc.y * mapWidth +  loc.x));
-    }
-
-    public void setBFSdistance(Point origin, int distance) {
-        int i = tileMapIndex(origin);
-        tiles.set(i,new Tile( tiles.get(i),distance));
-    }
-
-    private int tileMapIndex(Point origin) {
-        return origin.y*mapWidth + origin.x;
     }
 }
