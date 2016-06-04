@@ -80,7 +80,6 @@ public class UnitRangeBFS {
         while(!queue.isEmpty())
         {
             Node current = queue.remove();
-            visited.add(current);
             for(int i = 0; i < 6 ; i++)
             {
                 Point mateLoc = TileMath.neighbour(current.loc,i);
@@ -96,6 +95,12 @@ public class UnitRangeBFS {
                 }
             }
         }
+
+        for(int i = 0; i < graph.size(); i++){
+            if(graph.get(i).distance <= range)
+                visited.add(graph.get(i));
+        }
+
         return visited;
     }
 }
