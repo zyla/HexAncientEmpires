@@ -58,7 +58,8 @@ public class GameView extends View {
 
     public GameView(Context context) {
         super(context);
-        terrain = new ArrayList<>(6);
+        terrain = new ArrayList<>(7);
+        terrain.add(context.getResources().getDrawable(R.drawable.l));
         terrain.add(context.getResources().getDrawable(R.drawable.c));
         terrain.add(context.getResources().getDrawable(R.drawable.g));
         terrain.add(context.getResources().getDrawable(R.drawable.m));
@@ -79,8 +80,8 @@ public class GameView extends View {
 
         map = GameMap.loadFromString(GameMap.MAP1);
 
-        map.getTile(1, 0).unit = new Unit(1,1);
-        displayedRange = new UnitRangeBFS(map).getReachableTiles(new Point (1,0));
+        map.getTile(1, 1).unit = new Unit(1,1);
+        displayedRange = new UnitRangeBFS(map).getReachableTiles(new Point (1,1));
     }
 
     @Override
@@ -252,16 +253,12 @@ public class GameView extends View {
         Point loc = TileMath.tileLocation(mapX, mapY);
         Tile tile = map.getTile(mapX,mapY);
 
-        //ask Map if File is an element of the map
-        if(tile.type == Tile.NONE)
-          return; //or draw empty tile instead
-
         numTilesRendered++;
 
         canvas.save();
         {
             canvas.translate(loc.x, loc.y);
-            terrain.get(tile.type - 1).draw(canvas);
+            terrain.get(tile.type).draw(canvas);
 
             if (tile.unit != null) {
                 Unit unit = tile.unit;

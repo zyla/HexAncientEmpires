@@ -17,18 +17,20 @@ public class GameMap {
     public final int mapWidth;
     public final int mapHeight;
 
-    public static final String MAP1 = "11 11" +
-            " g g g g g g g g g g g" +
-            " g r r r r r r r r r g" +
-            " g r g g g g g g g r g" +
-            " g r g w g g g w g r g" +
-            " g r g g w w w g g r g" +
-            " g r g t g w g t g r g" +
-            " g r g g w m w g g r g" +
-            " g c g g m m m g g c g" +
-            " g g g t m m m t g g g" +
-            " g g t t m m m t t g g" +
-            " t g g g t t t g g g t";
+    public static final String MAP1 = "13 13 " +
+            "x x x x x x x x x x x x x " +
+            "x g g g g g g g g g g g x " +
+            "x g r r r r r r r r r g x " +
+            "x g r g g g g g g g r g x " +
+            "x g r g w g g g w g r g x " +
+            "x g r g g w w w g g r g x " +
+            "x g r g t g w g t g r g x " +
+            "x g r g g w m w g g r g x " +
+            "x g c g g m m m g g c g x " +
+            "x g g g t m m m t g g g x " +
+            "x g g t t m m m t t g g x " +
+            "x t g g g t t t g g g t x " +
+            "x x x x x x x x x x x x x ";
 
     public GameMap(int width, int height, ArrayList<Tile> tiles) {
         this.mapWidth = width;
