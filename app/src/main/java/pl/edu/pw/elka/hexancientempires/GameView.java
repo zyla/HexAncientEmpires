@@ -34,7 +34,7 @@ public class GameView extends View {
     /** Maximum movement distance for a click event, squared */
     private static final float MAX_CLICK_EVENT_DISTANCE_SQ = 100;
 
-    private GameMap Map;
+    private GameMap map;
     private ArrayList<Drawable> terrain;
     private ArrayList<Bitmap> units;
 
@@ -67,10 +67,10 @@ public class GameView extends View {
 
         cursor = context.getResources().getDrawable(R.drawable.cursor);
 
-        Map = GameMap.loadFromString(GameMap.MAP1);
+        map = GameMap.loadFromString(GameMap.MAP1);
 
-        Map.getTile(1, 0).unit = new Unit(1,1);
-        displayedRange = new UnitRangeBFS(Map).getReachableTiles(new Point (1,0));
+        map.getTile(1, 0).unit = new Unit(1,1);
+        displayedRange = new UnitRangeBFS(map).getReachableTiles(new Point (1,0));
     }
 
     @Override
@@ -106,7 +106,7 @@ public class GameView extends View {
 
     private void setCameraOffset(float x, float y) {
         // TODO refactor
-        Point lastTile = TileMath.tileLocation(Map.getWidth(), Map.getHeight());
+        Point lastTile = TileMath.tileLocation(map.getWidth(), map.getHeight());
         cameraOffset.x = Math.max(Math.min(x, -TILE_WIDTH/4), -lastTile.x + getWidth());
         cameraOffset.y = Math.max(Math.min(y, -TILE_HEIGHT/2), -lastTile.y + TILE_HEIGHT/2 + getHeight());
     }
@@ -219,7 +219,7 @@ public class GameView extends View {
 
     private void drawTile(Canvas canvas, int mapX, int mapY) {
         Point loc = TileMath.tileLocation(mapX, mapY);
-        Tile tile = Map.getTile(mapX,mapY);
+        Tile tile = map.getTile(mapX,mapY);
 
         //ask Map if File is an element of the map
         if(tile.type == Tile.NONE)
