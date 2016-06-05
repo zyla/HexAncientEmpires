@@ -12,7 +12,9 @@ import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import static pl.edu.pw.elka.hexancientempires.TileMath.TILE_WIDTH;
 import static pl.edu.pw.elka.hexancientempires.TileMath.TILE_HEIGHT;
@@ -32,7 +34,7 @@ public class GameView extends View {
     /** Maximum movement distance for a click event, squared */
     private static final float MAX_CLICK_EVENT_DISTANCE_SQ = 100;
 
-    private GameMap Map = new GameMap();
+    private GameMap Map;
     private ArrayList<Drawable> terrain;
     private ArrayList<Bitmap> units;
 
@@ -41,6 +43,8 @@ public class GameView extends View {
 
     private Drawable cursor;
     private Point cursorPos = new Point(0, 0);
+
+    private List<UnitRangeBFS.Node> displayedRange = Collections.emptyList();
 
     public GameView(Context context) {
         super(context);
@@ -62,6 +66,11 @@ public class GameView extends View {
         units.add(BitmapFactory.decodeResource(getResources(), R.drawable.units3));
 
         cursor = context.getResources().getDrawable(R.drawable.cursor);
+
+        Map = GameMap.loadFromString(GameMap.MAP1);
+
+        Map.getTile(1, 0).unit = new Unit(1,1);
+        displayedRange = new UnitRangeBFS(Map).getReachableTiles(new Point (1,0));
     }
 
     @Override
@@ -164,6 +173,22 @@ public class GameView extends View {
                 drawTile(canvas, x, y);
             }
         }
+
+        drawRange(canvas);
+    }
+
+    private void drawRange(Canvas canvas) {
+        Paint paint = new Paint();
+        paint.setColor(0x80ff0000);
+        paint.setStyle(Paint.Style.FILL);
+
+        for(UnitRangeBFS.Node node: displayedRange) {
+            Point loc = TileMath.tileLocation(node.loc.x, node.loc.y);
+
+            canvas.translate(loc.x, loc.y);
+            canvas.drawPath(tilePath, paint);
+            canvas.translate(-loc.x, -loc.y);
+        }
     }
 
     private void drawCursor(Canvas canvas, Point center) {
@@ -216,16 +241,6 @@ public class GameView extends View {
 
                 canvas.drawBitmap(bitmap, areaToCrop, areaToDraw, null);
             }
-
-            if(tile.isDisplayRange() == true) {
-                paint.setColor(0x80ff0000);
-                paint.setStyle(Paint.Style.FILL);
-                canvas.drawPath(tilePath, paint);
-            }
-            paint.setStrokeWidth(1);
-            paint.setStyle(Paint.Style.FILL);
-            paint.setTextSize(32);
-            paint.setTextAlign(Paint.Align.CENTER);
         }
         canvas.restore();
     }
