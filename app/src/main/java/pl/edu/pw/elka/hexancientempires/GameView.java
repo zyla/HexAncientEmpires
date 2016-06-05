@@ -23,8 +23,6 @@ import static pl.edu.pw.elka.hexancientempires.TileMath.TILE_HEIGHT;
  * Created by zyla on 3/29/16.
  */
 public class GameView extends View {
-    public String text = "";
-
     private PointF cameraOffset = new PointF(-TILE_WIDTH/4, -TILE_HEIGHT/2);
     private PointF lastTouchDown = new PointF();
 
@@ -161,18 +159,7 @@ public class GameView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        long start = System.currentTimeMillis();
         numTilesRendered = 0;
-
-        Paint paint = new Paint();
-        paint.setColor(0xffff0000);
-        paint.setStyle(Paint.Style.FILL);
-
-        canvas.drawRect(0, 0, getWidth(), getHeight(), paint);
-
-        paint.setColor(0xffff0000);
-        paint.setTextSize(30);
-        canvas.drawText(text, 0, 30, paint);
 
         canvas.save();
         {
@@ -183,13 +170,17 @@ public class GameView extends View {
         }
         canvas.restore();
 
-        long renderTime = System.currentTimeMillis() - start;
+        drawDebugInfo(canvas);
+    }
 
+    private void drawDebugInfo(Canvas canvas) {
+        Paint paint = new Paint();
         paint.setColor(0x80000000);
         paint.setStyle(Paint.Style.FILL);
         canvas.drawRect(getWidth() - 200, 0, getWidth(), 80, paint);
 
         paint.setColor(0xffffffff);
+        paint.setTextSize(30);
         paint.setTextAlign(Paint.Align.RIGHT);
         canvas.drawText(String.format("tiles: %d", numTilesRendered), getWidth(), 30, paint);
         canvas.drawText(String.format("fps: %d", 1000/Math.max(lastFrameTime, 1)), getWidth(), 60, paint);

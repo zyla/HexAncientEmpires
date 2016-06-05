@@ -66,7 +66,5 @@ public class GameActivity extends AppCompatActivity implements ConnectionService
 
     @Override
     public void lineReceived(String line) {
-        gameView.text += line + "\n";
-        gameView.invalidate();
     }
 }
