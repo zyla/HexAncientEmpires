@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 import android.view.View;
@@ -182,8 +183,9 @@ public class GameView extends View {
         paint.setColor(0xffffffff);
         paint.setTextSize(30);
         paint.setTextAlign(Paint.Align.RIGHT);
-        canvas.drawText(String.format("tiles: %d", numTilesRendered), getWidth(), 30, paint);
-        canvas.drawText(String.format("fps: %d", 1000/Math.max(lastFrameTime, 1)), getWidth(), 60, paint);
+        paint.setTypeface(Typeface.MONOSPACE);
+        canvas.drawText(String.format("tiles: %3d", numTilesRendered), getWidth(), 30, paint);
+        canvas.drawText(String.format("fps: %3d", 1000/Math.max(lastFrameTime, 1)), getWidth(), 60, paint);
     }
 
     private Rect visibleArea() {
