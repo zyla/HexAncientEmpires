@@ -46,6 +46,17 @@ public class GameView extends View {
 
     private List<UnitRangeBFS.Node> displayedRange = Collections.emptyList();
 
+    private long lastFrameStartedAt;
+    private long lastFrameTime; // for FPS reporting
+    private boolean framePending;
+
+    // java == wtf
+    private final Runnable processFrameRunnable = new Runnable() {
+        public void run() {
+            processFrame();
+        }
+    };
+
     public GameView(Context context) {
         super(context);
         terrain = new ArrayList<>(6);
@@ -92,7 +103,7 @@ public class GameView extends View {
                 if (isMovement) {
                     setCameraOffset(cameraOffset.x + offsetX, cameraOffset.y + offsetY);
                     lastTouchDown.set(event.getX(), event.getY());
-                    postInvalidate();
+                    requestFrame();
                 }
                 return true;
             case MotionEvent.ACTION_UP:
@@ -104,6 +115,33 @@ public class GameView extends View {
         return false;
     }
 
+    public void onAttachedToWindow() {
+        requestFrame();
+    }
+
+    private void requestFrame() {
+        if(!framePending) {
+            framePending = true;
+            long now = System.currentTimeMillis();
+            postDelayed(processFrameRunnable, Math.max(0, 16 - (now - lastFrameStartedAt)));
+        }
+    }
+
+    private void processFrame() {
+        framePending = false;
+        long frameTime = System.currentTimeMillis() - lastFrameStartedAt;
+        lastFrameStartedAt = System.currentTimeMillis();
+
+        update(frameTime);
+        invalidate();
+    }
+
+    private void update(long frameTime) {
+        lastFrameTime = frameTime;
+        // update animations here
+        // nothing for now
+    }
+
     private void setCameraOffset(float x, float y) {
         // TODO refactor
         Point lastTile = TileMath.tileLocation(map.getWidth(), map.getHeight());
@@ -113,7 +151,7 @@ public class GameView extends View {
 
     private void tileClicked(Point tilePos) {
         cursorPos = tilePos;
-        postInvalidate();
+        requestFrame();
     }
 
     /** Squared magnitude of a two-dimensional vector (x, y) */
@@ -154,7 +192,7 @@ public class GameView extends View {
         paint.setColor(0xffffffff);
         paint.setTextAlign(Paint.Align.RIGHT);
         canvas.drawText(String.format("tiles: %d", numTilesRendered), getWidth(), 30, paint);
-        canvas.drawText(String.format("time: %dms", renderTime), getWidth(), 60, paint);
+        canvas.drawText(String.format("fps: %d", 1000/Math.max(lastFrameTime, 1)), getWidth(), 60, paint);
     }
 
     private Rect visibleArea() {
