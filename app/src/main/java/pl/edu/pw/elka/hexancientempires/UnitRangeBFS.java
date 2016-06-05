@@ -61,7 +61,7 @@ public class UnitRangeBFS {
     }
 
     public ArrayList<Node> getReachableTiles(Point origin) {
-        Tile tile  = gameMap.getTile(origin.x,origin.y);
+        Tile tile  = gameMap.getTile(origin);
         if(tile.type == Tile.NONE || tile.unit == null)
             throw new IllegalArgumentException("tile not good for BFS");
 
@@ -70,7 +70,7 @@ public class UnitRangeBFS {
         LinkedList<Node> queue = new LinkedList<>();
         int range = UnitMath.unitSpeed[tile.unit.type];
 
-        int originIndex = origin.y * gameMap.mapWidth +origin.x;
+        int originIndex = gameMap.getMapIndex(origin);
         graph.set(originIndex,new Node(graph.get(originIndex),0));
 
         queue.add(graph.get(originIndex));
