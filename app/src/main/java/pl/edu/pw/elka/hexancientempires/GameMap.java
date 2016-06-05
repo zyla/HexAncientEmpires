@@ -111,4 +111,11 @@ public class GameMap {
 
         return new GameMap(mapWidth, mapHeight, tiles);
     }
+
+    public void move(ArrayList<Point> path) {
+        Unit unit = tiles.get(getMapIndex(path.get(0))).unit;
+        tiles.get(getMapIndex(path.get(0))).unit = null;
+        tiles.get(getMapIndex(path.get(path.size()- 1))).unit = unit ;
+
+    }
 }

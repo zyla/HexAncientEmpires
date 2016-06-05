@@ -34,6 +34,7 @@ public class GameView extends View {
     private static final float MAX_CLICK_EVENT_DISTANCE_SQ = 100;
 
     private GameMap map;
+    private Game game;
     private ArrayList<Drawable> terrain;
     private ArrayList<Bitmap> units;
 
@@ -43,7 +44,7 @@ public class GameView extends View {
     private Drawable cursor;
     private Point cursorPos = new Point(0, 0);
 
-    private List<UnitRangeBFS.Node> displayedRange = Collections.emptyList();
+    private ArrayList<UnitRangeBFS.Node> displayedRange;// = Collections.emptyList();
 
     private long lastFrameStartedAt;
     private long lastFrameTime; // for FPS reporting
@@ -79,9 +80,11 @@ public class GameView extends View {
         cursor = context.getResources().getDrawable(R.drawable.cursor);
 
         map = GameMap.loadFromString(GameMap.MAP1);
+        game = new Game(map);
 
         map.getTile(1, 1).unit = new Unit(1,1);
         displayedRange = new UnitRangeBFS(map).getReachableTiles(new Point (1,1));
+        game.setMoveRange(displayedRange);
     }
 
     @Override
@@ -151,6 +154,7 @@ public class GameView extends View {
 
     private void tileClicked(Point tilePos) {
         cursorPos = tilePos;
+        game.doSmth(tilePos);
         requestFrame();
     }
 
