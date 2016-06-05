@@ -15,26 +15,24 @@ public class UnitAttackRange {
 
     public class Node {
         Point loc;      //location of node in the map
-        boolean allowed;
         int distance;
+        int playerID;
 
-        public Node(Tile tile, Point loc,int playerID) {
+        public Node(Tile tile, Point loc) {
             this.loc = loc;
             distance = Integer.MAX_VALUE;
-            if (tile.unit != null && tile.type != Tile.NONE && playerID != tile.unit.playerID) {
-                allowed = true;
-            } else {
-                allowed = false;
-            }
+            if(tile.unit != null)
+                this.playerID = tile.unit.playerID;
+            else playerID = 0;
         }
    }
 
-    private ArrayList< Node> getGraph(int playerID){
+    private ArrayList< Node> getGraph(){
         int size = gameMap.getSize();
 
         ArrayList<Node> graph = new ArrayList<>(size);
         for(int i  = 0; i < size; i++ ) {
-            graph.add(i, new UnitAttackRange.Node(gameMap.getTile(i),gameMap.getMapLoc(i),playerID));
+            graph.add(i, new UnitAttackRange.Node(gameMap.getTile(i),gameMap.getMapLoc(i)));
         }
         return graph;
     }
@@ -45,7 +43,7 @@ public class UnitAttackRange {
             throw new IllegalArgumentException("tile not good for BFS");
 
         int range = UnitMath.unitRange[tile.unit.type];
-        ArrayList<Node> graph = getGraph(tile.unit.playerID);
+        ArrayList<Node> graph = getGraph();
 
         ArrayList<Node> inRange = new ArrayList<>();
         LinkedList<Node> queue = new LinkedList<>();
@@ -55,13 +53,12 @@ public class UnitAttackRange {
         while(!queue.isEmpty())
         {
             Node current = queue.remove();
-            inRange.add(current);
+            if(current.playerID != 0 && current.playerID != tile.unit.playerID)
+                inRange.add(current);
             for(int i = 0; i < 6 ; i++)
             {
                 Point mateLoc = TileMath.neighbour(current.loc,i);
                 Node mate = graph.get(gameMap.getMapIndex(mateLoc));
-                if(mate.allowed == false)
-                    continue;
                 if( mate.distance == Integer.MAX_VALUE) {
                     mate.distance = current.distance + 1;
                     graph.set(gameMap.getMapIndex(mateLoc),mate);
