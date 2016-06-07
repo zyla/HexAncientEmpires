@@ -14,6 +14,9 @@ import android.graphics.drawable.Drawable;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Map;
+
+import pl.edu.pw.elka.hexancientempires.UnitRangeBFS.Node;
 
 import static pl.edu.pw.elka.hexancientempires.TileMath.TILE_HEIGHT;
 import static pl.edu.pw.elka.hexancientempires.TileMath.TILE_WIDTH;
@@ -40,16 +43,15 @@ public class Game {
     private Point cursorPos = new Point(0, 0);
 
     //----------
-    private List<UnitRangeBFS.Node> displayedRange = Collections.emptyList();
+    private Map<Point, UnitRangeBFS.Node> displayedRange = Collections.emptyMap();
     ArrayList<UnitAttackRange.Node> atakRange;
     ArrayList<UnitRangeBFS.Node> moveRange;
-    private boolean rangeOn;
 
     private Animation unitAnimation = new Animation();
 
     public void tileSelected(Point tilePos) {
         Unit unit = map.getTile(cursorPos).unit;
-        if(unit != null) {
+        if(unit != null && isInRange(tilePos)) {
             unitAnimation.start(unit,
                 ANIMATION_TIME, 
                 toPointF(TileMath.tileLocation(cursorPos)),
@@ -59,6 +61,14 @@ public class Game {
         }
 
         cursorPos = tilePos;
+
+        unit = map.getTile(cursorPos).unit;
+
+        if(unit != null) {
+            displayedRange = new UnitRangeBFS(map).getReachableTiles(cursorPos);
+        } else {
+            displayedRange = Collections.emptyMap();
+        }
     }
 
     // TODO move to utils
@@ -95,11 +105,6 @@ public class Game {
         map = GameMap.loadFromString(GameMap.MAP1);
 
         map.getTile(1, 1).unit = new Unit(1,1);
-//        displayedRange = new UnitRangeBFS(map).getReachableTiles(new Point (1,1));
-//        game.setMoveRange(displayedRange);
-
-
- //       this.map = map;
     }
 
 
@@ -169,7 +174,7 @@ public class Game {
         paint.setColor(0x80ff0000);
         paint.setStyle(Paint.Style.FILL);
 
-        for(UnitRangeBFS.Node node: displayedRange) {
+        for(UnitRangeBFS.Node node: displayedRange.values()) {
             Point loc = TileMath.tileLocation(node.loc.x, node.loc.y);
 
             canvas.translate(loc.x, loc.y);
@@ -222,39 +227,20 @@ public class Game {
         canvas.drawBitmap(bitmap, areaToCrop, areaToDraw, null);
     }
 
-    public void setMoveRange(ArrayList<UnitRangeBFS.Node> moveRange) {
-        this.rangeOn = true;
-        this.moveRange = moveRange;
-
-
-    }
-
-
-    public ArrayList<Point> getPath(Point current){
+    public ArrayList<Point> getPath(Point current) {
         ArrayList<Point> way = new ArrayList<>();
 
-        while (current!= null){
+        while (current != null) {
             way.add(current);
-            current = moveRange.get(getIndex(moveRange,current)).parent;
+            current = displayedRange.get(current).parent;
         }
 
         Collections.reverse(way);
         return way;
     }
 
-    private int getIndex(ArrayList<UnitRangeBFS.Node> moveRange,Point loc){
-        for(int i = 0; i < moveRange.size();i++ ){
-            if(moveRange.get(i).loc == loc)
-                return i;
-        }
-        throw new IllegalArgumentException("move range path is broken");
-    }
-
-    private boolean isInRange(Point tilePos){
-        for(int i = 0; i < moveRange.size();i++)
-            if(moveRange.get(i).loc == tilePos)
-                return true;
-        return false;
+    private boolean isInRange(Point tilePos) {
+        return displayedRange.containsKey(tilePos);
     }
 
     public int getWidth() {

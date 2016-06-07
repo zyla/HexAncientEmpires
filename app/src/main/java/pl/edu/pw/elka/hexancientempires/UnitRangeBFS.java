@@ -1,7 +1,9 @@
 package pl.edu.pw.elka.hexancientempires;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 /**
  * After all this thinking I decided to not mess up GameMap too much
@@ -60,13 +62,13 @@ public class UnitRangeBFS {
         return graph;
     }
 
-    public ArrayList<Node> getReachableTiles(Point origin) {
+    public Map<Point, Node> getReachableTiles(Point origin) {
         Tile tile  = gameMap.getTile(origin);
         if(tile.type == Tile.NONE || tile.unit == null)
             throw new IllegalArgumentException("tile not good for BFS");
 
         ArrayList<Node> graph = getGraph();
-        ArrayList<Node> visited = new ArrayList<>();
+        Map<Point, Node> visited = new HashMap<>();
         LinkedList<Node> queue = new LinkedList<>();
         int range = UnitMath.unitSpeed[tile.unit.type];
 
@@ -94,9 +96,9 @@ public class UnitRangeBFS {
             }
         }
 
-        for(int i = 0; i < graph.size(); i++){
-            if(graph.get(i).distance <= range)
-                visited.add(graph.get(i));
+        for(Node node: graph) {
+            if(node.distance <= range)
+                visited.put(node.loc, node);
         }
 
         return visited;

@@ -23,4 +23,9 @@ public class Point {
         Point p = (Point) o;
         return x == p.x && y == p.y;
     }
+
+    @Override
+    public int hashCode() {
+        return x * 223 + y;
+    }
 }
