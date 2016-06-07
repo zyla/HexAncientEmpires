@@ -101,12 +101,16 @@ public class GameView extends View {
     private void processFrame() {
         framePending = false;
         long frameTime = System.currentTimeMillis() - lastFrameStartedAt;
+        lastFrameTime = frameTime;
         lastFrameStartedAt = System.currentTimeMillis();
 
-        update(frameTime);
+        game.update(Math.min(frameTime, 16));
         invalidate();
-    }
 
+        if(game.needsNextFrame()) {
+            requestFrame();
+        }
+    }
 
     private void setCameraOffset(float x, float y) {
         // TODO refactor
@@ -117,16 +121,9 @@ public class GameView extends View {
 
     private void tileClicked(Point tilePos) {
         game.tileSelected(tilePos);
+
         requestFrame();
     }
-
-    private void update(long frameTime) {
-        lastFrameTime = frameTime;
-        // update animations here
-        // nothing for now
-    }
-
-
 
     /** Squared magnitude of a two-dimensional vector (x, y) */
     private static float mag2(float x, float y) {
@@ -144,7 +141,6 @@ public class GameView extends View {
 
     }
 
-
     private Rect visibleArea() {
         Rect visableAreaInPixels = new Rect(
                 (int) -cameraOffset.x,
@@ -155,5 +151,4 @@ public class GameView extends View {
 
         return TileMath.visibleTiles(visableAreaInPixels);
     }
-
-  }
+}

@@ -11,6 +11,7 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -24,6 +25,7 @@ import static pl.edu.pw.elka.hexancientempires.TileMath.TILE_WIDTH;
  * Created by tomek on 05.06.16.
  */
 public class Game {
+    private static final long ANIMATION_TIME = 300;
 
     private GameMap map;
     private ArrayList<Drawable> terrain;
@@ -38,17 +40,35 @@ public class Game {
     private Point cursorPos = new Point(0, 0);
 
     //----------
-    private ArrayList<UnitRangeBFS.Node> displayedRange;// = Collections.emptyList();
+    private List<UnitRangeBFS.Node> displayedRange = Collections.emptyList();
     ArrayList<UnitAttackRange.Node> atakRange;
     ArrayList<UnitRangeBFS.Node> moveRange;
     private boolean rangeOn;
 
+    private Animation unitAnimation = new Animation();
+
     public void tileSelected(Point tilePos) {
-        //TODO process some other things than unit movement
-        if(isInRange(tilePos) && rangeOn){
-            map.move(getPath(tilePos) );
-            rangeOn = false;
+        Unit unit = map.getTile(cursorPos).unit;
+        if(unit != null) {
+            unitAnimation.start(unit,
+                ANIMATION_TIME, 
+                toPointF(TileMath.tileLocation(cursorPos)),
+                toPointF(TileMath.tileLocation(tilePos))
+            );
+            moveUnit(unit, cursorPos, tilePos);
         }
+
+        cursorPos = tilePos;
+    }
+
+    // TODO move to utils
+    private static PointF toPointF(Point p) {
+        return new PointF(p.x, p.y);
+    }
+
+    private void moveUnit(Unit unit, Point from, Point to) {
+        map.getTile(from).unit = null;
+        map.getTile(to).unit = unit;
     }
 
     public Game(Context context) {
@@ -105,6 +125,17 @@ public class Game {
         drawCursor(canvas, TileMath.tileCenter(cursorPos.x, cursorPos.y));
         drawDebugInfo(canvas,lastFrameTime);
 
+        drawMovingUnit(canvas);
+    }
+
+    private void drawMovingUnit(Canvas canvas) {
+        if(unitAnimation.isRunning()) {
+            drawUnit(canvas,
+                unitAnimation.getUnit(),
+                unitAnimation.getCurrentX(),
+                unitAnimation.getCurrentY()
+            );
+        }
     }
 
     private void drawDebugInfo(Canvas canvas,long lastFrameTime) {
@@ -173,20 +204,23 @@ public class Game {
             canvas.translate(loc.x, loc.y);
             terrain.get(tile.type).draw(canvas);
 
-            if (tile.unit != null) {
-                Unit unit = tile.unit;
-                Bitmap bitmap = units.get(unit.playerID - 1);
-                int unitWidth = bitmap.getWidth() / 12, unitHeight = bitmap.getHeight() / 2;
-                android.graphics.Rect areaToCrop = new android.graphics.Rect(unit.type * unitWidth, 0, (unit.type + 1) * unitWidth, unitHeight);
-                RectF areaToDraw = new RectF(0, 0, TILE_WIDTH, TILE_HEIGHT);
-
-                canvas.drawBitmap(bitmap, areaToCrop, areaToDraw, null);
+            Unit unit = tile.unit;
+            if (unit != null
+                    && !unitAnimation.isAnimating(unit)) { // moving unit is drawn separately
+                drawUnit(canvas, unit, 0, 0);
             }
         }
         canvas.restore();
     }
 
+    private void drawUnit(Canvas canvas, Unit unit, float x, float y) {
+        Bitmap bitmap = units.get(unit.playerID - 1);
+        int unitWidth = bitmap.getWidth() / 12, unitHeight = bitmap.getHeight() / 2;
+        android.graphics.Rect areaToCrop = new android.graphics.Rect(unit.type * unitWidth, 0, (unit.type + 1) * unitWidth, unitHeight);
+        RectF areaToDraw = new RectF(x, y, x + TILE_WIDTH, y + TILE_HEIGHT);
 
+        canvas.drawBitmap(bitmap, areaToCrop, areaToDraw, null);
+    }
 
     public void setMoveRange(ArrayList<UnitRangeBFS.Node> moveRange) {
         this.rangeOn = true;
@@ -229,5 +263,13 @@ public class Game {
 
     public int getHeight() {
         return map.getHeight();
+    }
+
+    public void update(long frameTime) {
+        unitAnimation.update(frameTime);
+    }
+
+    public boolean needsNextFrame() {
+        return unitAnimation.isRunning();
     }
 }

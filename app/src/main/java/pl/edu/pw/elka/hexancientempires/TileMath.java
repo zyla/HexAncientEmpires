@@ -44,6 +44,10 @@ public class TileMath {
                 TILE_HEIGHT * mapY + (mapX & 1) * TILE_HEIGHT / 2);
     }
 
+    public static Point tileLocation(Point loc) {
+        return tileLocation(loc.x, loc.y);
+    }
+
     public static Point neighbour(Point loc, int side) {
         // TODO use it in A*
         int even = (loc.x + 1) % 2;
