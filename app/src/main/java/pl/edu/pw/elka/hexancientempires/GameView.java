@@ -140,14 +140,14 @@ public class GameView extends View {
     }
 
     private Rect visibleArea() {
-        Rect visableAreaInPixels = new Rect(
+        Rect visibleAreaInPixels = new Rect(
                 (int) -cameraOffset.x,
                 (int) -cameraOffset.y,
                 (int) -cameraOffset.x + getWidth(),
                 (int) -cameraOffset.y + getHeight()
         );
 
-        return TileMath.visibleTiles(visableAreaInPixels);
+        return TileMath.visibleTiles(visibleAreaInPixels);
     }
 
     private void drawDebugInfo(Canvas canvas) {

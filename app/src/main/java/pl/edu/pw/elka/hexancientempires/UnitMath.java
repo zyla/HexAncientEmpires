@@ -42,17 +42,17 @@ public class UnitMath {
     };
 
     public static final int[] unitSpeed = {
-        3,//WARRIOR
-        3,//ARCHER
+        4,//WARRIOR
+        4,//ARCHER
         3,//WATERELEM
         2,//WIZZARD
-        3,//WISP
-        5,//WOLF
-        2,//GOLEM
+        4,//WISP
+        7,//WOLF
+        3,//GOLEM
         2,//CATEPULT
-        6,//DREGON
-        3,//SKELETON
-        3 //KING
+        8,//DREGON
+        4,//SKELETON
+        4 //KING
     };
 
     public static final int[] tileDefense = {
@@ -70,10 +70,10 @@ public class UnitMath {
             Integer.MAX_VALUE,//NONE
             3,//CASTLE
             2,//GRASS
-            5,//MOUNTAIN
+            3,//MOUNTAIN
             1,//ROAD
-            3,//TREE
-            5//WATER
+            2,//TREE
+            3//WATER
     };
 
     //I have to change value of hp in one unit, but idk if possible in java
