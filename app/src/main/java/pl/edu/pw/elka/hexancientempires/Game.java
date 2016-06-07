@@ -37,9 +37,6 @@ public class Game {
 
     Paint paint = new Paint();
 
-    //Debug Info
-    private int numTilesRendered;
-
     private Point cursorPos = new Point(0, 0);
 
     //----------
@@ -121,14 +118,11 @@ public class Game {
 
 
 
-    public void draw(Canvas canvas, PointF cameraOffset, Rect visibleArea, long lastFrameTime) {
-        numTilesRendered = 0;
-
+    public void draw(Canvas canvas, PointF cameraOffset, Rect visibleArea) {
         canvas.translate(cameraOffset.x, cameraOffset.y);
         drawMap(canvas, visibleArea);
 
         drawCursor(canvas, TileMath.tileCenter(cursorPos.x, cursorPos.y));
-        drawDebugInfo(canvas,lastFrameTime);
 
         drawMovingUnit(canvas);
     }
@@ -141,20 +135,6 @@ public class Game {
                 unitAnimation.getCurrentY()
             );
         }
-    }
-
-    private void drawDebugInfo(Canvas canvas,long lastFrameTime) {
-        Paint paint = new Paint();
-        paint.setColor(0x80000000);
-        paint.setStyle(Paint.Style.FILL);
-        canvas.drawRect(getWidth() - 200, 0, getWidth(), 80, paint);
-
-        paint.setColor(0xffffffff);
-        paint.setTextSize(30);
-        paint.setTextAlign(Paint.Align.RIGHT);
-        paint.setTypeface(Typeface.MONOSPACE);
-        canvas.drawText(String.format("tiles: %3d", numTilesRendered), getWidth(), 30, paint);
-        canvas.drawText(String.format("fps: %3d", 1000/Math.max(lastFrameTime, 1)), getWidth(), 60, paint);
     }
 
 
@@ -201,8 +181,6 @@ public class Game {
     private void drawTile(Canvas canvas, int mapX, int mapY) {
         Point loc = TileMath.tileLocation(mapX, mapY);
         Tile tile = map.getTile(mapX,mapY);
-
-        numTilesRendered++;
 
         canvas.save();
         {

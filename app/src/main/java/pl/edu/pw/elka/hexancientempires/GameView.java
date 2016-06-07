@@ -132,13 +132,11 @@ public class GameView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-
         canvas.save();
-        {
-            game.draw(canvas, cameraOffset, visibleArea(), lastFrameTime);
-        }
+        game.draw(canvas, cameraOffset, visibleArea());
         canvas.restore();
 
+        drawDebugInfo(canvas);
     }
 
     private Rect visibleArea() {
@@ -150,5 +148,18 @@ public class GameView extends View {
         );
 
         return TileMath.visibleTiles(visableAreaInPixels);
+    }
+
+    private void drawDebugInfo(Canvas canvas) {
+        Paint paint = new Paint();
+        paint.setColor(0x80000000);
+        paint.setStyle(Paint.Style.FILL);
+        canvas.drawRect(getWidth() - 200, 0, getWidth(), 40, paint);
+
+        paint.setColor(0xffffffff);
+        paint.setTextSize(30);
+        paint.setTextAlign(Paint.Align.RIGHT);
+        paint.setTypeface(Typeface.MONOSPACE);
+        canvas.drawText(String.format("fps: %3d", 1000/Math.max(lastFrameTime, 1)), getWidth(), 30, paint);
     }
 }
