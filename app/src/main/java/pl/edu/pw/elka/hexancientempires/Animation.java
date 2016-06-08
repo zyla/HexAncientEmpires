@@ -33,9 +33,12 @@ public class Animation {
     }
 
     public void update(long frameTime) {
+        if(!isRunning())
+            return;
+
         elapsedTime += frameTime;
 
-        while(elapsedTime >= totalTime) {
+        while(isRunning() && elapsedTime >= totalTime) {
             elapsedTime -= totalTime;
             fromPointIndex++;
         }
