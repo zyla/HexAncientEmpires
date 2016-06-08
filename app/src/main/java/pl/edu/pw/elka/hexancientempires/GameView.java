@@ -26,6 +26,7 @@ public class GameView extends View {
     private PointF lastTouchDown = new PointF();
     private long lastFrameTime; // for FPS reporting
 
+    private boolean isWaitingForEvent = true;
 
     /** True if current touch stroke is a movement, not a click */
     private boolean isMovement;
@@ -43,6 +44,12 @@ public class GameView extends View {
     private final Runnable processFrameRunnable = new Runnable() {
         public void run() {
             processFrame();
+        }
+    };
+
+    private final Runnable requestFrameRunnable = new Runnable() {
+        public void run() {
+            requestFrame();
         }
     };
 
@@ -100,15 +107,25 @@ public class GameView extends View {
 
     private void processFrame() {
         framePending = false;
-        long frameTime = System.currentTimeMillis() - lastFrameStartedAt;
+        long now = System.currentTimeMillis();
+        long frameTime = now - lastFrameStartedAt;
         lastFrameTime = frameTime;
-        lastFrameStartedAt = System.currentTimeMillis();
+        lastFrameStartedAt = now;
 
-        game.update(Math.min(frameTime, 16));
+        if(isWaitingForEvent) {
+            isWaitingForEvent = false;
+        } else {
+            game.update(frameTime);
+        }
         invalidate();
 
-        if(game.needsNextFrame()) {
+        long delay = game.nextFrameDelay();
+        if (delay == Game.FRAME_WAIT_FOR_EVENT) {
+            isWaitingForEvent = true;
+        } else if (delay == Game.FRAME_IMMEDIATELY) {
             requestFrame();
+        } else {
+            postDelayed(requestFrameRunnable, delay); // TODO cancel the timer when frame arrives
         }
     }
 
@@ -133,7 +150,7 @@ public class GameView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.save();
-        game.draw(canvas, cameraOffset, visibleArea());
+        game.draw(canvas, cameraOffset, visibleArea(), getWidth(), getHeight());
         canvas.restore();
 
         drawDebugInfo(canvas);

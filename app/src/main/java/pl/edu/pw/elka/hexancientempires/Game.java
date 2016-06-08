@@ -30,6 +30,12 @@ import static pl.edu.pw.elka.hexancientempires.TileMath.TILE_WIDTH;
 public class Game {
     private static final long ANIMATION_TIME = 300;
 
+    /** Special value for nextFrameDelay. Render next frame as fast as possible (considering rate limiting) */
+    public static final long FRAME_IMMEDIATELY = 0;
+
+    /** Special value for nextFrameDelay. Wait for event before rendering next frame. */
+    public static final long FRAME_WAIT_FOR_EVENT = -1;
+
     private GameMap map;
     private ArrayList<Drawable> terrain;
     private ArrayList<Bitmap> units;
@@ -45,6 +51,7 @@ public class Game {
     ArrayList<UnitRangeBFS.Node> moveRange;
 
     private Animation unitAnimation = new Animation();
+    private Message message = new Message();
 
     public void tileSelected(Point tilePos) {
         Unit unit = map.getTile(cursorPos).unit;
@@ -66,6 +73,8 @@ public class Game {
         } else {
             displayedRange = Collections.emptyMap();
         }
+
+        message.show("Selected tile " + tilePos, 3000);
     }
 
     // TODO move to utils
@@ -118,13 +127,20 @@ public class Game {
 
 
 
-    public void draw(Canvas canvas, PointF cameraOffset, Rect visibleArea) {
-        canvas.translate(cameraOffset.x, cameraOffset.y);
-        drawMap(canvas, visibleArea);
+    public void draw(Canvas canvas, PointF cameraOffset, Rect visibleArea, int screenWidth, int screenHeight) {
+        canvas.save();
+        {
+            canvas.translate(cameraOffset.x, cameraOffset.y);
 
-        drawCursor(canvas, TileMath.tileCenter(cursorPos.x, cursorPos.y));
+            drawMap(canvas, visibleArea);
 
-        drawMovingUnit(canvas);
+            drawCursor(canvas, TileMath.tileCenter(cursorPos.x, cursorPos.y));
+
+            drawMovingUnit(canvas);
+        }
+        canvas.restore();
+
+        drawMessage(canvas, screenWidth, screenHeight);
     }
 
     private void drawMovingUnit(Canvas canvas) {
@@ -134,6 +150,25 @@ public class Game {
                 unitAnimation.getCurrentX(),
                 unitAnimation.getCurrentY()
             );
+        }
+    }
+
+    private void drawMessage(Canvas canvas, int screenWidth, int screenHeight) {
+        if(message.isDisplaying()) {
+            final int margin = 30;
+            final int textSize = 40;
+            final int padding = 30;
+
+            Paint paint = new Paint();
+            paint.setColor(0x80000000);
+            paint.setStyle(Paint.Style.FILL);
+            canvas.drawRect(margin, screenHeight - margin - textSize - padding, screenWidth - margin, screenHeight - margin, paint);
+
+            paint.setColor(0xffffffff);
+            paint.setTextSize(textSize);
+            paint.setTextAlign(Paint.Align.CENTER);
+            paint.setTypeface(Typeface.MONOSPACE);
+            canvas.drawText(message.getText(), screenWidth / 2, screenHeight - margin - padding, paint);
         }
     }
 
@@ -230,10 +265,20 @@ public class Game {
     }
 
     public void update(long frameTime) {
-        unitAnimation.update(frameTime);
+        long animationFrameTime = Math.min(frameTime, 16); // TODO fix this hack
+
+        unitAnimation.update(animationFrameTime);
+
+        message.update(frameTime);
     }
 
-    public boolean needsNextFrame() {
-        return unitAnimation.isRunning();
+    public long nextFrameDelay() {
+        if(unitAnimation.isRunning()) {
+            return FRAME_IMMEDIATELY;
+        } else if(message.isDisplaying()) {
+            return message.getTimeLeft();
+        } else {
+            return FRAME_WAIT_FOR_EVENT;
+        }
     }
 }

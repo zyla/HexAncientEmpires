@@ -25,4 +25,12 @@ public class Rect {
         Rect r = (Rect) o;
         return left == r.left && top == r.top && right == r.right && bottom == r.bottom;
     }
+
+    public int width() {
+        return right - left;
+    }
+
+    public int height() {
+        return bottom - top;
+    }
 }
