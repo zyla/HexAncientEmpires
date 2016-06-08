@@ -74,7 +74,10 @@ public class GameLogic {
                 || unitInfos.get(tileFrom.unit.loc).moved)
             return false;
 
-        unitInfos.get(from).moved = true;
+        UnitInfo unitInfo = unitInfos.get(from);
+        unitInfo.moved = true;
+        unitInfos.remove(from);
+        unitInfos.put(to, unitInfo);
 
         map.getTile(to).unit = tileFrom.unit;
         map.getTile(from).unit = null;
