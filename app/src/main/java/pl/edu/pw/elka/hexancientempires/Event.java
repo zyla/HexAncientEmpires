@@ -3,16 +3,12 @@ package pl.edu.pw.elka.hexancientempires;
 import java.util.Arrays;
 
 public abstract class Event {
-    public static enum Type {
-        MOVE
-    }
-
     public static class Move extends Event {
-        public final int unitId;
+        public final Point from;
         public final Point to;
 
-        public Move(int unitId, Point to) {
-            this.unitId = unitId;
+        public Move(Point from, Point to) {
+            this.from = from;
             this.to = to;
         }
 
@@ -32,7 +28,8 @@ public abstract class Event {
             public String[] move(Move event) {
                 return new String[] {
                     "move", 
-                    Integer.toString(event.unitId),
+                    Integer.toString(event.from.x),
+                    Integer.toString(event.from.y),
                     Integer.toString(event.to.x),
                     Integer.toString(event.to.y),
                 };
@@ -50,8 +47,8 @@ public abstract class Event {
             switch(command) {
 
                 case "move":
-                    requireNumArguments(input, 3);
-                    return new Move(parseUnitId(input[1]), parsePoint(input[2], input[3]));
+                    requireNumArguments(input, 4);
+                    return new Move(parsePoint(input[1], input[2]), parsePoint(input[3], input[4]));
 
                 default:
                     throw invalidEvent(input, "Invalid command");
@@ -60,10 +57,6 @@ public abstract class Event {
         } catch (NumberFormatException e) {
             throw invalidEvent(input, "Invalid integer: " + e.getMessage());
         }
-    }
-
-    private static int parseUnitId(String str) {
-        return Integer.parseInt(str);
     }
 
     private static Point parsePoint(String xStr, String yStr) {

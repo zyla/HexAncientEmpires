@@ -179,4 +179,9 @@ public class GameView extends View {
         paint.setTypeface(Typeface.MONOSPACE);
         canvas.drawText(String.format("fps: %3d", 1000/Math.max(lastFrameTime, 1)), getWidth(), 30, paint);
     }
+
+    public void onEventReceived(Event event) {
+        game.eventReceived(event);
+        requestFrame();
+    }
 }

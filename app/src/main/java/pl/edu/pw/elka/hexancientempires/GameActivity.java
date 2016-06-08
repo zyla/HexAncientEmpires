@@ -61,5 +61,14 @@ public class GameActivity extends AppCompatActivity implements ConnectionService
 
     @Override
     public void lineReceived(String line) {
+        Event event;
+        try {
+            String[] tokens = line.split("\\s+");
+            event = Event.deserialize(tokens);
+        } catch (IllegalArgumentException e) {
+            System.err.println(e.getMessage());
+            return;
+        }
+        gameView.onEventReceived(event);
     }
 }

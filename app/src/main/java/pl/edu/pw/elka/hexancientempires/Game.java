@@ -56,30 +56,26 @@ public class Game {
     private Animation unitAnimation = new Animation();
     private Message message = new Message();
 
-    public void tileSelected(Point tilePos) {
+    public void tileSelected(Point newCursorPos) {
         if(unitAnimation.isRunning()) {
             unitAnimation.stop();
         }
 
-        Unit unit = map.getTile(cursorPos).unit;
-        if(unit != null && isInRange(tilePos) && gameLogic.move(cursorPos,tilePos)) {
-            unitAnimation.start(unit,
-                ANIMATION_TIME, 
-                pathToPixels(getPath(tilePos))
-            );
+        if(isInRange(newCursorPos)) {
+            moveUnit(cursorPos, newCursorPos);
         }
 
-        cursorPos = tilePos;
+        cursorPos = newCursorPos;
 
-        unit = map.getTile(cursorPos).unit;
+        Unit unit = map.getTile(cursorPos).unit;
 
         if(unit != null) {
-            displayedRange = new UnitRangeBFS(map).getReachableTiles(cursorPos);
+            displayedRange = new UnitRangeBFS(map).getReachableTiles(unit, cursorPos);
         } else {
             displayedRange = Collections.emptyMap();
         }
 
-        message.show("Selected tile " + tilePos, 3000);
+        message.show("Selected tile " + newCursorPos, 3000);
     }
 
     // TODO move to utils
@@ -93,6 +89,19 @@ public class Game {
             result.add(toPointF(TileMath.tileLocation(x)));
         }
         return result;
+    }
+
+    private void moveUnit(Point from, Point to) {
+        Unit unit = map.getTile(from).unit;
+
+        Map<Point, UnitRangeBFS.Node> range = new UnitRangeBFS(map).getReachableTiles(unit, from);
+
+        if(gameLogic.move(from, to)) {
+            unitAnimation.start(unit,
+                ANIMATION_TIME, 
+                pathToPixels(getPath(range, to))
+            );
+        }
     }
 
     public Game(Context context) {
@@ -251,12 +260,12 @@ public class Game {
         canvas.drawBitmap(bitmap, areaToCrop, areaToDraw, null);
     }
 
-    public ArrayList<Point> getPath(Point current) {
+    public static ArrayList<Point> getPath(Map<Point, UnitRangeBFS.Node> range, Point current) {
         ArrayList<Point> way = new ArrayList<>();
 
         while (current != null) {
             way.add(current);
-            current = displayedRange.get(current).parent;
+            current = range.get(current).parent;
         }
 
         Collections.reverse(way);
@@ -291,5 +300,14 @@ public class Game {
         } else {
             return FRAME_WAIT_FOR_EVENT;
         }
+    }
+
+    public void eventReceived(Event event) {
+        event.accept(new Event.Visitor<Void>() {
+            public Void move(Event.Move event) {
+                moveUnit(event.from, event.to);
+                return null;
+            }
+        });
     }
 }
