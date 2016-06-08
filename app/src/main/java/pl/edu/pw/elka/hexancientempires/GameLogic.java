@@ -14,17 +14,17 @@ public class GameLogic {
     int playerID;
     GameMap map;
 
-    public class UnitInfo{
-    boolean moved;
-    boolean attacked;
-    Unit unit;
+    public class UnitInfo {
+        boolean moved;
+        boolean attacked;
+        Unit unit;
 
-    public UnitInfo(Unit unit) {
-        this.moved = false;
-        this.attacked = false;
-        this.unit = unit;
+        public UnitInfo(Unit unit) {
+            this.moved = false;
+            this.attacked = false;
+            this.unit = unit;
+        }
     }
-}
 
     public GameLogic(List<Unit> units, int playerID, GameMap map) {
         this.units = units;
@@ -85,6 +85,6 @@ public class GameLogic {
         tileTo.unit.loc = to;
 
         return true;
-        }
+    }
 
 }
