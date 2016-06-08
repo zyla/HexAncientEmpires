@@ -32,11 +32,6 @@ public class GameActivity extends AppCompatActivity implements ConnectionService
         layout.addView(gameView);
         setContentView(layout);
 
-//        gameView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
-//                | View.SYSTEM_UI_FLAG_FULLSCREEN
-//                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-//                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-
         Intent intent = new Intent(getApplicationContext(), ConnectionService.class);
 
         boolean bound = bindService(intent, new ServiceConnection() {
