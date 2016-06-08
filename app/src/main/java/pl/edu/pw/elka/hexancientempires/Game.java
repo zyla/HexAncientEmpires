@@ -40,6 +40,7 @@ public class Game {
     private ArrayList<Drawable> terrain;
     private ArrayList<Bitmap> unitTextures;
     private Drawable cursor;
+    private GameLogic gameLogic;
 
     private List<Unit> units = new ArrayList<>();
 
@@ -61,12 +62,11 @@ public class Game {
         }
 
         Unit unit = map.getTile(cursorPos).unit;
-        if(unit != null && isInRange(tilePos)) {
+        if(unit != null && isInRange(tilePos) && gameLogic.move(cursorPos,tilePos)) {
             unitAnimation.start(unit,
                 ANIMATION_TIME, 
                 pathToPixels(getPath(tilePos))
             );
-            moveUnit(unit, cursorPos, tilePos);
         }
 
         cursorPos = tilePos;
@@ -95,12 +95,6 @@ public class Game {
         return result;
     }
 
-    private void moveUnit(Unit unit, Point from, Point to) {
-        map.getTile(from).unit = null;
-        map.getTile(to).unit = unit;
-        unit.loc = to;
-    }
-
     public Game(Context context) {
         terrain = new ArrayList<>(7);
         terrain.add(context.getResources().getDrawable(R.drawable.l));
@@ -124,10 +118,13 @@ public class Game {
 
         map = GameMap.loadFromString(GameMap.MAP1);
 
-        Point p =new Point (1,1);
-        Unit u = new Unit(1,1,p);
+        int playerID = 1;
+        Point p = new Point (1,1);
+        Unit u = new Unit(1,playerID,p);
         map.getTile(p).unit = u;
         units.add(u);
+
+        gameLogic = new GameLogic(units,playerID,map);
     }
 
 

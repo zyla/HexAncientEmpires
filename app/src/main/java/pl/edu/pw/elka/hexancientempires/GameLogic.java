@@ -36,20 +36,22 @@ public class GameLogic {
         this.map = map;
     }
 
-    public void Attack(Point attacking, Point defensing,int distance){
+    public boolean attack(Point attacking, Point defensing,int distance){
         Tile attacker = map.getTile(attacking);
         Tile attacked = map.getTile(defensing);
 
-        if(unitInfos.get(attacker.unit.loc).unit.playerID !=playerID
-                || unitInfos.get(attacked.unit.loc).unit.playerID == playerID
+        if(attacker.unit == null
+                || attacked.unit == null
+                || attacker.unit.playerID !=playerID
+                || attacked.unit.playerID == playerID
                 || unitInfos.get(attacked.unit.loc).attacked)
-            return;
+            return false;
 
-        unitInfos.get(attacker.unit.loc).attacked = true;
+        unitInfos.get(attacking).attacked = true;
 
         int result = UnitMath.attack(attacker,attacked,distance);
         if(result == UnitMath.NO_ONE_DIE)
-            return;
+            return true;
         if(result == UnitMath.ATTACKED_DIE) {
             units.remove(attacked.unit);
             unitInfos.remove(attacked.unit.loc);
@@ -59,17 +61,27 @@ public class GameLogic {
             unitInfos.remove(attacker.unit.loc);
             attacker.unit = null;
         }
-
+        return true;
     }
 
-    public void Move(Point from, Point to) {
+    public boolean move(Point from, Point to) {
         Tile tileFrom = map.getTile(from);
         Tile tileTo = map.getTile(to);
 
-        if (unitInfos.get(tileFrom.unit.loc).unit.playerID != playerID
-            || unitInfos.get(tileFrom.unit.loc).moved)
-            return;
+        if (tileFrom.unit == null
+                || tileTo.unit != null
+                || tileFrom.unit.playerID != playerID
+                || unitInfos.get(tileFrom.unit.loc).moved)
+            return false;
 
-        unitInfos.get(tileFrom.unit.loc).attacked = true;
-    }
+        unitInfos.get(from).moved = true;
+
+        map.getTile(to).unit = tileFrom.unit;
+        map.getTile(from).unit = null;
+
+        tileTo.unit.loc = to;
+
+        return true;
+        }
+
 }
