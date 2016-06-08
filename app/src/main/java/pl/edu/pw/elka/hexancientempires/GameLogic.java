@@ -41,8 +41,11 @@ public class GameLogic {
         Tile attacked = map.getTile(defensing);
 
         if(unitInfos.get(attacker.unit.loc).unit.playerID !=playerID
-                || unitInfos.get(attacked.unit.loc).unit.playerID == playerID)
+                || unitInfos.get(attacked.unit.loc).unit.playerID == playerID
+                || unitInfos.get(attacked.unit.loc).attacked)
             return;
+
+        unitInfos.get(attacker.unit.loc).attacked = true;
 
         int result = UnitMath.attack(attacker,attacked,distance);
         if(result == UnitMath.NO_ONE_DIE)
@@ -57,5 +60,16 @@ public class GameLogic {
             attacker.unit = null;
         }
 
+    }
+
+    public void Move(Point from, Point to) {
+        Tile tileFrom = map.getTile(from);
+        Tile tileTo = map.getTile(to);
+
+        if (unitInfos.get(tileFrom.unit.loc).unit.playerID != playerID
+            || unitInfos.get(tileFrom.unit.loc).moved)
+            return;
+
+        unitInfos.get(tileFrom.unit.loc).attacked = true;
     }
 }
