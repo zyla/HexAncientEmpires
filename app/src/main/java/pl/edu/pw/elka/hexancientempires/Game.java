@@ -38,8 +38,10 @@ public class Game {
 
     private GameMap map;
     private ArrayList<Drawable> terrain;
-    private ArrayList<Bitmap> units;
+    private ArrayList<Bitmap> unitTextures;
     private Drawable cursor;
+
+    private List<Unit> units = new ArrayList<>();
 
     Paint paint = new Paint();
 
@@ -96,6 +98,7 @@ public class Game {
     private void moveUnit(Unit unit, Point from, Point to) {
         map.getTile(from).unit = null;
         map.getTile(to).unit = unit;
+        unit.loc = to;
     }
 
     public Game(Context context) {
@@ -112,16 +115,19 @@ public class Game {
             terrain.get(i).setBounds(0, 0, TileMath.TILE_WIDTH, TileMath.TILE_HEIGHT);
         }
 
-        units = new ArrayList<>(3);
-        units.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.units1));
-        units.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.units2));
-        units.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.units3));
+        unitTextures = new ArrayList<>(3);
+        unitTextures.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.units1));
+        unitTextures.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.units2));
+        unitTextures.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.units3));
 
         cursor = context.getResources().getDrawable(R.drawable.cursor);
 
         map = GameMap.loadFromString(GameMap.MAP1);
 
-        map.getTile(1, 1).unit = new Unit(1,1);
+        Point p =new Point (1,1);
+        Unit u = new Unit(1,1,p);
+        map.getTile(p).unit = u;
+        units.add(u);
     }
 
 
@@ -147,18 +153,11 @@ public class Game {
 
             drawCursor(canvas, TileMath.tileCenter(cursorPos.x, cursorPos.y));
 
-            drawMovingUnit(canvas);
+            drawUnits(canvas);
         }
         canvas.restore();
 
         drawMessage(canvas, screenWidth, screenHeight);
-    }
-
-    private void drawMovingUnit(Canvas canvas) {
-        if(unitAnimation.isRunning()) {
-            PointF loc = unitAnimation.getCurrentPoint();
-            drawUnit(canvas, unitAnimation.getUnit(), loc.x, loc.y);
-        }
     }
 
     private void drawMessage(Canvas canvas, int screenWidth, int screenHeight) {
@@ -229,18 +228,25 @@ public class Game {
         {
             canvas.translate(loc.x, loc.y);
             terrain.get(tile.type).draw(canvas);
-
-            Unit unit = tile.unit;
-            if (unit != null
-                    && !unitAnimation.isAnimating(unit)) { // moving unit is drawn separately
-                drawUnit(canvas, unit, 0, 0);
-            }
         }
         canvas.restore();
     }
 
+    private void drawUnits(Canvas canvas) {
+        //TODO make this for cool
+        for(Unit unit :units){
+            PointF loc =
+                unitAnimation.isAnimating(unit) ?
+                    unitAnimation.getCurrentPoint() :
+                    toPointF(TileMath.tileLocation(unit.loc.x, unit.loc.y));
+
+            drawUnit(canvas, unit, loc.x, loc.y);
+        }
+
+    }
+
     private void drawUnit(Canvas canvas, Unit unit, float x, float y) {
-        Bitmap bitmap = units.get(unit.playerID - 1);
+        Bitmap bitmap = unitTextures.get(unit.playerID - 1);
         int unitWidth = bitmap.getWidth() / 12, unitHeight = bitmap.getHeight() / 2;
         android.graphics.Rect areaToCrop = new android.graphics.Rect(unit.type * unitWidth, 0, (unit.type + 1) * unitWidth, unitHeight);
         RectF areaToDraw = new RectF(x, y, x + TILE_WIDTH, y + TILE_HEIGHT);
