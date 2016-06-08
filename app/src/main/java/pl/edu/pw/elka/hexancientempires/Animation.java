@@ -1,11 +1,13 @@
 package pl.edu.pw.elka.hexancientempires;
 
+import java.util.List;
+
 import android.graphics.PointF;
 
 public class Animation {
     private long totalTime;
-    private PointF from;
-    private PointF to;
+    private List<PointF> points;
+    private int fromPointIndex;
 
     private Unit unit;
     private long elapsedTime;
@@ -13,15 +15,15 @@ public class Animation {
     public Animation() {}
 
     public boolean isRunning() {
-        return unit != null && elapsedTime < totalTime;
+        return unit != null && fromPointIndex < points.size() - 1;
     }
 
-    public void start(Unit unit, long totalTime, PointF from, PointF to) {
-        this.totalTime = totalTime;
-        this.from = from;
-        this.to = to;
+    public void start(Unit unit, long totalTime, List<PointF> points) {
         this.unit = unit;
+        this.totalTime = totalTime;
+        this.points = points;
 
+        fromPointIndex = 0;
         elapsedTime = 0;
     }
 
@@ -32,20 +34,27 @@ public class Animation {
 
     public void update(long frameTime) {
         elapsedTime += frameTime;
+
+        while(elapsedTime >= totalTime) {
+            elapsedTime -= totalTime;
+            fromPointIndex++;
+        }
     }
 
     private float interpolate(float from, float to) {
         return from + (to - from) * elapsedTime / totalTime;
     }
 
-    public float getCurrentX() {
+    public PointF getCurrentPoint() {
         assertRunning();
-        return interpolate(from.x, to.x);
-    }
 
-    public float getCurrentY() {
-        assertRunning();
-        return interpolate(from.y, to.y);
+        PointF from = points.get(fromPointIndex);
+        PointF to = points.get(fromPointIndex + 1);
+
+        return new PointF(
+            interpolate(from.x, to.x),
+            interpolate(from.y, to.y)
+        );
     }
 
     public Unit getUnit() {

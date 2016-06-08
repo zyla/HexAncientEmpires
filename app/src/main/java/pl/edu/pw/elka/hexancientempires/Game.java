@@ -28,7 +28,7 @@ import static pl.edu.pw.elka.hexancientempires.TileMath.TILE_WIDTH;
  * Created by tomek on 05.06.16.
  */
 public class Game {
-    private static final long ANIMATION_TIME = 300;
+    private static final long ANIMATION_TIME = 150;
 
     /** Special value for nextFrameDelay. Render next frame as fast as possible (considering rate limiting) */
     public static final long FRAME_IMMEDIATELY = 0;
@@ -62,8 +62,7 @@ public class Game {
         if(unit != null && isInRange(tilePos)) {
             unitAnimation.start(unit,
                 ANIMATION_TIME, 
-                toPointF(TileMath.tileLocation(cursorPos)),
-                toPointF(TileMath.tileLocation(tilePos))
+                pathToPixels(getPath(tilePos))
             );
             moveUnit(unit, cursorPos, tilePos);
         }
@@ -84,6 +83,14 @@ public class Game {
     // TODO move to utils
     private static PointF toPointF(Point p) {
         return new PointF(p.x, p.y);
+    }
+
+    private static List<PointF> pathToPixels(Iterable<Point> xs) {
+        ArrayList<PointF> result = new ArrayList<>();
+        for(Point x: xs) {
+            result.add(toPointF(TileMath.tileLocation(x)));
+        }
+        return result;
     }
 
     private void moveUnit(Unit unit, Point from, Point to) {
@@ -149,11 +156,8 @@ public class Game {
 
     private void drawMovingUnit(Canvas canvas) {
         if(unitAnimation.isRunning()) {
-            drawUnit(canvas,
-                unitAnimation.getUnit(),
-                unitAnimation.getCurrentX(),
-                unitAnimation.getCurrentY()
-            );
+            PointF loc = unitAnimation.getCurrentPoint();
+            drawUnit(canvas, unitAnimation.getUnit(), loc.x, loc.y);
         }
     }
 
