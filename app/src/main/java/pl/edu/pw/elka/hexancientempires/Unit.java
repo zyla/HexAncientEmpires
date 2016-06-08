@@ -21,11 +21,14 @@ public class Unit {
     public int type;
     public int playerID;
     public int hp;
+    public Point loc;
 
-    public Unit(int type, int id) {
+
+    public Unit(int type, int playerID, Point loc) {
         this.type = type;
-        this.playerID = id;
+        this.playerID = playerID;
         this.hp = UnitMath.STARTING_HP;
+        this.loc = loc;
     }
 
 }

@@ -49,7 +49,7 @@ public class UnitRangeBFS {
             this.allowed = true;
             this.loc = node.loc;
             this.distance = distance;
-            this.cost = 0;//node.cost;
+            this.cost = node.cost;
         }
     }
     private ArrayList< Node> getGraph(){

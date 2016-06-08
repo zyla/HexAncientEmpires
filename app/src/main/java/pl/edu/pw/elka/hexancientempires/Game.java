@@ -16,8 +16,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 
-import pl.edu.pw.elka.hexancientempires.UnitRangeBFS.Node;
-
 import static pl.edu.pw.elka.hexancientempires.TileMath.TILE_HEIGHT;
 import static pl.edu.pw.elka.hexancientempires.TileMath.TILE_WIDTH;
 
@@ -38,8 +36,11 @@ public class Game {
 
     private GameMap map;
     private ArrayList<Drawable> terrain;
-    private ArrayList<Bitmap> units;
+    private ArrayList<Bitmap> unitsTextures;
     private Drawable cursor;
+
+    //TODO store units here and draw frm here
+    private List<Unit> units = new ArrayList<>();
 
     Paint paint = new Paint();
 
@@ -95,6 +96,7 @@ public class Game {
 
     private void moveUnit(Unit unit, Point from, Point to) {
         map.getTile(from).unit = null;
+        unit.loc = to;
         map.getTile(to).unit = unit;
     }
 
@@ -112,16 +114,19 @@ public class Game {
             terrain.get(i).setBounds(0, 0, TileMath.TILE_WIDTH, TileMath.TILE_HEIGHT);
         }
 
-        units = new ArrayList<>(3);
-        units.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.units1));
-        units.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.units2));
-        units.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.units3));
+        unitsTextures = new ArrayList<>(3);
+        unitsTextures.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.units1));
+        unitsTextures.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.units2));
+        unitsTextures.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.units3));
 
         cursor = context.getResources().getDrawable(R.drawable.cursor);
 
         map = GameMap.loadFromString(GameMap.MAP1);
 
-        map.getTile(1, 1).unit = new Unit(1,1);
+        Point p =new Point (1,1);
+        Unit u = new Unit(1,1,p);
+        map.getTile(p).unit = u;
+        units.add(u);
     }
 
 
@@ -138,12 +143,12 @@ public class Game {
 
 
 
-    public void draw(Canvas canvas, PointF cameraOffset, Rect visibleArea, int screenWidth, int screenHeight) {
-        canvas.save();
+    public void draw(Canvas canvas, PointF cameraOffset, Rect visibleArea) {
+       canvas.save();
         {
-            canvas.translate(cameraOffset.x, cameraOffset.y);
-
-            drawMap(canvas, visibleArea);
+        canvas.translate(cameraOffset.x, cameraOffset.y);
+        drawMap(canvas, visibleArea);
+        drawUnits(canvas);
 
             drawCursor(canvas, TileMath.tileCenter(cursorPos.x, cursorPos.y));
 
@@ -207,8 +212,7 @@ public class Game {
     }
 
 
-    private final Path tilePath;
-    {
+    private final Path tilePath drawPath()    {
         float xgap = TILE_WIDTH / 4;
 
         tilePath = new Path();
@@ -230,17 +234,36 @@ public class Game {
             canvas.translate(loc.x, loc.y);
             terrain.get(tile.type).draw(canvas);
 
-            Unit unit = tile.unit;
+            /*Unit unit = tile.unit;
             if (unit != null
                     && !unitAnimation.isAnimating(unit)) { // moving unit is drawn separately
                 drawUnit(canvas, unit, 0, 0);
-            }
+            */
+
         }
         canvas.restore();
     }
 
+    private void drawUnits(Canvas canvas) {
+        //TODO make this for cool
+        for(Unit unit :units){
+            canvas.save();
+            {
+                Point loc = TileMath.tileLocation(unit.loc.x, unit.loc.y);
+                canvas.translate(loc.x, loc.y);
+                if (!unitAnimation.isAnimating(unit)) { // moving unit is drawn separately
+                    drawUnit(canvas, unit, 0, 0);
+                }
+            }
+            canvas.restore();
+        }
+
+    }
+
+
+
     private void drawUnit(Canvas canvas, Unit unit, float x, float y) {
-        Bitmap bitmap = units.get(unit.playerID - 1);
+        Bitmap bitmap = unitsTextures.get(unit.playerID - 1);
         int unitWidth = bitmap.getWidth() / 12, unitHeight = bitmap.getHeight() / 2;
         android.graphics.Rect areaToCrop = new android.graphics.Rect(unit.type * unitWidth, 0, (unit.type + 1) * unitWidth, unitHeight);
         RectF areaToDraw = new RectF(x, y, x + TILE_WIDTH, y + TILE_HEIGHT);
