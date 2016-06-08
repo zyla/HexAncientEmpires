@@ -54,6 +54,10 @@ public class Game {
     private Message message = new Message();
 
     public void tileSelected(Point tilePos) {
+        if(unitAnimation.isRunning()) {
+            unitAnimation.stop();
+        }
+
         Unit unit = map.getTile(cursorPos).unit;
         if(unit != null && isInRange(tilePos)) {
             unitAnimation.start(unit,

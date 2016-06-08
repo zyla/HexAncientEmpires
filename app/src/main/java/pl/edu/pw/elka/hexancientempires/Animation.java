@@ -25,6 +25,11 @@ public class Animation {
         elapsedTime = 0;
     }
 
+    public void stop() {
+        totalTime = 0;
+        unit = null;
+    }
+
     public void update(long frameTime) {
         elapsedTime += frameTime;
     }
