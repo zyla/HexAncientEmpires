@@ -8,9 +8,9 @@ package pl.edu.pw.elka.hexancientempires;
  */
 public class UnitMath {
     public static final int STARTING_HP = 100;
-    public static final int ATACKED_DIE = -1;//no need if attack removes units
-    public static final int ATACKING_DIE = 1;
-    public static final int NOONE_DIE = 0;
+    public static final int ATTACKED_DIE = -1;//no need if attack removes units
+    public static final int ATTACKING_DIE = 1;
+    public static final int NO_ONE_DIE = 0;
 
 
     public static final int[] unitDamage = {
@@ -77,26 +77,26 @@ public class UnitMath {
     };
 
     //I have to change value of hp in one unit, but idk if possible in java
-    public int attack(Tile attacking, Tile attacked, int distance){
+    public static int attack(Tile attacking, Tile attacked, int distance){
         int attackValue1 = unitDamage[attacking.unit.type];
         int attackedHp = attacked.unit.hp;
         int attackedDef = tileDefense[attacked.type];
 
         if(attackedHp <= attackValue1 - attackedDef)
-            return ATACKED_DIE;
+            return ATTACKED_DIE;
         attacked.unit.hp = attackedHp + attackedDef - attackValue1;
 
         if(distance > unitRange[attacked.unit.type])
-            return NOONE_DIE;
+            return NO_ONE_DIE;
 
         int attackingHp = attacking.unit.hp;
         int attackValue2 = unitDamage[attacked.unit.type];
         int attackingDef = tileDefense[attacking.type];
 
         if(attackingHp <= attackValue2 - attackingDef)
-            return ATACKING_DIE;
+            return ATTACKING_DIE;
 
         attacking.unit.hp = attackingHp + attackingDef - attackValue2;
-        return NOONE_DIE;
+        return NO_ONE_DIE;
     }
 }
