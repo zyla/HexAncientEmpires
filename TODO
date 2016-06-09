@@ -1,6 +1,5 @@
-- attacking
 - initial unit placement
 - turn system
 - network: handle disconnections
-- network: open server and client socket (currently client only)
 - display range only if allowed to move
+- Fix concurrency bugs in ConnectionService
