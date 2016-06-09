@@ -1,5 +1,6 @@
 package pl.edu.pw.elka.hexancientempires;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -86,4 +87,37 @@ public class GameLogic {
         return true;
     }
 
+    public static interface ActionListener {
+        /** The given Unit was moved along the specified path. */
+        public void moved(Unit unit, List<Point> path);
+
+        /** Nothing happened (no unit on source or target tile, or some other condition) */
+        public void noAction();
+
+        // TODO possibly make this more detailed (add explanations why an action can't be performed, etc.)
+    }
+
+    /**
+     * Executes a suitable action (move or attack) depending on contents of the
+     * target tile.
+     *
+     * This method is responsible for checking move/attack ranges and computing
+     * movement path (returned as argument to ActionListener.moved).
+     *
+     * Calls one of the methods of listener.
+     *
+     * @param from Tile that is currently selected
+     * @param to Tile that was clicked
+     * @param listener Listener that will be notified what happened
+     */
+    public void action(Point from, Point to, ActionListener listener) {
+        // TODO this is dummy impl, reimplement
+
+        Unit unit = map.getTile(from).getUnit();
+        if(unit != null && move(from, to)) {
+            listener.moved(unit, Arrays.asList(from, to));
+        } else {
+            listener.noAction();
+        }
+    }
 }

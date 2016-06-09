@@ -53,14 +53,24 @@ public class Game {
     private Animation unitAnimation = new Animation();
     private Message message = new Message();
 
-    public void tileSelected(Point newCursorPos) {
+    public void tileSelected(final Point newCursorPos) {
         if(unitAnimation.isRunning()) {
             unitAnimation.stop();
         }
 
-        if(isInRange(newCursorPos)) {
-            moveUnit(cursorPos, newCursorPos);
-        }
+        gameLogic.action(cursorPos, newCursorPos, new GameLogic.ActionListener() {
+            public void moved(Unit unit, List<Point> path) {
+                unitAnimation.start(unit,
+                    ANIMATION_TIME, 
+                    Utils.pathToPixels(path)
+                );
+            }
+
+            public void noAction() {
+                // TODO maybe show information about terrain?
+                message.show("Selected tile " + newCursorPos, 3000);
+            }
+        });
 
         cursorPos = newCursorPos;
 
@@ -71,8 +81,6 @@ public class Game {
         } else {
             displayedRange = Collections.emptyMap();
         }
-
-        message.show("Selected tile " + newCursorPos, 3000);
     }
 
     private void moveUnit(Point from, Point to) {
