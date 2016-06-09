@@ -87,6 +87,9 @@ public class Game {
                 );
                 return true;
             }
+            public Boolean attacked(Unit attacker, Unit attacked, int range){
+                return true;
+            }
 
             public Boolean noAction() {
                 // TODO maybe show information about terrain?
