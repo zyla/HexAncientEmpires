@@ -87,12 +87,12 @@ public class GameLogic {
         return true;
     }
 
-    public static interface ActionListener {
+    public static interface ActionListener<R> {
         /** The given Unit was moved along the specified path. */
-        public void moved(Unit unit, List<Point> path);
+        public R moved(Unit unit, List<Point> path);
 
         /** Nothing happened (no unit on source or target tile, or some other condition) */
-        public void noAction();
+        public R noAction();
 
         // TODO possibly make this more detailed (add explanations why an action can't be performed, etc.)
     }
@@ -110,14 +110,14 @@ public class GameLogic {
      * @param to Tile that was clicked
      * @param listener Listener that will be notified what happened
      */
-    public void action(Point from, Point to, ActionListener listener) {
+    public <R> R action(Point from, Point to, ActionListener<R> listener) {
         // TODO this is dummy impl, reimplement
 
         Unit unit = map.getTile(from).getUnit();
         if(unit != null && move(from, to)) {
-            listener.moved(unit, Arrays.asList(from, to));
+            return listener.moved(unit, Arrays.asList(from, to));
         } else {
-            listener.noAction();
+            return listener.noAction();
         }
     }
 }

@@ -20,4 +20,14 @@ public class Utils {
         }
         return result;
     }
+
+    public static String join(String separator, String[] tokens) {
+        StringBuilder result = new StringBuilder();
+        for(String tok: tokens) {
+            if(result.length() > 0)
+                result.append(' ');
+            result.append(tok);
+        }
+        return result.toString();
+    }
 }

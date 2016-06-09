@@ -20,17 +20,13 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.UUID;
 
-public class GameActivity extends AppCompatActivity implements ConnectionService.Listener {
+public class GameActivity extends AppCompatActivity implements ConnectionService.Listener, Connection {
     private GameView gameView;
+    private ConnectionService connectionService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        gameView = new GameView(this);
-        FrameLayout layout = new FrameLayout(this);
-        layout.addView(gameView);
-        setContentView(layout);
 
         Intent intent = new Intent(getApplicationContext(), ConnectionService.class);
 
@@ -39,10 +35,8 @@ public class GameActivity extends AppCompatActivity implements ConnectionService
             public void onServiceConnected(ComponentName name, IBinder binder) {
                 Log.d("GameActivity", "Service connected");
 
-                ConnectionService connection = ((ConnectionService.Binder) binder).getService();
-                connection.send("Hello from GameActivity\n");
-
-                connection.setListener(GameActivity.this);
+                connectionService = ((ConnectionService.Binder) binder).getService();
+                connectionService.setListener(GameActivity.this);
             }
 
             @Override
@@ -52,6 +46,11 @@ public class GameActivity extends AppCompatActivity implements ConnectionService
         }, BIND_AUTO_CREATE);
 
         Log.d("GameActivity", "Binding service success=" + bound);
+
+        gameView = new GameView(this, this);
+        FrameLayout layout = new FrameLayout(this);
+        layout.addView(gameView);
+        setContentView(layout);
     }
 
     @Override
@@ -70,5 +69,10 @@ public class GameActivity extends AppCompatActivity implements ConnectionService
             return;
         }
         gameView.onEventReceived(event);
+    }
+
+    public void sendEvent(Event event) {
+        String data = Utils.join(" ", event.serialize());
+        connectionService.send(data);
     }
 }
