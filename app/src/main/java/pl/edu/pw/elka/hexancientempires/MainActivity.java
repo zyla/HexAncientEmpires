@@ -12,9 +12,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        gameView = new GameView(this);
+        gameView = new GameView(this, new NullConnection());
         FrameLayout layout = new FrameLayout(this);
         layout.addView(gameView);
         setContentView(layout);
+    }
+
+    private static class NullConnection implements Connection {
+        public void sendEvent(Event event) {}
     }
 }

@@ -1,4 +1,6 @@
-#13 attacking
-#14 initial unit placement
-#15 networking - receive attack events, send move and attack events
-#16 turn system
+- attacking
+- initial unit placement
+- turn system
+- network: handle disconnections
+- network: open server and client socket (currently client only)
+- display range only if allowed to move

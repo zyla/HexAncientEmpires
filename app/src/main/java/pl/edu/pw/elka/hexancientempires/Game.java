@@ -34,6 +34,8 @@ public class Game {
     /** Special value for nextFrameDelay. Wait for event before rendering next frame. */
     public static final long FRAME_WAIT_FOR_EVENT = -1;
 
+    private final Connection connection;
+
     private GameMap map;
     private ArrayList<Drawable> terrain;
     private ArrayList<Bitmap> unitTextures;
@@ -56,19 +58,9 @@ public class Game {
             unitAnimation.stop();
         }
 
-        gameLogic.action(cursorPos, newCursorPos, new GameLogic.ActionListener() {
-            public void moved(Unit unit, List<Point> path) {
-                unitAnimation.start(unit,
-                    ANIMATION_TIME, 
-                    Utils.pathToPixels(path)
-                );
-            }
-
-            public void noAction() {
-                // TODO maybe show information about terrain?
-                message.show("Selected tile " + newCursorPos, 3000);
-            }
-        });
+        if(processAction(cursorPos, newCursorPos)) {
+            sendAction(cursorPos, newCursorPos);
+        }
 
         cursorPos = newCursorPos;
 
@@ -83,20 +75,34 @@ public class Game {
         }
     }
 
-    private void moveUnit(Point from, Point to) {
-        Unit unit = map.getTile(from).getUnit();
+    /**
+     * Returns whether an action happened.
+     */
+    private boolean processAction(final Point from, final Point to) {
+        return gameLogic.action(from, to, new GameLogic.ActionListener<Boolean>() {
+            public Boolean moved(Unit unit, List<Point> path) {
+                unitAnimation.start(unit,
+                    ANIMATION_TIME, 
+                    Utils.pathToPixels(path)
+                );
+                return true;
+            }
 
-        Map<Point, UnitRangeBFS.Node> range = new UnitRangeBFS(map).getReachableTiles(unit, from);
-
-        if(gameLogic.move(from, to)) {
-            unitAnimation.start(unit,
-                ANIMATION_TIME, 
-                Utils.pathToPixels(getPath(range, to))
-            );
-        }
+            public Boolean noAction() {
+                // TODO maybe show information about terrain?
+                message.show("Selected tile " + to, 3000);
+                return false;
+            }
+        });
     }
 
-    public Game(Context context) {
+    private void sendAction(Point from, Point to) {
+        connection.sendEvent(new Event.Action(from, to));
+    }
+
+    public Game(Context context, Connection connection) {
+        this.connection = connection;
+
         terrain = new ArrayList<>(7);
         terrain.add(context.getResources().getDrawable(R.drawable.l));
         terrain.add(context.getResources().getDrawable(R.drawable.c));
@@ -310,8 +316,8 @@ public class Game {
 
     public void eventReceived(Event event) {
         event.accept(new Event.Visitor<Void>() {
-            public Void move(Event.Move event) {
-                moveUnit(event.from, event.to);
+            public Void action(Event.Action event) {
+                processAction(event.from, event.to);
                 return null;
             }
         });

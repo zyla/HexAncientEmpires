@@ -53,10 +53,9 @@ public class GameView extends View {
         }
     };
 
-    public GameView(Context context) {
+    public GameView(Context context, Connection connection) {
         super(context);
-        game = new Game(context);
-
+        game = new Game(context, connection);
     }
 
     @Override

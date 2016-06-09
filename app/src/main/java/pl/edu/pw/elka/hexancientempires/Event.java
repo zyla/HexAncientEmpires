@@ -3,31 +3,31 @@ package pl.edu.pw.elka.hexancientempires;
 import java.util.Arrays;
 
 public abstract class Event {
-    public static class Move extends Event {
+    public static class Action extends Event {
         public final Point from;
         public final Point to;
 
-        public Move(Point from, Point to) {
+        public Action(Point from, Point to) {
             this.from = from;
             this.to = to;
         }
 
         public <A> A accept(Visitor<A> visitor) {
-            return visitor.move(this);
+            return visitor.action(this);
         }
     }
 
     public static interface Visitor<A> {
-        public A move(Move event);
+        public A action(Action event);
     }
 
     public abstract <A> A accept(Visitor<A> visitor);
 
     public String[] serialize() {
         return accept(new Visitor<String[]>() {
-            public String[] move(Move event) {
+            public String[] action(Action event) {
                 return new String[] {
-                    "move", 
+                    "action", 
                     Integer.toString(event.from.x),
                     Integer.toString(event.from.y),
                     Integer.toString(event.to.x),
@@ -46,9 +46,9 @@ public abstract class Event {
         try {
             switch(command) {
 
-                case "move":
+                case "action":
                     requireNumArguments(input, 4);
-                    return new Move(parsePoint(input[1], input[2]), parsePoint(input[3], input[4]));
+                    return new Action(parsePoint(input[1], input[2]), parsePoint(input[3], input[4]));
 
                 default:
                     throw invalidEvent(input, "Invalid command");
