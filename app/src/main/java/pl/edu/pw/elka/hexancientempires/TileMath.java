@@ -63,7 +63,7 @@ public class TileMath {
             case TOPLEFT:
                 return new Point(loc.x - 1 , loc.y - even );
         }
-        throw new  IndexOutOfBoundsException("Tile of this index don't exists in map");
+        throw new  IndexOutOfBoundsException("There is no side numbered like this");
     }
 
     public static Point tileHitTest(int x, int y) {
