@@ -1,10 +1,6 @@
 package pl.edu.pw.elka.hexancientempires;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Objects;
-
-import static pl.edu.pw.elka.hexancientempires.UnitRangeBFS.*;
 
 
 /**

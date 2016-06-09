@@ -17,10 +17,10 @@ import java.util.Map;
  * Created by tomek on 03.06.16.
  * You know mate.
  */
-public class UnitRangeBFS {
+public class UnitMovementRange {
     GameMap gameMap;
 
-    public UnitRangeBFS(GameMap gameMap) {
+    public UnitMovementRange(GameMap gameMap) {
         this.gameMap = gameMap;
     }
 
@@ -52,7 +52,7 @@ public class UnitRangeBFS {
 
         ArrayList<Node> graph = new ArrayList<>(size);
         for(int i  = 0; i < size; i++ ) {
-            graph.add(i, new UnitRangeBFS.Node(gameMap.getTile(i),gameMap.getMapLoc(i)));
+            graph.add(i, new UnitMovementRange.Node(gameMap.getTile(i),gameMap.getMapLoc(i)));
         }
         return graph;
     }

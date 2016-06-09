@@ -1,7 +1,6 @@
 package pl.edu.pw.elka.hexancientempires;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -94,6 +93,9 @@ public class GameLogic {
         /** The given Unit was moved along the specified path. */
         public R moved(Unit unit, List<Point> path);
 
+        /** First given unit attacked second unit from range */
+        public R attacked(Unit attacker, Unit attacked,int range);
+
         /** Nothing happened (no unit on source or target tile, or some other condition) */
         public R noAction();
 
@@ -114,22 +116,34 @@ public class GameLogic {
      * @param listener Listener that will be notified what happened
      */
     public <R> R action(Point from, Point to, ActionListener<R> listener) {
-        // TODO this is dummy impl, reimplement
-
         Unit unit = map.getTile(from).getUnit();
-        if(unit != null && move(from, to)) {
-            return listener.moved(unit, Arrays.asList(from, to));
+
+        Map<Point, UnitMovementRange.Node> movementRange = new UnitMovementRange(map).getReachableTiles(unit, from);
+        Map<Point, UnitAttackRange.Node> attackRange = new  UnitAttackRange(map).getReachableTiles(unit, from);
+
+        if(unit != null && isInMovementRange(movementRange,to) && move(from, to)) {
+            return listener.moved(unit, getPath(movementRange,to));
+        } else if(unit != null && isInAttackRange(attackRange,to) && attack(from, to, getAttackDistance(attackRange,to))) {
+            return listener.attacked(unit, unit, getAttackDistance(attackRange,to));
         } else {
             return listener.noAction();
         }
     }
-/*
-    private boolean isInRange(Point tilePos) {
-        return movementRange.containsKey(tilePos);
+
+    private boolean isInMovementRange(Map<Point, UnitMovementRange.Node> range, Point tilePos) {
+        return range.containsKey(tilePos);
     }
 
-    public static ArrayList<Point> getPath(Map<Point, UnitRangeBFS.Node> range, Point current) {
-        ArrayList<Point> way = new ArrayList<>();
+    private boolean isInAttackRange(Map<Point,UnitAttackRange.Node> range, Point tilePos) {
+        return range.containsKey(tilePos);
+    }
+
+    private int getAttackDistance(Map<Point,UnitAttackRange.Node> range, Point tilePos) {
+        return range.get(tilePos).distance;
+    }
+
+    public static List<Point> getPath(Map<Point, UnitMovementRange.Node> range, Point current) {
+        List<Point> way = new ArrayList<>();
 
         while (current != null) {
             way.add(current);
@@ -139,6 +153,6 @@ public class GameLogic {
         Collections.reverse(way);
         return way;
     }
-*/
+
 
 }

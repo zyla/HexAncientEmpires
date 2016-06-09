@@ -47,8 +47,8 @@ public class Game {
     private Point cursorPos = new Point(0, 0);
 
     //----------
-    private Map<Point, UnitRangeBFS.Node> movementRange = Collections.emptyMap();
-    private List<UnitAttackRange.Node> attackRange = Collections.emptyList();
+    private Map<Point, UnitMovementRange.Node> movementRange = Collections.emptyMap();
+    private Map<Point, UnitAttackRange.Node> attackRange = Collections.emptyMap();
 
     private Animation unitAnimation = new Animation();
     private Message message = new Message();
@@ -67,11 +67,11 @@ public class Game {
         Unit unit = map.getTile(cursorPos).getUnit();
 
         if(unit != null) {
-            movementRange = new UnitRangeBFS(map).getReachableTiles(unit, cursorPos);
+            movementRange = new UnitMovementRange(map).getReachableTiles(unit, cursorPos);
             attackRange = new  UnitAttackRange(map).getReachableTiles(unit, cursorPos);
         } else {
             movementRange = Collections.emptyMap();
-            attackRange = Collections.emptyList();
+            attackRange = Collections.emptyMap();
         }
     }
 
@@ -208,7 +208,7 @@ public class Game {
         paint.setColor(0x800000ff);
         paint.setStyle(Paint.Style.FILL);
 
-        for(UnitRangeBFS.Node node: movementRange.values()) {
+        for(UnitMovementRange.Node node: movementRange.values()) {
             Point loc = TileMath.tileLocation(node.loc.x, node.loc.y);
 
             canvas.translate(loc.x, loc.y);
@@ -222,7 +222,7 @@ public class Game {
         paint.setColor(0x80ff0000);
         paint.setStyle(Paint.Style.FILL);
 
-        for(UnitAttackRange.Node node: attackRange) {
+        for(UnitAttackRange.Node node: attackRange.values()) {
             Point loc = TileMath.tileLocation(node.loc.x, node.loc.y);
 
             canvas.translate(loc.x, loc.y);

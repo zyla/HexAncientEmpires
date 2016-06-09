@@ -1,7 +1,9 @@
 package pl.edu.pw.elka.hexancientempires;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 /**
  * Created by tomek on 05.06.16.
@@ -37,12 +39,12 @@ public class UnitAttackRange {
         return graph;
     }
 
-    public ArrayList<Node> getReachableTiles(Unit unit, Point origin) {
+    public Map<Point, Node> getReachableTiles(Unit unit, Point origin) {
         Tile tile  = gameMap.getTile(origin);
         int range = UnitMath.unitRange[unit.getType()];
         ArrayList<Node> graph = getGraph();
 
-        ArrayList<Node> inRange = new ArrayList<>();
+        Map<Point,Node> inRange = new HashMap<>();
         LinkedList<Node> queue = new LinkedList<>();
 
         queue.add(graph.get(gameMap.getMapIndex(origin)));
@@ -51,7 +53,7 @@ public class UnitAttackRange {
         {
             Node current = queue.remove();
             if(current.playerID != 0 && current.playerID != tile.getUnit().getPlayerID())
-                inRange.add(current);
+                inRange.put(current.loc,current);
             for(int i = 0; i < 6 ; i++)
             {
                 Point mateLoc = TileMath.neighbour(current.loc,i);
