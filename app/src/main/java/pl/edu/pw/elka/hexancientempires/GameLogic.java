@@ -104,7 +104,7 @@ public class GameLogic {
 
     /**
      * Executes a suitable action (move or attack) depending on contents of the
-     * target tile.
+     * source and the target tile.
      *
      * This method is responsible for checking move/attack ranges and computing
      * movement path (returned as argument to ActionListener.moved).
@@ -117,6 +117,11 @@ public class GameLogic {
      */
     public <R> R action(Point from, Point to, ActionListener<R> listener) {
         Unit unitFrom = map.getTile(from).getUnit();
+
+        if(unitFrom == null) {
+            return listener.noAction();
+        }
+
         Unit unitTo = map.getTile(to).getUnit();
         Map<Point, UnitMovementRange.Node> movementRange = new UnitMovementRange(map).getReachableTiles(unitFrom, from);
         Map<Point, UnitAttackRange.Node> attackRange = new  UnitAttackRange(map).getReachableTiles(unitFrom, from);
