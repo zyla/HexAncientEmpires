@@ -159,11 +159,5 @@ public class GameLogic {
         return way;
     }
 
-    /**
-     * True if all possible moves in current turn are used.
-     */
-    public boolean isTurnFinished() {
-        // TODO implement
-        return false;
-    }
+
 }
