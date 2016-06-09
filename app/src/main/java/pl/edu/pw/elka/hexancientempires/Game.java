@@ -10,6 +10,7 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -34,7 +35,12 @@ public class Game {
     /** Special value for nextFrameDelay. Wait for event before rendering next frame. */
     public static final long FRAME_WAIT_FOR_EVENT = -1;
 
+    private static final int SERVER_PLAYER_ID = 1;
+    private static final int CLIENT_PLAYER_ID = 2;
+
     private final Connection connection;
+
+    private final int myPlayerID;
 
     private GameMap map;
     private ArrayList<Drawable> terrain;
@@ -58,7 +64,7 @@ public class Game {
             unitAnimation.stop();
         }
 
-        if(processAction(cursorPos, newCursorPos)) {
+        if(processAction(myPlayerID, cursorPos, newCursorPos)) {
             sendAction(cursorPos, newCursorPos);
         }
 
@@ -78,7 +84,11 @@ public class Game {
     /**
      * Returns whether an action happened.
      */
-    private boolean processAction(final Point from, final Point to) {
+    private boolean processAction(int playerID, final Point from, final Point to) {
+        if(playerID != gameLogic.playerID) {
+            return false;
+        }
+
         return gameLogic.action(from, to, new GameLogic.ActionListener<Boolean>() {
             public Boolean moved(Unit unit, List<Point> path) {
                 unitAnimation.start(unit,
@@ -107,6 +117,9 @@ public class Game {
 
     public Game(Context context, Connection connection) {
         this.connection = connection;
+        this.myPlayerID = connection.isServer()? SERVER_PLAYER_ID: CLIENT_PLAYER_ID;
+
+        Log.d("Game", "myPlayerId = " + myPlayerID);
 
         terrain = new ArrayList<>(7);
         terrain.add(context.getResources().getDrawable(R.drawable.l));
@@ -130,23 +143,26 @@ public class Game {
 
         map = GameMap.loadFromString(GameMap.MAP1);
 
-        int playerID = 1;
         Point p = new Point (1,1);
-        Unit u = new Unit(1,playerID,p);
+        Unit u = new Unit(1,SERVER_PLAYER_ID,p);
         map.getTile(p).setUnit(u);
         units.add(u);
 
-        int playerID_2 = 2;
         Point p2 = new Point (2,2);
-        Unit u2 = new Unit(1,playerID_2,p2);
+        Unit u2 = new Unit(1,CLIENT_PLAYER_ID,p2);
         map.getTile(p2).setUnit(u2);
         units.add(u2);
 
-
-        gameLogic = new GameLogic(units,playerID,map);
+        startTurn(SERVER_PLAYER_ID);
     }
 
+    private void startTurn(int playerID) {
+        gameLogic = new GameLogic(units, playerID, map);
+    }
 
+    private static int oppositePlayerID(int playerID) {
+        return playerID == CLIENT_PLAYER_ID? SERVER_PLAYER_ID: CLIENT_PLAYER_ID;
+    }
 
     private void drawCursor(Canvas canvas, Point center) {
         final int width = TILE_WIDTH + 10, height = TILE_HEIGHT + 10;
@@ -316,7 +332,7 @@ public class Game {
     public void eventReceived(Event event) {
         event.accept(new Event.Visitor<Void>() {
             public Void action(Event.Action event) {
-                processAction(event.from, event.to);
+                processAction(oppositePlayerID(myPlayerID), event.from, event.to);
                 return null;
             }
         });
