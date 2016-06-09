@@ -35,12 +35,7 @@ public class UnitRangeBFS {
             this.loc = loc;
             this.distance = Integer.MAX_VALUE;
             this.cost = UnitMath.tileDistance[tile.getType()];
-            if(tile.getUnit() != null || tile.getType() == Tile.NONE) {
-                allowed = false;
-            }
-            else {
-                allowed = true;
-            }
+            allowed = !(tile.getUnit() != null || tile.getType() == Tile.NONE);
             parent = null;
         }
 
@@ -80,7 +75,7 @@ public class UnitRangeBFS {
             {
                 Point mateLoc = TileMath.neighbour(current.loc,i);
                 Node mate = graph.get(gameMap.getMapIndex(mateLoc));
-                if(mate.allowed == false)
+                if(!mate.allowed)
                     continue;
                 if( current.distance + mate.cost < mate.distance ) {
                     mate.distance = current.distance + mate.cost;

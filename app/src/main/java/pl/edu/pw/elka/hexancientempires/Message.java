@@ -1,6 +1,5 @@
 package pl.edu.pw.elka.hexancientempires;
 
-import android.graphics.PointF;
 
 public class Message {
     private String text;

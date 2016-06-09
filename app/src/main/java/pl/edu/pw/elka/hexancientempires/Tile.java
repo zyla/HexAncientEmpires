@@ -32,11 +32,6 @@ public class Tile {
         this.unit = tile.unit;
     }
 
-    public Tile(Tile tile, Unit unit) {
-        this.type = tile.type;
-        this.unit = unit;
-    }
-
     public Unit getUnit() {
         return unit;
     }
