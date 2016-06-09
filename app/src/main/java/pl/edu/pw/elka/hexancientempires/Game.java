@@ -91,6 +91,11 @@ public class Game {
                 return true;
             }
 
+            public Boolean attacked(Unit attacker, Unit attacked, int range) {
+                // TODO display info
+                return true;
+            }
+
             public Boolean noAction() {
                 // TODO maybe show information about terrain?
                 message.show("Selected tile " + to, 3000);
