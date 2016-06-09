@@ -100,6 +100,7 @@ public class Game {
 
             public Boolean attacked(Unit attacker, Unit attacked, int range) {
                 // TODO display info
+                message.show("Attacked " +from  + to, 3000);
                 return true;
             }
 

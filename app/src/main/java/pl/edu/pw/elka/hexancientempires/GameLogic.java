@@ -45,8 +45,8 @@ public class GameLogic {
         if(attacker.getUnit() == null
                 || attacked.getUnit() == null
                 || attacker.getUnit().getPlayerID() != playerID
-                || attacked.getUnit().getPlayerID()== playerID
-                || unitInfos.get(attacked.getUnit().getLoc()).attacked)
+                || attacked.getUnit().getPlayerID() == playerID
+                || unitInfos.get(attacker.getUnit().getLoc()).attacked)
             return false;
 
         unitInfos.get(attacking).attacked = true;
