@@ -131,6 +131,13 @@ public class Game {
         map.getTile(p).setUnit(u);
         units.add(u);
 
+        int playerID_2 = 2;
+        Point p2 = new Point (2,2);
+        Unit u2 = new Unit(1,playerID_2,p2);
+        map.getTile(p2).setUnit(u2);
+        units.add(u2);
+
+
         gameLogic = new GameLogic(units,playerID,map);
     }
 
@@ -155,9 +162,9 @@ public class Game {
 
             drawMap(canvas, visibleArea);
 
-            drawCursor(canvas, TileMath.tileCenter(cursorPos.x, cursorPos.y));
-
             drawUnits(canvas);
+
+            drawCursor(canvas, TileMath.tileCenter(cursorPos.x, cursorPos.y));
         }
         canvas.restore();
 
@@ -192,6 +199,7 @@ public class Game {
         }
 
         drawMovementRange(canvas);
+        drawAttackRange(canvas);
     }
 
     private void drawMovementRange(Canvas canvas) {
@@ -213,7 +221,7 @@ public class Game {
         paint.setColor(0x80ff0000);
         paint.setStyle(Paint.Style.FILL);
 
-        for(UnitAttackRange.Node node: attackRange) {
+        for(UnitAttackRange.Node node: attackRange.) {
             Point loc = TileMath.tileLocation(node.loc.x, node.loc.y);
 
             canvas.translate(loc.x, loc.y);
