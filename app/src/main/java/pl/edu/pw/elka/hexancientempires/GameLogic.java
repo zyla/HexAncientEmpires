@@ -1,8 +1,11 @@
 package pl.edu.pw.elka.hexancientempires;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * to rename and refactor
@@ -120,4 +123,22 @@ public class GameLogic {
             return listener.noAction();
         }
     }
+/*
+    private boolean isInRange(Point tilePos) {
+        return movementRange.containsKey(tilePos);
+    }
+
+    public static ArrayList<Point> getPath(Map<Point, UnitRangeBFS.Node> range, Point current) {
+        ArrayList<Point> way = new ArrayList<>();
+
+        while (current != null) {
+            way.add(current);
+            current = range.get(current).parent;
+        }
+
+        Collections.reverse(way);
+        return way;
+    }
+*/
+
 }

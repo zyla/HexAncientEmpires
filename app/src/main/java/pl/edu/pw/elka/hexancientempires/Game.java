@@ -162,6 +162,10 @@ public class Game {
 
             drawMap(canvas, visibleArea);
 
+            drawMovementRange(canvas);
+
+            drawAttackRange(canvas);
+
             drawUnits(canvas);
 
             drawCursor(canvas, TileMath.tileCenter(cursorPos.x, cursorPos.y));
@@ -197,9 +201,6 @@ public class Game {
                 drawTile(canvas, x, y);
             }
         }
-
-        drawMovementRange(canvas);
-        drawAttackRange(canvas);
     }
 
     private void drawMovementRange(Canvas canvas) {
@@ -280,21 +281,6 @@ public class Game {
         canvas.drawBitmap(bitmap, areaToCrop, areaToDraw, null);
     }
 
-    public static ArrayList<Point> getPath(Map<Point, UnitRangeBFS.Node> range, Point current) {
-        ArrayList<Point> way = new ArrayList<>();
-
-        while (current != null) {
-            way.add(current);
-            current = range.get(current).parent;
-        }
-
-        Collections.reverse(way);
-        return way;
-    }
-
-    private boolean isInRange(Point tilePos) {
-        return movementRange.containsKey(tilePos);
-    }
 
     public int getWidth() {
         return map.getWidth();
