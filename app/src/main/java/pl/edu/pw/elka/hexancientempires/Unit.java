@@ -7,15 +7,33 @@ package pl.edu.pw.elka.hexancientempires;
 public class Unit {
     public static final int WARRIOR     = 0;
     public static final int ARCHER      = 1;
-    public static final int WATERELEM   = 2;
-    public static final int WIZZARD     = 3;
+    public static final int LIZARD      = 2;
+    public static final int WIZARD      = 3;
     public static final int WISP        = 4;
     public static final int WOLF        = 5;
     public static final int GOLEM       = 6;
     public static final int CATAPULT    = 7;
     public static final int DRAGON      = 8;
-    public static final int SKELETON    = 9;
-    public static final int KING        = 10;
+    public static final int KING        = 9;
+    public static final int SKELETON    = 10;
+
+    @Override
+    public String toString() {
+        switch (type){
+            case WARRIOR:   return "Warrior";
+            case ARCHER:    return "Archer";
+            case LIZARD:    return "Lizard";
+            case WIZARD:    return "Wizard";
+            case WISP:      return "Wisp";
+            case WOLF:      return "Wolf";
+            case GOLEM:     return "Golem";
+            case CATAPULT:  return "Catapult";
+            case DRAGON:    return "Dragon";
+            case KING:      return "King";
+            case SKELETON:  return "Skeleton";
+            default:        return "";
+        }
+    }
 
 
     private int type;

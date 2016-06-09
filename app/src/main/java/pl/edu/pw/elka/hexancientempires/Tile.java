@@ -1,9 +1,6 @@
 package pl.edu.pw.elka.hexancientempires;
 
 /**
- * <br>public Tile(int type);<br/>
- * <br>public Tile(Tile tile, Unit unit);<br/>
- *
  * Simple class representing tile
  * Created by Tomek on 31.05.16.
  */
@@ -26,10 +23,6 @@ public class Tile {
 
     public Tile(int type) {
         this.type = type;
-    }
-    public Tile(Tile tile) {
-        this.type = tile.type;
-        this.unit = tile.unit;
     }
 
     public Unit getUnit() {

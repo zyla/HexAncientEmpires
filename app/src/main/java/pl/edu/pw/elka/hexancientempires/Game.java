@@ -91,6 +91,7 @@ public class Game {
 
         return gameLogic.action(from, to, new GameLogic.ActionListener<Boolean>() {
             public Boolean moved(Unit unit, List<Point> path) {
+                message.show(unit + " moved to " + path.get(path.size() - 1), 3000);
                 unitAnimation.start(unit,
                     ANIMATION_TIME, 
                     Utils.pathToPixels(path)
@@ -99,13 +100,11 @@ public class Game {
             }
 
             public Boolean attacked(Unit attacker, Unit attacked, int range) {
-                // TODO display info
-                message.show("Attacked " +from  + to, 3000);
+                message.show(attacker + " attacked " +attacked, 3000);
                 return true;
             }
 
             public Boolean noAction() {
-                // TODO maybe show information about terrain?
                 message.show("Selected tile " + to, 3000);
                 return false;
             }
@@ -282,7 +281,6 @@ public class Game {
     }
 
     private void drawUnits(Canvas canvas) {
-        //TODO make this for cool
         for(Unit unit :units){
             PointF loc =
                 unitAnimation.isAnimating(unit) ?

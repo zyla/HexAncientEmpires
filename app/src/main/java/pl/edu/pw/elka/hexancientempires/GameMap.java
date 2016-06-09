@@ -48,8 +48,8 @@ public class GameMap {
 
     public Tile getTile(int index) {
         if(index < 0 || index >= tiles.size())
-            return new Tile(Tile.NONE);//TODO should throw exception
-        return new Tile (tiles.get(index));
+            throw new IndexOutOfBoundsException("Tile of this index don't exists in map");
+         return tiles.get(index);
     }
 
     public int getSize() {
@@ -68,7 +68,7 @@ public class GameMap {
     {
         int index = loc.y * mapWidth + loc.x;
         if(index < 0 || index >= tiles.size())
-            return 0; //TODO throw impossible exception
+            throw new  IndexOutOfBoundsException("Tile of this index don't exists in map");
         return  index;
     }
 

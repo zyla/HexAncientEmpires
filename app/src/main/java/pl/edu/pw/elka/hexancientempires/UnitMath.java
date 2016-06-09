@@ -16,43 +16,43 @@ public class UnitMath {
     public static final int[] unitDamage = {
         50,//WARRIOR
         50,//ARCHER
-        50,//WATERELEM
-        50,//WIZZARD
+        50,//LIZARD
+        50,//WIZARD
         50,//WISP
         50,//WOLF
         50,//GOLEM
         50,//CATEPULT
         50,//DREGON
-        50,//SKELETON
-        50 //KING
-    };
+        50,//KING
+        50//SKELETON
+};
 
     public static final int[] unitRange = {
         1,//WARRIOR
         2,//ARCHER
-        1,//WATERELEM
-        1,//WIZZARD
+        1,//LIZARD
+        1,//WIZARD
         2,//WISP
         1,//WOLF
         1,//GOLEM
-        5,//CATEPULT
-        2,//DREGON
-        1,//SKELETON
-        1 //KING
-    };
+        5,//CATAPULT
+        2,//DRAGON
+        1,//KING
+        1 //SKELETON
+};
 
     public static final int[] unitSpeed = {
         4,//WARRIOR
         4,//ARCHER
-        3,//WATERELEM
-        2,//WIZZARD
+        3,//LIZARD
+        2,//WIZARD
         4,//WISP
         7,//WOLF
         3,//GOLEM
-        2,//CATEPULT
-        8,//DREGON
-        4,//SKELETON
-        4 //KING
+        2,//CATAPULT
+        8,//DRAGON
+        4,//KING
+        4//SKELETON
     };
 
     public static final int[] tileDefense = {

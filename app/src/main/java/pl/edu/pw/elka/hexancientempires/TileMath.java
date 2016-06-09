@@ -27,7 +27,6 @@ public class TileMath {
 
 
     public static Rect visibleTiles(Rect visibleArea) {
-        // TODO test _visibleTiles
         Point topLeft = tileHitTest(visibleArea.left, visibleArea.top);
         Point botRight = tileHitTest(visibleArea.right, visibleArea.bottom);
 
@@ -49,7 +48,6 @@ public class TileMath {
     }
 
     public static Point neighbour(Point loc, int side) {
-        // TODO use it in A*
         int even = (loc.x + 1) % 2;
         switch(side) {
             case TOPSIDE:
@@ -65,11 +63,10 @@ public class TileMath {
             case TOPLEFT:
                 return new Point(loc.x - 1 , loc.y - even );
         }
-        return new Point(99999,99999); //should throw exception or something
+        throw new  IndexOutOfBoundsException("Tile of this index don't exists in map");
     }
 
     public static Point tileHitTest(int x, int y) {
-        // TODO test _tileHitTest
         int col = (int)Math.floor(((double) x) / (TILE_WIDTH * 3/4));
         int row = (int)Math.floor(((double)y - (col & 1)* TILE_HEIGHT/2) / TILE_HEIGHT);
        // +((y>=0)?1:-1)*
