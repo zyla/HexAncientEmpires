@@ -37,6 +37,11 @@ public class GameActivity extends AppCompatActivity implements ConnectionService
 
                 connectionService = ((ConnectionService.Binder) binder).getService();
                 connectionService.setListener(GameActivity.this);
+
+                gameView = new GameView(GameActivity.this, GameActivity.this);
+                FrameLayout layout = new FrameLayout(GameActivity.this);
+                layout.addView(gameView);
+                setContentView(layout);
             }
 
             @Override
@@ -46,11 +51,6 @@ public class GameActivity extends AppCompatActivity implements ConnectionService
         }, BIND_AUTO_CREATE);
 
         Log.d("GameActivity", "Binding service success=" + bound);
-
-        gameView = new GameView(this, this);
-        FrameLayout layout = new FrameLayout(this);
-        layout.addView(gameView);
-        setContentView(layout);
     }
 
     public void connected() {}
@@ -76,5 +76,9 @@ public class GameActivity extends AppCompatActivity implements ConnectionService
     public void sendEvent(Event event) {
         String data = Utils.join(" ", event.serialize());
         connectionService.send(data);
+    }
+
+    public boolean isServer() {
+        return connectionService.isServer();
     }
 }

@@ -24,6 +24,7 @@ public class ConnectionService extends Service {
     private WeakReference<Listener> listener;
     private Handler handler;
     private BluetoothServerSocket serverSocket;
+    private boolean isServer;
 
     private Listener getListener() {
         return listener != null? listener.get(): null;
@@ -67,7 +68,7 @@ public class ConnectionService extends Service {
             socket.connect();
             Log.d("BT", "Connected");
 
-            connected();
+            connected(false);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -171,7 +172,7 @@ public class ConnectionService extends Service {
                 Log.d("BT", "Listening for connections");
                 socket = serverSocket.accept();
                 Log.d("BT", "Accepted connection");
-                connected();
+                connected(true);
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
@@ -180,8 +181,9 @@ public class ConnectionService extends Service {
         }
     }
 
-    private void connected() {
+    private void connected(boolean isServer) {
         stopListening();
+        this.isServer = isServer;
 
         startInputThread();
 
@@ -200,5 +202,9 @@ public class ConnectionService extends Service {
         public void connected();
         public void disconnected();
         public void lineReceived(String line);
+    }
+
+    public boolean isServer() {
+        return isServer;
     }
 }

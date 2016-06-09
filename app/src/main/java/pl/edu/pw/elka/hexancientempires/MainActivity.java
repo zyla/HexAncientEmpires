@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private static class NullConnection implements Connection {
+        public boolean isServer() { return true; }
         public void sendEvent(Event event) {}
     }
 }
