@@ -40,7 +40,6 @@ public class UnitAttackRange {
     }
 
     public Map<Point, Node> getReachableTiles(Unit unit, Point origin) {
-        Tile tile  = gameMap.getTile(origin);
         int range = UnitMath.unitRange[unit.getType()];
         ArrayList<Node> graph = getGraph();
 
@@ -52,7 +51,7 @@ public class UnitAttackRange {
         while(!queue.isEmpty())
         {
             Node current = queue.remove();
-            if(current.playerID != 0 && current.playerID != tile.getUnit().getPlayerID())
+            if(current.playerID != 0 && current.playerID != unit.getPlayerID())
                 inRange.put(current.loc,current);
             for(int i = 0; i < 6 ; i++)
             {
