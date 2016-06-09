@@ -53,6 +53,8 @@ public class GameActivity extends AppCompatActivity implements ConnectionService
         setContentView(layout);
     }
 
+    public void connected() {}
+
     @Override
     public void disconnected() {
         finish();

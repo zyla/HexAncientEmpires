@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.os.AsyncTask;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,13 +24,14 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConnectActivity extends AppCompatActivity {
+public class ConnectActivity extends AppCompatActivity implements ConnectionService.Listener {
 
     private static final int REQUEST_ENABLE_BT = 1;
     private BluetoothAdapter bluetoothAdapter;
 
     private List<BluetoothDevice> devices = new ArrayList<>();
     private DevicesAdapter listAdapter;
+    private ConnectionService connectionService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,20 @@ public class ConnectActivity extends AppCompatActivity {
                 startGameWithDevice(device);
             }
         });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if(connectionService != null) {
+            connectionService.stopListening();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -56,7 +72,7 @@ public class ConnectActivity extends AppCompatActivity {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         } else {
-            findDevices();
+            bluetoothEnabled();
         }
     }
 
@@ -64,17 +80,35 @@ public class ConnectActivity extends AppCompatActivity {
         bluetoothAdapter.cancelDiscovery();
         setProgressBarIndeterminateVisibility(false);
 
-        Intent intent = new Intent(getApplicationContext(), ConnectionService.class);
+        new AsyncTask<Void, Void, Void>() {
+            protected Void doInBackground(Void... args) {
+                connectionService.connect(device);
+                return null;
+            }
 
+            protected void onPostExecute(Void result) { }
+        }.execute();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == REQUEST_ENABLE_BT) {
+            bluetoothEnabled();
+        }
+    }
+
+    private void bluetoothEnabled() {
+        Intent intent = new Intent(getApplicationContext(), ConnectionService.class);
         boolean bound = bindService(intent, new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder binder) {
                 Log.d("ConnectActivity", "Service connected");
 
-                ConnectionService connection = ((ConnectionService.Binder) binder).getService();
-                connection.connect(device);
+                connectionService = ((ConnectionService.Binder) binder).getService();
+                connectionService.setListener(ConnectActivity.this);
+                connectionService.startListening();
 
-                startActivity(new Intent(getApplicationContext(), GameActivity.class));
+                findDevices();
             }
 
             @Override
@@ -86,14 +120,8 @@ public class ConnectActivity extends AppCompatActivity {
         Log.d("ConnectActivity", "Binding service success=" + bound);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == REQUEST_ENABLE_BT) {
-            findDevices();
-        }
-    }
-
     private void findDevices() {
+        devices.clear();
         setProgressBarIndeterminateVisibility(true);
 
         BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -130,4 +158,12 @@ public class ConnectActivity extends AppCompatActivity {
             return view;
         }
     }
+
+    // ConnectionService listener
+    public void connected() {
+        startActivity(new Intent(getApplicationContext(), GameActivity.class));
+    }
+
+    public void disconnected() {}
+    public void lineReceived(String line) {}
 }

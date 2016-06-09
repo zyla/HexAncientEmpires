@@ -1,7 +1,9 @@
 package pl.edu.pw.elka.hexancientempires;
 
 import android.app.Service;
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.Handler;
@@ -21,6 +23,7 @@ public class ConnectionService extends Service {
     private BluetoothSocket socket;
     private WeakReference<Listener> listener;
     private Handler handler;
+    private BluetoothServerSocket serverSocket;
 
     private Listener getListener() {
         return listener != null? listener.get(): null;
@@ -32,7 +35,7 @@ public class ConnectionService extends Service {
         }
     }
 
-    public void setListener(GameActivity listener) {
+    public void setListener(Listener listener) {
         this.listener = new WeakReference<Listener>(listener);
         this.handler = new Handler();
     }
@@ -56,13 +59,15 @@ public class ConnectionService extends Service {
             throw new IllegalStateException("Already connected");
         }
 
+        stopListening();
+
         try {
             socket = device.createRfcommSocketToServiceRecord(SERVICE_UUID);
             Log.d("BT", "Connecting to " + device);
             socket.connect();
             Log.d("BT", "Connected");
 
-            startInputThread();
+            connected();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -99,6 +104,7 @@ public class ConnectionService extends Service {
             @Override
             public void run() {
                 try {
+                    Log.d("BT", "reading input");
                     BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     String line;
                     while((line = input.readLine()) != null) {
@@ -142,7 +148,56 @@ public class ConnectionService extends Service {
         }
     }
 
+
+    public void startListening() {
+        new ListeningThread().start();
+    }
+
+    public void stopListening() {
+        if(serverSocket != null) {
+            try {
+                serverSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private class ListeningThread extends Thread {
+        public void run() {
+            try {
+                serverSocket = BluetoothAdapter.getDefaultAdapter()
+                    .listenUsingRfcommWithServiceRecord("HexAncientEmpires", SERVICE_UUID);
+                Log.d("BT", "Listening for connections");
+                socket = serverSocket.accept();
+                Log.d("BT", "Accepted connection");
+                connected();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                stopListening();
+            }
+        }
+    }
+
+    private void connected() {
+        stopListening();
+
+        startInputThread();
+
+        final Listener listener = getListener();
+        if(listener != null) {
+            post(new Runnable() {
+                @Override
+                public void run() {
+                    listener.connected();
+                }
+            });
+        }
+    }
+
     public interface Listener {
+        public void connected();
         public void disconnected();
         public void lineReceived(String line);
     }
