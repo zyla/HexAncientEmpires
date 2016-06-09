@@ -123,16 +123,15 @@ public class GameLogic {
         }
 
         Unit unitTo = map.getTile(to).getUnit();
-        if(unitFrom != null) {
-            Map<Point, UnitMovementRange.Node> movementRange = new UnitMovementRange(map).getReachableTiles(unitFrom, from);
-            Map<Point, UnitAttackRange.Node> attackRange = new UnitAttackRange(map).getReachableTiles(unitFrom, from);
+        Map<Point, UnitMovementRange.Node> movementRange = new UnitMovementRange(map).getReachableTiles(unitFrom, from);
+        Map<Point, UnitAttackRange.Node> attackRange = new UnitAttackRange(map).getReachableTiles(unitFrom, from);
 
-            if (isInMovementRange(movementRange, to) && move(from, to)) {
-                return listener.moved(unitFrom, getPath(movementRange, to));
-            } else if (isInAttackRange(attackRange, to) && attack(from, to, getAttackDistance(attackRange, to))) {
-                return listener.attacked(unitFrom, unitTo, getAttackDistance(attackRange, to));
-            }
+        if (isInMovementRange(movementRange, to) && move(from, to)) {
+            return listener.moved(unitFrom, getPath(movementRange, to));
+        } else if (isInAttackRange(attackRange, to) && attack(from, to, getAttackDistance(attackRange, to))) {
+            return listener.attacked(unitFrom, unitTo, getAttackDistance(attackRange, to));
         }
+
         return listener.noAction();
     }
 
