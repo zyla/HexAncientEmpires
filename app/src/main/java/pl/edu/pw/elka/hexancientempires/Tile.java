@@ -17,8 +17,12 @@ public class Tile {
     public static final int WATER = 6;
 
 
-    public int type;
-    public Unit unit;
+    public int getType() {
+        return type;
+    }
+
+    private int type;
+    private Unit unit;
 
     public Tile(int type) {
         this.type = type;
@@ -30,6 +34,14 @@ public class Tile {
 
     public Tile(Tile tile, Unit unit) {
         this.type = tile.type;
+        this.unit = unit;
+    }
+
+    public Unit getUnit() {
+        return unit;
+    }
+
+    public void setUnit(Unit unit) {
         this.unit = unit;
     }
 }

@@ -18,10 +18,10 @@ public class Unit {
     public static final int KING        = 10;
 
 
-    public int type;
-    public int playerID;
-    public int hp;
-    public Point loc;
+    private int type;
+    private int playerID;
+    private int hp;
+    private Point loc;
 
 
     public Unit(int type, int playerID, Point loc) {
@@ -31,4 +31,27 @@ public class Unit {
         this.loc = loc;
     }
 
+    public int getType() {
+        return type;
+    }
+
+    public int getPlayerID() {
+        return playerID;
+    }
+
+    public int getHp() {
+        return hp;
+    }
+
+    public Point getLoc() {
+        return loc;
+    }
+
+    public void setLoc(Point loc) {
+        this.loc = loc;
+    }
+
+    public void setHp(int hp) {
+        this.hp = hp;
+    }
 }

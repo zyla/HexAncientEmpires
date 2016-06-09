@@ -21,8 +21,8 @@ public class UnitAttackRange {
         public Node(Tile tile, Point loc) {
             this.loc = loc;
             distance = Integer.MAX_VALUE;
-            if(tile.unit != null)
-                this.playerID = tile.unit.playerID;
+            if(tile.getUnit() != null)
+                this.playerID = tile.getUnit().getPlayerID();
             else playerID = 0;
         }
    }
@@ -39,10 +39,10 @@ public class UnitAttackRange {
 
     public ArrayList<Node> getReachableTiles(Point origin) {
         Tile tile  = gameMap.getTile(origin);
-        if(tile.type == Tile.NONE || tile.unit == null)
+        if(tile.getType() == Tile.NONE || tile.getUnit()== null)
             throw new IllegalArgumentException("tile not good for BFS");
 
-        int range = UnitMath.unitRange[tile.unit.type];
+        int range = UnitMath.unitRange[tile.getUnit().getType()];
         ArrayList<Node> graph = getGraph();
 
         ArrayList<Node> inRange = new ArrayList<>();
@@ -53,7 +53,7 @@ public class UnitAttackRange {
         while(!queue.isEmpty())
         {
             Node current = queue.remove();
-            if(current.playerID != 0 && current.playerID != tile.unit.playerID)
+            if(current.playerID != 0 && current.playerID != tile.getUnit().getPlayerID())
                 inRange.add(current);
             for(int i = 0; i < 6 ; i++)
             {

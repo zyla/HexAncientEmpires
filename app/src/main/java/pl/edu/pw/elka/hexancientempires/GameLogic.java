@@ -30,7 +30,7 @@ public class GameLogic {
         this.units = units;
         unitInfos = new HashMap<>();
         for(Unit unit :units){
-            unitInfos.put(unit.loc,new UnitInfo(unit));
+            unitInfos.put(unit.getLoc(),new UnitInfo(unit));
         }
         this.playerID = playerID;
         this.map = map;
@@ -40,11 +40,11 @@ public class GameLogic {
         Tile attacker = map.getTile(attacking);
         Tile attacked = map.getTile(defensing);
 
-        if(attacker.unit == null
-                || attacked.unit == null
-                || attacker.unit.playerID !=playerID
-                || attacked.unit.playerID == playerID
-                || unitInfos.get(attacked.unit.loc).attacked)
+        if(attacker.getUnit() == null
+                || attacked.getUnit() == null
+                || attacker.getUnit().getPlayerID() != playerID
+                || attacked.getUnit().getPlayerID()== playerID
+                || unitInfos.get(attacked.getUnit().getLoc()).attacked)
             return false;
 
         unitInfos.get(attacking).attacked = true;
@@ -53,13 +53,13 @@ public class GameLogic {
         if(result == UnitMath.NO_ONE_DIE)
             return true;
         if(result == UnitMath.ATTACKED_DIE) {
-            units.remove(attacked.unit);
-            unitInfos.remove(attacked.unit.loc);
-            attacked.unit = null;
+            units.remove(attacked.getUnit());
+            unitInfos.remove(attacked.getUnit().getLoc());
+            attacked.setUnit(null);
         }else{//result == UnitMath.ATTACKING_DIE
-            units.remove(attacker.unit);
-            unitInfos.remove(attacker.unit.loc);
-            attacker.unit = null;
+            units.remove(attacker.getUnit());
+            unitInfos.remove(attacker.getUnit().getLoc());
+            attacker.setUnit(null);
         }
         return true;
     }
@@ -68,10 +68,10 @@ public class GameLogic {
         Tile tileFrom = map.getTile(from);
         Tile tileTo = map.getTile(to);
 
-        if (tileFrom.unit == null
-                || tileTo.unit != null
-                || tileFrom.unit.playerID != playerID
-                || unitInfos.get(tileFrom.unit.loc).moved)
+        if (tileFrom.getUnit() == null
+                || tileTo.getUnit() != null
+                || tileFrom.getUnit().getPlayerID() != playerID
+                || unitInfos.get(tileFrom.getUnit().getLoc()).moved)
             return false;
 
         UnitInfo unitInfo = unitInfos.get(from);
@@ -79,10 +79,10 @@ public class GameLogic {
         unitInfos.remove(from);
         unitInfos.put(to, unitInfo);
 
-        map.getTile(to).unit = tileFrom.unit;
-        map.getTile(from).unit = null;
+        map.getTile(to).setUnit( tileFrom.getUnit());
+        map.getTile(from).setUnit(null);
 
-        tileTo.unit.loc = to;
+        tileTo.getUnit().setLoc(to);
 
         return true;
     }

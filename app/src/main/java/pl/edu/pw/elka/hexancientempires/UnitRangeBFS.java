@@ -34,8 +34,8 @@ public class UnitRangeBFS {
         public Node(Tile tile,Point loc) {
             this.loc = loc;
             this.distance = Integer.MAX_VALUE;
-            this.cost = UnitMath.tileDistance[tile.type];
-            if(tile.unit != null || tile.type == Tile.NONE) {
+            this.cost = UnitMath.tileDistance[tile.getType()];
+            if(tile.getUnit() != null || tile.getType() == Tile.NONE) {
                 allowed = false;
             }
             else {
@@ -66,7 +66,7 @@ public class UnitRangeBFS {
         ArrayList<Node> graph = getGraph();
         Map<Point, Node> visited = new HashMap<>();
         LinkedList<Node> queue = new LinkedList<>();
-        int range = UnitMath.unitSpeed[unit.type];
+        int range = UnitMath.unitSpeed[unit.getType()];
 
         int originIndex = gameMap.getMapIndex(origin);
         graph.set(originIndex,new Node(graph.get(originIndex),0));

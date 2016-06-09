@@ -78,25 +78,25 @@ public class UnitMath {
 
     //I have to change value of hp in one unit, but idk if possible in java
     public static int attack(Tile attacking, Tile attacked, int distance){
-        int attackValue1 = unitDamage[attacking.unit.type];
-        int attackedHp = attacked.unit.hp;
-        int attackedDef = tileDefense[attacked.type];
+        int attackValue1 = unitDamage[attacking.getUnit().getType()];
+        int attackedHp = attacked.getUnit().getHp();
+        int attackedDef = tileDefense[attacked.getType()];
 
         if(attackedHp <= attackValue1 - attackedDef)
             return ATTACKED_DIE;
-        attacked.unit.hp = attackedHp + attackedDef - attackValue1;
+        attacked.getUnit().setHp( attackedHp + attackedDef - attackValue1);
 
-        if(distance > unitRange[attacked.unit.type])
+        if(distance > unitRange[attacked.getUnit().getType()])
             return NO_ONE_DIE;
 
-        int attackingHp = attacking.unit.hp;
-        int attackValue2 = unitDamage[attacked.unit.type];
-        int attackingDef = tileDefense[attacking.type];
+        int attackingHp = attacking.getUnit().getHp();
+        int attackValue2 = unitDamage[attacked.getUnit().getType()];
+        int attackingDef = tileDefense[attacking.getType()];
 
         if(attackingHp <= attackValue2 - attackingDef)
             return ATTACKING_DIE;
 
-        attacking.unit.hp = attackingHp + attackingDef - attackValue2;
+        attacking.getUnit().setHp( attackingHp + attackingDef - attackValue2);
         return NO_ONE_DIE;
     }
 }

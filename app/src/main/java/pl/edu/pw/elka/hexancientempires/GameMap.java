@@ -14,8 +14,8 @@ import static pl.edu.pw.elka.hexancientempires.UnitRangeBFS.*;
  */
 public class GameMap {
     private ArrayList<Tile> tiles;
-    public final int mapWidth;
-    public final int mapHeight;
+    private final int mapWidth;
+    private final int mapHeight;
 
     public static final String MAP1 = "13 13 " +
             "x x x x x x x x x x x x x " +
@@ -110,12 +110,5 @@ public class GameMap {
         }
 
         return new GameMap(mapWidth, mapHeight, tiles);
-    }
-
-    public void move(ArrayList<Point> path) {
-        Unit unit = tiles.get(getMapIndex(path.get(0))).unit;
-        tiles.get(getMapIndex(path.get(0))).unit = null;
-        tiles.get(getMapIndex(path.get(path.size()- 1))).unit = unit ;
-
     }
 }
