@@ -75,19 +75,6 @@ public class Game {
         message.show("Selected tile " + newCursorPos, 3000);
     }
 
-    // TODO move to utils
-    private static PointF toPointF(Point p) {
-        return new PointF(p.x, p.y);
-    }
-
-    private static List<PointF> pathToPixels(Iterable<Point> xs) {
-        ArrayList<PointF> result = new ArrayList<>();
-        for(Point x: xs) {
-            result.add(toPointF(TileMath.tileLocation(x)));
-        }
-        return result;
-    }
-
     private void moveUnit(Point from, Point to) {
         Unit unit = map.getTile(from).getUnit();
 
@@ -96,7 +83,7 @@ public class Game {
         if(gameLogic.move(from, to)) {
             unitAnimation.start(unit,
                 ANIMATION_TIME, 
-                pathToPixels(getPath(range, to))
+                Utils.pathToPixels(getPath(range, to))
             );
         }
     }
@@ -240,7 +227,7 @@ public class Game {
             PointF loc =
                 unitAnimation.isAnimating(unit) ?
                     unitAnimation.getCurrentPoint() :
-                    toPointF(TileMath.tileLocation(unit.getLoc().x, unit.getLoc().y));
+                    Utils.toPointF(TileMath.tileLocation(unit.getLoc().x, unit.getLoc().y));
 
             drawUnit(canvas, unit, loc.x, loc.y);
         }
