@@ -37,12 +37,9 @@ public class UnitAttackRange {
         return graph;
     }
 
-    public ArrayList<Node> getReachableTiles(Point origin) {
+    public ArrayList<Node> getReachableTiles(Unit unit, Point origin) {
         Tile tile  = gameMap.getTile(origin);
-        if(tile.getType() == Tile.NONE || tile.getUnit()== null)
-            throw new IllegalArgumentException("tile not good for BFS");
-
-        int range = UnitMath.unitRange[tile.getUnit().getType()];
+        int range = UnitMath.unitRange[unit.getType()];
         ArrayList<Node> graph = getGraph();
 
         ArrayList<Node> inRange = new ArrayList<>();

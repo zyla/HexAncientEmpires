@@ -114,7 +114,7 @@ public class GameLogic {
         // TODO this is dummy impl, reimplement
 
         Unit unit = map.getTile(from).getUnit();
-        if(unit != null && move(from, to)) {
+        if( move(from, to)) {
             listener.moved(unit, Arrays.asList(from, to));
         } else {
             listener.noAction();

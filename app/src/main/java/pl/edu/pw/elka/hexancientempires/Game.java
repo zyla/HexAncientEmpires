@@ -16,8 +16,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 
-import pl.edu.pw.elka.hexancientempires.UnitRangeBFS.Node;
-
 import static pl.edu.pw.elka.hexancientempires.TileMath.TILE_HEIGHT;
 import static pl.edu.pw.elka.hexancientempires.TileMath.TILE_WIDTH;
 
@@ -47,8 +45,8 @@ public class Game {
     private Point cursorPos = new Point(0, 0);
 
     //----------
-    private Map<Point, UnitRangeBFS.Node> displayedRange = Collections.emptyMap();
-    private ArrayList<UnitAttackRange.Node> atakRange;
+    private Map<Point, UnitRangeBFS.Node> movementRange = Collections.emptyMap();
+    private List<UnitAttackRange.Node> attackRange = Collections.emptyList();
 
     private Animation unitAnimation = new Animation();
     private Message message = new Message();
@@ -77,9 +75,11 @@ public class Game {
         Unit unit = map.getTile(cursorPos).getUnit();
 
         if(unit != null) {
-            displayedRange = new UnitRangeBFS(map).getReachableTiles(unit, cursorPos);
+            movementRange = new UnitRangeBFS(map).getReachableTiles(unit, cursorPos);
+            attackRange = new  UnitAttackRange(map).getReachableTiles(unit, cursorPos);
         } else {
-            displayedRange = Collections.emptyMap();
+            movementRange = Collections.emptyMap();
+            attackRange = Collections.emptyList();
         }
     }
 
@@ -185,15 +185,15 @@ public class Game {
             }
         }
 
-        drawRange(canvas);
+        drawMovementRange(canvas);
     }
 
-    private void drawRange(Canvas canvas) {
+    private void drawMovementRange(Canvas canvas) {
         Paint paint = new Paint();
-        paint.setColor(0x80ff0000);
+        paint.setColor(0x800000ff);
         paint.setStyle(Paint.Style.FILL);
 
-        for(UnitRangeBFS.Node node: displayedRange.values()) {
+        for(UnitRangeBFS.Node node: movementRange.values()) {
             Point loc = TileMath.tileLocation(node.loc.x, node.loc.y);
 
             canvas.translate(loc.x, loc.y);
@@ -201,6 +201,21 @@ public class Game {
             canvas.translate(-loc.x, -loc.y);
         }
     }
+
+    private void drawAttackRange(Canvas canvas) {
+        Paint paint = new Paint();
+        paint.setColor(0x80ff0000);
+        paint.setStyle(Paint.Style.FILL);
+
+        for(UnitAttackRange.Node node: attackRange) {
+            Point loc = TileMath.tileLocation(node.loc.x, node.loc.y);
+
+            canvas.translate(loc.x, loc.y);
+            canvas.drawPath(tilePath, paint);
+            canvas.translate(-loc.x, -loc.y);
+        }
+    }
+
 
 
     private final Path tilePath;
@@ -264,7 +279,7 @@ public class Game {
     }
 
     private boolean isInRange(Point tilePos) {
-        return displayedRange.containsKey(tilePos);
+        return movementRange.containsKey(tilePos);
     }
 
     public int getWidth() {
