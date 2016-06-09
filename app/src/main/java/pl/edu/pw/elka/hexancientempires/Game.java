@@ -221,7 +221,7 @@ public class Game {
         paint.setColor(0x80ff0000);
         paint.setStyle(Paint.Style.FILL);
 
-        for(UnitAttackRange.Node node: attackRange.) {
+        for(UnitAttackRange.Node node: attackRange) {
             Point loc = TileMath.tileLocation(node.loc.x, node.loc.y);
 
             canvas.translate(loc.x, loc.y);
