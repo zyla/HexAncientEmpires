@@ -2,4 +2,3 @@
 - network: handle disconnections
 - Fix concurrency bugs in ConnectionService
 - fix UnitAttackRange algorithm (too much range)
-- Update selected tile state after external events

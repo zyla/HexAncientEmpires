@@ -70,6 +70,10 @@ public class Game {
 
         cursorPos = newCursorPos;
 
+        updateTileState();
+    }
+
+    private void updateTileState() {
         Unit unit = map.getTile(cursorPos).getUnit();
 
         if(isMyTurn() && unit != null) {
@@ -172,6 +176,7 @@ public class Game {
             finishTurn();
             connection.sendEvent(new Event.FinishTurn());
         }
+        updateTileState();
     }
 
     private void finishTurn() {
@@ -366,6 +371,7 @@ public class Game {
                 return null;
             }
         });
+        updateTileState();
     }
 
     public int getMyPlayerID() {
