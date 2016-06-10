@@ -70,11 +70,22 @@ public class Game {
 
         cursorPos = newCursorPos;
 
+        updateTileState();
+    }
+
+    private void updateTileState() {
         Unit unit = map.getTile(cursorPos).getUnit();
 
-        if(unit != null) {
-            movementRange = new UnitMovementRange(map).getReachableTiles(unit, cursorPos);
-            attackRange = new  UnitAttackRange(map).getReachableTiles(unit, cursorPos);
+        if(isMyTurn() && unit != null) {
+
+            movementRange = gameLogic.canMove(unit) ?
+                new UnitMovementRange(map).getReachableTiles(unit, cursorPos) :
+                Collections.<Point, UnitMovementRange.Node>emptyMap();
+
+            attackRange = gameLogic.canAttack(unit) ?
+                new UnitAttackRange(map).getReachableTiles(unit, cursorPos) :
+                Collections.<Point, UnitAttackRange.Node>emptyMap();
+
         } else {
             movementRange = Collections.emptyMap();
             attackRange = Collections.emptyMap();
@@ -105,7 +116,6 @@ public class Game {
             }
 
             public Boolean noAction() {
-                message.show("Selected tile " + to, 3000);
                 return false;
             }
         });
@@ -166,14 +176,11 @@ public class Game {
             finishTurn();
             connection.sendEvent(new Event.FinishTurn());
         }
+        updateTileState();
     }
 
     private void finishTurn() {
         startTurn(oppositePlayerID(gameLogic.playerID));
-
-        if(isMyTurn()) {
-            message.show("Go!", 2000);
-        }
     }
 
     private boolean isMyTurn() {
@@ -203,11 +210,11 @@ public class Game {
 
             drawMap(canvas, visibleArea);
 
+            drawUnits(canvas);
+
             drawMovementRange(canvas);
 
             drawAttackRange(canvas);
-
-            drawUnits(canvas);
 
             drawCursor(canvas, TileMath.tileCenter(cursorPos.x, cursorPos.y));
         }
@@ -217,7 +224,9 @@ public class Game {
             drawMessage(canvas, message.getText(), screenWidth, screenHeight, 120);
         }
         
-        String turnMessage = isMyTurn() ? "Your turn" : "Waiting for Player " + oppositePlayerID(myPlayerID);
+        String turnMessage = isMyTurn() ?
+            (gameLogic.isTurnFinished() ? "No moves left in this turn" : "Your turn") :
+            "Waiting for Player " + oppositePlayerID(myPlayerID);
         drawMessage(canvas, turnMessage, screenWidth, screenHeight, 30);
     }
 
@@ -334,10 +343,7 @@ public class Game {
     }
 
     public void update(long frameTime) {
-        long animationFrameTime = Math.min(frameTime, 16); // TODO fix this hack
-
-        unitAnimation.update(animationFrameTime);
-
+        unitAnimation.update(frameTime);
         message.update(frameTime);
     }
 
@@ -365,5 +371,10 @@ public class Game {
                 return null;
             }
         });
+        updateTileState();
+    }
+
+    public int getMyPlayerID() {
+        return myPlayerID;
     }
 }

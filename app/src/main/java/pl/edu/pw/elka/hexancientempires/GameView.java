@@ -24,9 +24,6 @@ import static pl.edu.pw.elka.hexancientempires.TileMath.TILE_HEIGHT;
 public class GameView extends View {
     private PointF cameraOffset = new PointF(-TILE_WIDTH/4, -TILE_HEIGHT/2);
     private PointF lastTouchDown = new PointF();
-    private long lastFrameTime; // for FPS reporting
-
-    private boolean isWaitingForEvent = true;
 
     /** True if current touch stroke is a movement, not a click */
     private boolean isMovement;
@@ -36,8 +33,8 @@ public class GameView extends View {
 
     private Game game;
 
-    // DEBUG INFO
     private long lastFrameStartedAt;
+    private long lastRenderStartedAt;
     private boolean framePending;
 
     // java == wtf
@@ -100,45 +97,39 @@ public class GameView extends View {
         if(!framePending) {
             framePending = true;
             long now = System.currentTimeMillis();
-            postDelayed(processFrameRunnable, Math.max(0, 16 - (now - lastFrameStartedAt)));
+            postDelayed(processFrameRunnable, Math.max(0, 16 - (now - lastRenderStartedAt)));
         }
     }
 
     private void processFrame() {
         framePending = false;
-        long now = System.currentTimeMillis();
-        long frameTime = now - lastFrameStartedAt;
-        lastFrameTime = frameTime;
-        lastFrameStartedAt = now;
+        lastRenderStartedAt = System.currentTimeMillis();
 
-        if(isWaitingForEvent) {
-            isWaitingForEvent = false;
-        } else {
-            game.update(frameTime);
-        }
+        doUpdate();
         invalidate();
 
         long delay = game.nextFrameDelay();
         if (delay == Game.FRAME_WAIT_FOR_EVENT) {
-            isWaitingForEvent = true;
+            // nothing
         } else if (delay == Game.FRAME_IMMEDIATELY) {
             requestFrame();
         } else {
-            postDelayed(requestFrameRunnable, delay); // TODO cancel the timer when frame arrives
+            postDelayed(requestFrameRunnable, delay);
         }
     }
 
+    private void doUpdate() {
+        long now = System.currentTimeMillis();
+        long frameTime = now - lastFrameStartedAt;
+        lastFrameStartedAt = now;
+
+        game.update(frameTime);
+    }
+
     private void setCameraOffset(float x, float y) {
-        // TODO refactor
         Point lastTile = TileMath.tileLocation(game.getWidth(), game.getHeight());
         cameraOffset.x = Math.max(Math.min(x, -TILE_WIDTH/4), -lastTile.x + getWidth());
         cameraOffset.y = Math.max(Math.min(y, -TILE_HEIGHT/2), -lastTile.y + TILE_HEIGHT/2 + getHeight());
-    }
-
-    private void tileClicked(Point tilePos) {
-        game.tileSelected(tilePos);
-
-        requestFrame();
     }
 
     /** Squared magnitude of a two-dimensional vector (x, y) */
@@ -151,8 +142,6 @@ public class GameView extends View {
         canvas.save();
         game.draw(canvas, cameraOffset, visibleArea(), getWidth(), getHeight());
         canvas.restore();
-
-        drawDebugInfo(canvas);
     }
 
     private Rect visibleArea() {
@@ -166,26 +155,25 @@ public class GameView extends View {
         return TileMath.visibleTiles(visibleAreaInPixels);
     }
 
-    private void drawDebugInfo(Canvas canvas) {
-        Paint paint = new Paint();
-        paint.setColor(0x80000000);
-        paint.setStyle(Paint.Style.FILL);
-        canvas.drawRect(getWidth() - 200, 0, getWidth(), 40, paint);
-
-        paint.setColor(0xffffffff);
-        paint.setTextSize(30);
-        paint.setTextAlign(Paint.Align.RIGHT);
-        paint.setTypeface(Typeface.MONOSPACE);
-        canvas.drawText(String.format("fps: %3d", 1000/Math.max(lastFrameTime, 1)), getWidth(), 30, paint);
+    public int getMyPlayerID() {
+        return game.getMyPlayerID();
     }
 
     public void onEventReceived(Event event) {
+        doUpdate();
         game.eventReceived(event);
         requestFrame();
     }
 
     public void finishTurnClicked() {
+        doUpdate();
         game.finishTurnClicked();
+        requestFrame();
+    }
+
+    private void tileClicked(Point tilePos) {
+        doUpdate();
+        game.tileSelected(tilePos);
         requestFrame();
     }
 }

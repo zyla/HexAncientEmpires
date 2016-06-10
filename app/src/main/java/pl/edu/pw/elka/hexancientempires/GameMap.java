@@ -68,9 +68,12 @@ public class GameMap {
     {
         int index = loc.y * mapWidth + loc.x;
         if(index < 0 || index >= tiles.size())
-            return 0; //TODO UnitAttack range is using this awful hack pls fix me
-            // throw new  IndexOutOfBoundsException("Tile of this location don't exists in map");
+            throw new  IndexOutOfBoundsException("Tile of this location don't exists in map");
         return  index;
+    }
+
+    public boolean containsTile(Point loc) {
+        return loc.x >= 0 && loc.y >= 0 && loc.x < mapWidth && loc.y < mapHeight;
     }
 
     public Point getMapLoc(int i) {
@@ -101,7 +104,6 @@ public class GameMap {
                 case "w": tiles.add(new Tile(Tile.WATER));
                     break;
                 default: tiles.add(new Tile(Tile.NONE));
-                    // FIXME handle syntax errors
                     break;
             }
         }

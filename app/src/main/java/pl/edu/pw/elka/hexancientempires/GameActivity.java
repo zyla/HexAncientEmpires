@@ -45,7 +45,7 @@ public class GameActivity extends AppCompatActivity implements ConnectionService
                 layout.addView(gameView);
                 setContentView(layout);
 
-                setTitle("Game [Player " + gameView.getPlayerID() + "]");
+                setTitle("Game [Player " + gameView.getMyPlayerID() + "]");
             }
 
             @Override
