@@ -217,9 +217,8 @@ public class Game {
             drawMessage(canvas, message.getText(), screenWidth, screenHeight, 120);
         }
         
-        if(!isMyTurn()) {
-            drawMessage(canvas, "Waiting for Player " + oppositePlayerID(myPlayerID), screenWidth, screenHeight, 30);
-        }
+        String turnMessage = isMyTurn() ? "Your turn" : "Waiting for Player " + oppositePlayerID(myPlayerID);
+        drawMessage(canvas, turnMessage, screenWidth, screenHeight, 30);
     }
 
     private void drawMessage(Canvas canvas, String text, int screenWidth, int screenHeight, int bottom) {
