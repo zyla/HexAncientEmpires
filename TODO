@@ -3,6 +3,4 @@
 - display range only if allowed to move
 - Fix concurrency bugs in ConnectionService
 - fix UnitAttackRange algorithm
-- BUG: messages disappear too quickly
-- BUG: "Selected tile" appears from network events
 - Update selected tile state after external events
