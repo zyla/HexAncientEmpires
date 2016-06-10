@@ -1,6 +1,5 @@
-- initial unit placement
+- add more initial units
 - network: handle disconnections
-- display range only if allowed to move
 - Fix concurrency bugs in ConnectionService
-- fix UnitAttackRange algorithm
+- fix UnitAttackRange algorithm (too much range)
 - Update selected tile state after external events
