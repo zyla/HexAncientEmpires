@@ -2,11 +2,20 @@ package pl.edu.pw.elka.hexancientempires;
 
 import java.util.Arrays;
 
+/**
+ * An event send through network connection.
+ */
 public abstract class Event {
     public static class Action extends Event {
         public final Point from;
         public final Point to;
 
+        /**
+         * Event: do a game action
+         *
+         * @param from tile to start from
+         * @param to tile to act upon
+         */
         public Action(Point from, Point to) {
             this.from = from;
             this.to = to;
@@ -17,6 +26,9 @@ public abstract class Event {
         }
     }
 
+    /**
+     * Event: finish current turn
+     */
     public static class FinishTurn extends Event {
         public <A> A accept(Visitor<A> visitor) {
             return visitor.finishTurn(this);
@@ -30,8 +42,9 @@ public abstract class Event {
 
     public abstract <A> A accept(Visitor<A> visitor);
 
-    public String[] serialize() {
-        return accept(new Visitor<String[]>() {
+    /** Encode this Event as a String */
+    public String serialize() {
+        String[] tokens = accept(new Visitor<String[]>() {
             public String[] action(Action event) {
                 return new String[] {
                     "action", 
@@ -48,9 +61,16 @@ public abstract class Event {
                 };
             }
         });
+        return Utils.join(" ", tokens) + "\n";
     }
 
-    public static Event deserialize(String[] input) {
+    /**
+     * Decode an Event from a String.
+     * @throws IllegalArgumentException when input is invalid
+     */
+    public static Event deserialize(String str) {
+        String[] input = str.split("\\s+");
+
         if(input.length < 1)
             throw invalidEvent(input, "no command");
 

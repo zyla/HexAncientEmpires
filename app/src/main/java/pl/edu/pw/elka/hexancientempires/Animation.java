@@ -4,6 +4,9 @@ import java.util.List;
 
 import android.graphics.PointF;
 
+/**
+ * Class representing animation of a moving unit.
+ */
 public class Animation {
     private long totalTime;
     private List<PointF> points;
@@ -12,12 +15,18 @@ public class Animation {
     private Unit unit;
     private long elapsedTime;
 
-    public Animation() {}
-
+    /** Returns thue if the animation is not yet finished. */
     public boolean isRunning() {
         return unit != null && fromPointIndex < points.size() - 1;
     }
 
+    /**
+     * Begins the animation.
+     *
+     * @param unit the unit to move
+     * @param totalTime time to move between each two tiles
+     * @param points path to follow (coordinates in pixels)
+     */
     public void start(Unit unit, long totalTime, List<PointF> points) {
         this.unit = unit;
         this.totalTime = totalTime;
@@ -27,11 +36,16 @@ public class Animation {
         elapsedTime = 0;
     }
 
+    /** Stops the animation */
     public void stop() {
         totalTime = 0;
         unit = null;
     }
 
+    /**
+     * Updates animation state.
+     * @param frameTime time elapsed since last update
+     */
     public void update(long frameTime) {
         if(!isRunning())
             return;
@@ -48,6 +62,9 @@ public class Animation {
         return from + (to - from) * elapsedTime / totalTime;
     }
 
+    /**
+     * @return current position of the animated unit
+     */
     public PointF getCurrentPoint() {
         assertRunning();
 
@@ -60,11 +77,16 @@ public class Animation {
         );
     }
 
+    /**
+     * @return currently animated unit
+     */
     public Unit getUnit() {
-        assertRunning();
         return unit;
     }
 
+    /**
+     * @returns true if the given unit is currently being animated
+     */
     public boolean isAnimating(Unit unit) {
         return isRunning() && this.unit == unit;
     }

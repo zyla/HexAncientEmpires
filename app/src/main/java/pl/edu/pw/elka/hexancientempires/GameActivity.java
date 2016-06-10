@@ -68,8 +68,7 @@ public class GameActivity extends AppCompatActivity implements ConnectionService
     public void lineReceived(String line) {
         Event event;
         try {
-            String[] tokens = line.split("\\s+");
-            event = Event.deserialize(tokens);
+            event = Event.deserialize(line);
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
             return;
@@ -78,8 +77,7 @@ public class GameActivity extends AppCompatActivity implements ConnectionService
     }
 
     public void sendEvent(Event event) {
-        String data = Utils.join(" ", event.serialize()) + "\n";
-        connectionService.send(data);
+        connectionService.send(event.serialize());
     }
 
     public boolean isServer() {

@@ -17,6 +17,12 @@ import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
 import java.util.UUID;
 
+/**
+ * Service that manages the Bluetooth connection.
+ *
+ * It can have two states: either it's listening for a connection,
+ * or handling a established connection.
+ */
 public class ConnectionService extends Service {
     public static final UUID SERVICE_UUID = UUID.fromString("3d9ee4b4-f508-11e5-8a8f-b74a5cbde83f");
 
@@ -36,12 +42,12 @@ public class ConnectionService extends Service {
         }
     }
 
+    /**
+     * Registers a Listener.
+     */
     public void setListener(Listener listener) {
         this.listener = new WeakReference<Listener>(listener);
         this.handler = new Handler();
-    }
-
-    public ConnectionService() {
     }
 
     public class Binder extends android.os.Binder {
@@ -55,6 +61,13 @@ public class ConnectionService extends Service {
         return new Binder();
     }
 
+    /**
+     * Opens connection to the given device.
+     *
+     * If the service is currently listening, it will stop listening.
+     *
+     * The connection attempt is synchronous; don't invoke this on UI thread.
+     */
     public void connect(BluetoothDevice device) throws IOException {
         if(socket != null) {
             throw new IllegalStateException("Already connected");
@@ -75,6 +88,11 @@ public class ConnectionService extends Service {
         connected(false);
     }
 
+    /**
+     * Sends a given String to the socket.
+     *
+     * Note: commands are read line by line, so data should probably end in "\n".
+     */
     public void send(String data) {
         if(socket == null) {
             throw new IllegalStateException();
@@ -88,6 +106,9 @@ public class ConnectionService extends Service {
         }
     }
 
+    /**
+     * Ends the connection. Does not automatically go back to listening.
+     */
     public void disconnect() {
         if(socket == null) {
             throw new IllegalStateException();
@@ -150,11 +171,16 @@ public class ConnectionService extends Service {
         }
     }
 
-
+    /**
+     * Start listening for incoming connections.
+     */
     public void startListening() {
         new ListeningThread().start();
     }
 
+    /**
+     * Stop listening for incoming connections.
+     */
     public void stopListening() {
         if(serverSocket != null) {
             try {
@@ -200,11 +226,19 @@ public class ConnectionService extends Service {
     }
 
     public interface Listener {
+        /** A connection was established */
         public void connected();
+
+        /** The connection was broken */
         public void disconnected();
+
+        /** A command was received */
         public void lineReceived(String line);
     }
 
+    /**
+     * @return true if the connection was accepted, false if we initiated it
+     */
     public boolean isServer() {
         return isServer;
     }

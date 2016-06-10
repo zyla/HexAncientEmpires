@@ -27,6 +27,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Starting app activity. Lets the user choose a device to connect to.
+ */
 public class ConnectActivity extends AppCompatActivity implements ConnectionService.Listener {
 
     private static final int REQUEST_ENABLE_BT = 1;
