@@ -1,0 +1,249 @@
+\documentclass[paper=a4, fontsize=11pt]{scrartcl} % A4 paper and 11pt font size
+
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\usepackage{fourier} % Use the Adobe Utopia font for the document - comment this line to return to the LaTeX default
+\usepackage{polski} %język polski
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+\usepackage{listings}
+\lstset{language=C++} 
+
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+
+\usepackage{sectsty} % Allows customizing section commands
+\allsectionsfont{\centering \normalfont\scshape} % Make all sections centered, the default font and small caps
+
+\usepackage{fancyhdr} % Custom headers and footers
+\pagestyle{fancyplain} % Makes all pages in the document conform to the custom headers and footers
+\fancyhead{} % No page header - if you want one, create it in the same way as the footers below
+\fancyfoot[L]{} % Empty left footer
+\fancyfoot[C]{} % Empty center footer
+\fancyfoot[R]{\thepage} % Page numbering for right footer
+\renewcommand{\headrulewidth}{0pt} % Remove header underlines
+\renewcommand{\footrulewidth}{0pt} % Remove footer underlines
+\setlength{\headheight}{13.6pt} % Customize the height of the header
+
+\numberwithin{equation}{section} % Number equations within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{figure}{section} % Number figures within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{table}{section} % Number tables within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs - comment this line for an assignment with lots of text
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
+
+\title{	
+\normalfont \normalsize 
+\textsc{Politechnika Warszawska} \\ [25pt] % Your university, school and/or department name(s)
+\huge HexAncientEmpires \\ % The assignment title
+}
+
+\author{Tomasz Zieliński,  Maciej Bielecki}
+
+\date{\normalsize\today} 
+
+\begin{document}
+\maketitle 
+%------------------------------------------------
+
+\section{Wstęp}
+Nasz projekt to odtworzenie częci aspektów gry Ancient Empires II wraz z naszymi modyfikacjami. Najpoważniejszą zmianą było zastąpienie planszy klasycznej przez mape podzieloną na szeciokąty. Ograniczylimy trochę zawiłe szczegółyrozgrywki, by gra była bardziej przystepna dla użytkownika. Gra daziała pod systamem Android i wykorzystuje komunikację Bluetooth. 
+%------------------------------------------------
+
+\section{Opis Gry}
+Rozgrywkę rozpoczyna gracz pierwszy. Do dyspozycji ma jednostki w kolorze odpowiadającym numerowi gracza. Są one rozmieszczone na mapie.
+Gracz może w swojej turze jednokrotnie poruszyć i jednokrotnie zaatakować każdą ze swoich jednostek. Jednostki poruszają się po mapie w nietrywialny sposób, ponieważ mogą znajdować się tylko na siatce, a koszt wejcia na konkretny typ podłoża jest rózny. Żeby poruszyć jednostką należy umiecić na niej kursor, a następnie wybrać pozycje z tych oznaczonych przez kolor niebieski. Tylko takie miejsca są w zasięgu poruszania danej jednostki. Jednostka następnie wykona płynny ruch reprezentowany animacją i znajdze się w wyznaczonym celu. Od tego momentu nie może poruszyc się aż do końca tury.  Wartoć ataku, zasięg poruszanie i zasięg ataku jednostek zależy od ich typu. Jednostka będąc atakowana otrzymuje obrażenia zmniejszone o obrone pola, na którym stoi
+%------------------------------------------------
+
+\section{Architektura}
+connect acticity i game actictiwity  i to co obsłóguje połączenia ConnectionService
+Program wykonyje dwie główne aktywnoci reprezentowane prze ConnectActivity i GameActivity. ConnectActivity jest odpowiedzialne za nawiązanie połącznia BlueTooth. GameActivity jest odpowiedzialne za wykonywanie pozostałych zadań gry.
+%------------------------------------------------
+
+\section{Superblok}
+W celu kontrolowania poprawności struktury logicznej powołany będzie superblok. Zawarte w nim zostaną 8B przechowujące odpowiednie informacje zależnie od wykonywaniej operacji:\\
+- 1B - kod wykonywanej operacji\\
+- 2B - adres początku pliku (numer bloku)\\
+- 1B - sten aktualnie wykonywanej operacji\\
+- 1B - warunek ukończenia wykonywanej operacji\\
+- 1B - rozmiar pliku\\
+- 1B – adres deskryptora (numer bloku)\\
+- 2B - nazwa pliku\\
+%------------------------------------------------
+
+\section{Mapa Bitowa}
+Realizowana jest na 8 B, z których każdy bit odwzorowuje jeden blok, czyli 2 B pamięci na dysku.
+%------------------------------------------------
+
+\section{Deskryptory plików}
+Zawierają informacje o plikach. Każdy z nich jest zapisywany według następującego schematu:\\
+- 2B – adres początku pliku (numer boku)\\
+- 1B – długość pliku (w bajtach)\\ 
+- 2B – nazwa pliku\\
+%------------------------------------------------
+
+\section{Plan Systamu Plików}
+- 8 B – Superblok\\
+- 80 B – tablica deskryptorów ( 5B * 16 )\\
+- 8 B – mapa zajętości pamięci ( (1024 / 16) / 8 )\\
+- 928 B – dane ( 1024B - 8B- 80B - 8B)\\
+%------------------------------------------------
+
+\section{Operacje W Systemie Plików}
+- montowanie \\
+- odczyt pliku \\
+- usuwanie pliku\\
+- zapis pliku \\
+- odmontowanie \\
+%------------------------------------------------
+
+\section{Realizacja Operacji}
+Każda z operacji zwraca wartość typu BOOL; TRUE w przypadku powodzenia operacji i FALSE w przypadku wystąpienia jakiegoś błędu. 
+
+\subsection{Montowanie Systemu Plików}
+- 1B - kod Montowania Systemu Plików\\
+- 2B - adres obecnie obsłógiwanego miejsca\\
+- 1B - numer deskryptora obsługiwanego pliku\\
+- 1B - rozmiar obsługiwanego pliku\\
+- 1B - nie używany w montowaniu\\
+- 1B - nie używany w montowaniu\\
+- 2B - nazwa pliku\\
+\begin{samepage}
+\begin{lstlisting}
+if (stanSB() != OK)   dzialaj(); 
+else 
+{
+    switch(stanSB()) 
+	{
+		case: ODCZYT_PLIKU: 
+            zmienStatusSB(OK);  
+            break; 
+        case:  USUWANIE_PLIKU : 
+            usunPlik(nazwaPliku); 
+            break; 
+        case:  TWORZENIE_DESKRYPTORA : 
+            modyfikujDeskryptor( 
+                SBAdres(),  
+                SBRozmiar(),  
+                SBNazwa() ); 
+            break; 
+        case:  USUWANIE_DESKRYPTORA :  
+            modyfikujDeskryptor( 
+                szukajDeskryptora(SBNazwa()), 
+                0,  
+                  ); 
+            modyfikujSuperblok(0, 0, 0, 0,  OK ); 
+            break; 
+        default: 
+            modyfikujSuperblok(0, 0, 0, 0,  OK ); 
+            break; 
+	}
+}
+\end{lstlisting}
+\end{samepage}
+
+\subsection{Kopiowanie Pliku}
+- 1B - kod Kopiowania\\
+- 2B - adres początku miejsca w które kopiujemy (numer bloku)\\
+- 1B - liczba przekopiowanych bloków\\
+- 1B - liczba bloków do przekopiowania\\
+- 1B - rozmiar pliku\\
+- 1B – adres deskryptora (numer bloku)\\
+- 2B - nazwa pliku\\
+\begin{samepage}
+\begin{lstlisting}
+if (wolneMiejsce() == rozmiarPliku)  
+	error(); 
+else if (wolneCiagleMiejsce() < rozmiarPliku)
+{   
+    if (zgodaNaDefragmentacje == true) 
+		defragmentuj();  
+    if (wolneMiejsce < rozmiarPliku)  
+		error(); 
+} 
+else if (liczbaWolnychDeskryptorow() == 0)  
+	error(); 
+else 
+{
+    modyfikujSuperblok( 
+        adresWolnegoMiejsca(),  
+        rozmiarPliku,  
+        adresWolnegoDeskryptora(),  
+        nazwaPliku,  
+         TWORZENIE_PLIKU ); 
+ 
+    wprowadzDane(adresWolnegoMiejsca(), dane); 
+ 
+    modyfikujDeskryptor( 
+        adresWolnegoMiejsca(),  
+        rozmiarPliku,  
+        nazwaPliku); 
+ 
+    modyfikujSuperblok(0, 0, 0, 0,  OK ); 
+} 
+return true;    
+\end{lstlisting}
+\end{samepage}
+
+\subsection{Usuwanie Pliku}
+- 1B - kod Usuwania\\
+- 2B - adres początku pliku usuwanego (numer bloku)\\
+- 1B - liczba wyzerowanych bloków\\
+- 1B - liczba bloków do wyzerowania\\
+- 1B - rozmiar pliku\\
+- 1B – adres deskryptora (numer bloku)\\
+- 2B - nazwa pliku\\
+\begin{samepage}
+\begin{lstlisting}
+if (nazwaPliku != NULL) 
+{ 
+    if (szukajDeskryptora(nazwaPliku) != NULL)
+	{
+        adresBloku = adresBlokuPlikuZDeskryptora(szukajDeskryptora(nazwaPliku)); 
+        modyfikujSuperblok( 
+            adresBloku, 
+            0,  
+            szukajDeskryptora(nazwaPliku), 
+            nazwaPliku,  
+             USUWANIE_PLIKU ); 
+         
+        for (int i = adresBloku; i < adresBloku + CEIL(rozmiarPliku/2); i++) 
+		{
+            zerujBlok(i); 
+		} 
+        modyfikujSuperblok( 
+            adresBloku, 
+            0,  
+            szukajDeskryptora(nazwaPliku), 
+            nazwaPliku,  
+             USUWANIE_DESKRYPTORA ); 
+ 
+        modyfikujDeskryptor( 
+            szukajDeskryptora(nazwaPliku), 
+            0,  
+              ); 
+ 
+        modyfikujSuperblok(0, 0, 0, 0,  OK ); 
+    }
+	else 
+        error(); 
+} 
+else 
+    error(); 
+\end{lstlisting}
+\end{samepage}
+%------------------------------------------------
+
+\section{Czytanie plikue}
+Prosta funkcja, która niekoniecznie musi zmieniać stan superbloku. My jednak mimo to, zmienimy flagę na ODCZYTPLIKU. Przekazujemy zawartość pliku, po czym ustawiamy wartości superbloku na zera i flagę na OK.
+%------------------------------------------------
+
+\section{Wypisywanie Plików na Woluminie}
+Ze względu na to, iż nie zmieniamy wywołując tą funkcję nic w systemie plików, flaga w superbloku pozostaje bez zmian.  
+- Sprawdzamy, czy 0-1B (adres początku pliku) są różne od zera oraz 3-4B (nazwa pliku) są niezerowe. Jeśli tak, pomijamy deskryptor i przechodzimy do następnego, jeśli nie, wypisujemy informację o pliku na ekran.
+
+%------------------------------------------------
+\end{document}
