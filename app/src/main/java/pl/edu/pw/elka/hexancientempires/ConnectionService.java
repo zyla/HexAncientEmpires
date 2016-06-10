@@ -110,10 +110,6 @@ public class ConnectionService extends Service {
      * Ends the connection. Does not automatically go back to listening.
      */
     public void disconnect() {
-        if(socket == null) {
-            throw new IllegalStateException();
-        }
-
         try {
             Log.d("BT", "Disconnecting");
             socket.close();

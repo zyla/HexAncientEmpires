@@ -63,6 +63,15 @@ public class GameActivity extends AppCompatActivity implements ConnectionService
     public void connected() {}
 
     @Override
+    public void onStop() {
+        super.onStop();
+
+        if(connectionService != null) {
+            connectionService.disconnect();
+        }
+    }
+
+    @Override
     public void disconnected() {
         finish();
     }
