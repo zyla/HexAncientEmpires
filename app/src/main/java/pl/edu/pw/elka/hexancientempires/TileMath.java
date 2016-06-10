@@ -1,8 +1,6 @@
 package pl.edu.pw.elka.hexancientempires;
 
 /**
- * Created by zyla on 5/3/16.
- *
  * Tile-screen coordinate system conversions.
  *
  * This code handles two coordinate systems:
@@ -25,7 +23,9 @@ public class TileMath {
     public static final int BOTLEFT = 4;
     public static final int TOPLEFT = 5;
 
-
+    /**
+     * @return rect of visible hexagons in hexagon geometry
+     */
     public static Rect visibleTiles(Rect visibleArea) {
         Point topLeft = tileHitTest(visibleArea.left, visibleArea.top);
         Point botRight = tileHitTest(visibleArea.right, visibleArea.bottom);
@@ -33,20 +33,36 @@ public class TileMath {
         return new Rect(topLeft.x-MARGIN,topLeft.y-MARGIN, botRight.x+MARGIN , botRight.y+MARGIN);
     }
 
+    /**
+     * @return center of hexagon in pixels
+     */
     public static Point tileCenter(int mapX, int mapY) {
         Point pt = tileLocation(mapX, mapY);
         return new Point(pt.x + TILE_WIDTH / 2, pt.y + TILE_HEIGHT / 2);
     }
 
+    /**
+     * @return tile location in pixels based on tile position on the map
+     */
     public static Point tileLocation(int mapX, int mapY) {
         return new Point(TILE_WIDTH * 3 / 4 * mapX,
                 TILE_HEIGHT * mapY + (mapX & 1) * TILE_HEIGHT / 2);
     }
 
+
+    /**
+     * @return tile position based on index in map
+     */
     public static Point tileLocation(Point loc) {
         return tileLocation(loc.x, loc.y);
     }
 
+
+    /**
+     * @param loc location of the base tile
+     * @param side number of side of base tile numbered clockwise
+     * @return coordinates of certain neighbour in map coordinates
+     */
     public static Point neighbour(Point loc, int side) {
         int even = (loc.x + 1) % 2;
         switch(side) {
@@ -66,6 +82,10 @@ public class TileMath {
         throw new  IndexOutOfBoundsException("There is no side numbered like this");
     }
 
+
+    /**
+     * @return map coordinate of tile under given pixels
+     */
     public static Point tileHitTest(int x, int y) {
         int col = (int)Math.floor(((double) x) / (TILE_WIDTH * 3/4));
         int row = (int)Math.floor(((double)y - (col & 1)* TILE_HEIGHT/2) / TILE_HEIGHT);

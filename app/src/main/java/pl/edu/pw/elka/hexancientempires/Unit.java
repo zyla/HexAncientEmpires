@@ -2,7 +2,7 @@ package pl.edu.pw.elka.hexancientempires;
 
 /**
  * simple class representing unit
- * Created by tomek on 01.06.16.
+ * contains also unit identifiers
  */
 public class Unit {
     public static final int WARRIOR     = 0;
@@ -17,6 +17,9 @@ public class Unit {
     public static final int KING        = 9;
     public static final int SKELETON    = 10;
 
+    /**
+     * Returns name of the unit to display it in message
+     */
     @Override
     public String toString() {
         switch (type){

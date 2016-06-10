@@ -6,16 +6,8 @@ import java.util.LinkedList;
 import java.util.Map;
 
 /**
- * After all this thinking I decided to not mess up GameMap too much
- * 1. I will copy some map info to my graph structure
- * 2. Determine using BFS WHERE and HOW unit can get to certain position
- * 3. Return that info to map so it can share that with display
- * 4. ? ? ?
- * 5. Profit
- *
- * Side note ♪ it would be cool if not whole map was being copied, but who cares
- * Created by tomek on 03.06.16.
- * You know mate.
+ * Class that provides methods capable to compute movement range of certain unit
+ * Uses Dijkstra's algorithm because cost of tiles differ
  */
 public class UnitMovementRange {
     GameMap gameMap;
@@ -24,6 +16,9 @@ public class UnitMovementRange {
         this.gameMap = gameMap;
     }
 
+    /**
+     * Nested class used to describe graph of the map for the algorithm in simple way
+     */
     public class Node{
         Point loc;      //location of node in the map
         int distance;   //distance measured with game speed currency
@@ -47,6 +42,10 @@ public class UnitMovementRange {
             this.cost = node.cost;
         }
     }
+
+    /**
+     * Creates structure of the graph
+     */
     private ArrayList< Node> getGraph(){
         int size = gameMap.getSize();
 
@@ -57,6 +56,12 @@ public class UnitMovementRange {
         return graph;
     }
 
+    /**
+     * Returns information where and how certain unit can get from certain position based on map topography
+     * @param unit
+     * @param origin
+     * @return visited
+     */
     public Map<Point, Node> getReachableTiles(Unit unit, Point origin) {
         ArrayList<Node> graph = getGraph();
         Map<Point, Node> visited = new HashMap<>();

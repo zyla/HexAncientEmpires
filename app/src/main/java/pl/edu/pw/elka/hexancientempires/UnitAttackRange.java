@@ -6,7 +6,8 @@ import java.util.LinkedList;
 import java.util.Map;
 
 /**
- * Created by tomek on 05.06.16.
+ * Class that provides methods capable to compute attack range of certain unit
+ * Uses BFS algorithm because id don't takes obstacles in account
  */
 public class UnitAttackRange {
     GameMap gameMap;
@@ -15,6 +16,9 @@ public class UnitAttackRange {
         this.gameMap = gameMap;
     }
 
+    /**
+     * Nested class used to describe graph of the map for the algorithm in simple way
+     */
     public class Node {
         Point loc;      //location of node in the map
         int distance;
@@ -29,6 +33,9 @@ public class UnitAttackRange {
         }
    }
 
+    /**
+     * Creates structure of the graph
+     */
     private ArrayList< Node> getGraph(){
         int size = gameMap.getSize();
 
@@ -39,6 +46,12 @@ public class UnitAttackRange {
         return graph;
     }
 
+    /**
+     * Returns information where certain unit can attack from certain position based on map topography
+     * @param unit
+     * @param origin
+     * @return inRange
+     */
     public Map<Point, Node> getReachableTiles(Unit unit, Point origin) {
         int range = UnitMath.unitRange[unit.getType()];
         ArrayList<Node> graph = getGraph();

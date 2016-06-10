@@ -1,10 +1,9 @@
 package pl.edu.pw.elka.hexancientempires;
 
 /**
- * this class is whole about fighting
- * but fighting is highly dependant on tile that unit is standing at
- * so more of a tile.unit fighting
- * Created by tomek on 02.06.16.
+ * This class menages all constants connected with units
+ * and calculate attack values based on this constants.
+ * Fighting is highly dependant on tile that unit is standing at.
  */
 public class UnitMath {
     public static final int STARTING_HP = 100;
@@ -13,6 +12,9 @@ public class UnitMath {
     public static final int NO_ONE_DIE = 0;
 
 
+    /**
+     * Constant values of attack of certain unit in HP
+     */
     public static final int[] unitDamage = {
         50,//WARRIOR
         50,//ARCHER
@@ -27,6 +29,10 @@ public class UnitMath {
         50//SKELETON
 };
 
+
+    /**
+     * How far certain unit can attack measured in hexagons
+     */
     public static final int[] unitRange = {
         1,//WARRIOR
         2,//ARCHER
@@ -41,6 +47,9 @@ public class UnitMath {
         1 //SKELETON
 };
 
+    /**
+     * Budget of "move currency" that certain unit get for every turn aka "speed"
+     */
     public static final int[] unitSpeed = {
         4,//WARRIOR
         4,//ARCHER
@@ -55,6 +64,10 @@ public class UnitMath {
         4//SKELETON
     };
 
+
+    /**
+     * Defense that certain terrain type gives to unit that stands on it
+     */
     public static final int[] tileDefense = {
             0,//NONE
             15,//CASTLE
@@ -65,7 +78,9 @@ public class UnitMath {
             0//WATER
     };
 
-    //strange naming for value of speed that you have to pay to get on the tile
+    /**
+     * Cost in "move currency" that you have to pay to get on certain terrain type
+     */
     public static final int[] tileDistance = {
             Integer.MAX_VALUE,//NONE
             3,//CASTLE
@@ -76,7 +91,10 @@ public class UnitMath {
             3//WATER
     };
 
-    //I have to change value of hp in one unit, but idk if possible in java
+    /**
+     * computes result of an attack
+     * @return result of the fight
+     */
     public static int attack(Tile attacking, Tile attacked, int distance){
         int attackValue1 = unitDamage[attacking.getUnit().getType()];
         int attackedHp = attacked.getUnit().getHp();
