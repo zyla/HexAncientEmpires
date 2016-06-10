@@ -43,10 +43,9 @@ public class GameLogic {
         Tile attacked = map.getTile(defensing);
 
         if(attacker.getUnit() == null
+                || !canAttack(attacker.getUnit())
                 || attacked.getUnit() == null
-                || attacker.getUnit().getPlayerID() != playerID
-                || attacked.getUnit().getPlayerID() == playerID
-                || unitInfos.get(attacker.getUnit().getLoc()).attacked)
+                || attacked.getUnit().getPlayerID() == playerID)
             return false;
 
         unitInfos.get(attacking).attacked = true;
@@ -70,10 +69,8 @@ public class GameLogic {
         Tile tileFrom = map.getTile(from);
         Tile tileTo = map.getTile(to);
 
-        if (tileFrom.getUnit() == null
-                || tileTo.getUnit() != null
-                || tileFrom.getUnit().getPlayerID() != playerID
-                || unitInfos.get(tileFrom.getUnit().getLoc()).moved)
+        if (tileFrom.getUnit() == null || !canMove(tileFrom.getUnit())
+                || tileTo.getUnit() != null)
             return false;
 
         UnitInfo unitInfo = unitInfos.get(from);
@@ -159,5 +156,11 @@ public class GameLogic {
         return way;
     }
 
+    public boolean canMove(Unit unit) {
+        return unit.getPlayerID() == playerID && !unitInfos.get(unit.getLoc()).moved;
+    }
 
+    public boolean canAttack(Unit unit) {
+        return unit.getPlayerID() == playerID && !unitInfos.get(unit.getLoc()).attacked;
+    }
 }

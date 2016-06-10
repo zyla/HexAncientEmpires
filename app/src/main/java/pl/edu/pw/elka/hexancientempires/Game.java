@@ -72,9 +72,16 @@ public class Game {
 
         Unit unit = map.getTile(cursorPos).getUnit();
 
-        if(unit != null) {
-            movementRange = new UnitMovementRange(map).getReachableTiles(unit, cursorPos);
-            attackRange = new  UnitAttackRange(map).getReachableTiles(unit, cursorPos);
+        if(isMyTurn() && unit != null) {
+
+            movementRange = gameLogic.canMove(unit) ?
+                new UnitMovementRange(map).getReachableTiles(unit, cursorPos) :
+                Collections.<Point, UnitMovementRange.Node>emptyMap();
+
+            attackRange = gameLogic.canAttack(unit) ?
+                new UnitAttackRange(map).getReachableTiles(unit, cursorPos) :
+                Collections.<Point, UnitAttackRange.Node>emptyMap();
+
         } else {
             movementRange = Collections.emptyMap();
             attackRange = Collections.emptyMap();
