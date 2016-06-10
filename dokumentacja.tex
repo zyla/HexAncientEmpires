@@ -109,8 +109,20 @@ Aplikacja podzielona jest na trzy komponenty obsługiwane przez system Android:
 \end{itemize}
 
 %------------------------------------------------
-\section{Opis Protokołu \textit{BlueTooth}}
+\section{Opis Protokołu}
 
+Komunikacja jest realizowana za pomocą protokołu \textit{RFCOMM}.
+Komunikaty są rozdzielane znakiem nowej linii i składają się z komendy i parametrów rozdzielanych spacjami.
+Dostępne są następujące komendy:
+
+\begin{itemize}
+
+  \item \emph{action} \textit{fromX fromY toX toY} - wykonanie akcji gry przez
+    postać na pozycji (fromX, fromY) skierowanej na pozycję (toX, toY)
+
+  \item \emph{finish\_turn} - zakończenie tury i przekazanie kontroli drugiemu graczowi.
+
+\end{itemize}
 
 %------------------------------------------------
 \section{Napotkane Trudności}
