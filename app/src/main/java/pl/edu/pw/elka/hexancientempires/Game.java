@@ -210,11 +210,11 @@ public class Game {
 
             drawMap(canvas, visibleArea);
 
+            drawUnits(canvas);
+
             drawMovementRange(canvas);
 
             drawAttackRange(canvas);
-
-            drawUnits(canvas);
 
             drawCursor(canvas, TileMath.tileCenter(cursorPos.x, cursorPos.y));
         }
