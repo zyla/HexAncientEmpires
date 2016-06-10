@@ -4,3 +4,4 @@
 - display range only if allowed to move
 - Fix concurrency bugs in ConnectionService
 - fix UnitAttackRange algorithm
+- BUG: messages disappear too quickly
