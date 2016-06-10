@@ -115,7 +115,7 @@ public class GameView extends View {
         } else if (delay == Game.FRAME_IMMEDIATELY) {
             requestFrame();
         } else {
-            postDelayed(requestFrameRunnable, delay); // TODO cancel the timer when frame arrives
+            postDelayed(requestFrameRunnable, delay);
         }
     }
 
@@ -129,7 +129,6 @@ public class GameView extends View {
     }
 
     private void setCameraOffset(float x, float y) {
-        // TODO refactor
         Point lastTile = TileMath.tileLocation(game.getWidth(), game.getHeight());
         cameraOffset.x = Math.max(Math.min(x, -TILE_WIDTH/4), -lastTile.x + getWidth());
         cameraOffset.y = Math.max(Math.min(y, -TILE_HEIGHT/2), -lastTile.y + TILE_HEIGHT/2 + getHeight());

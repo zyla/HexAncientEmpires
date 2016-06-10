@@ -104,7 +104,6 @@ public class GameMap {
                 case "w": tiles.add(new Tile(Tile.WATER));
                     break;
                 default: tiles.add(new Tile(Tile.NONE));
-                    // FIXME handle syntax errors
                     break;
             }
         }

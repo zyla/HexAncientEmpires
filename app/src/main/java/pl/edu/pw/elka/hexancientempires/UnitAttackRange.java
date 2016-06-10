@@ -46,7 +46,7 @@ public class UnitAttackRange {
         Map<Point,Node> inRange = new HashMap<>();
         LinkedList<Node> queue = new LinkedList<>();
 
-        queue.add(graph.get(gameMap.getMapIndex(origin))); //TODO getting into trouble
+        queue.add(graph.get(gameMap.getMapIndex(origin)));
 
         while(!queue.isEmpty())
         {
@@ -60,10 +60,10 @@ public class UnitAttackRange {
                 if(!gameMap.containsTile(mateLoc))
                   continue;
                 
-                Node mate = graph.get(gameMap.getMapIndex(mateLoc));//TODO getting into trouble
+                Node mate = graph.get(gameMap.getMapIndex(mateLoc));
                 if( mate.distance == Integer.MAX_VALUE) {
                     mate.distance = current.distance + 1;
-                    graph.set(gameMap.getMapIndex(mateLoc),mate); //TODO getting into trouble
+                    graph.set(gameMap.getMapIndex(mateLoc),mate);
                     if (mate.distance < range)
                         queue.add(mate);
                 }

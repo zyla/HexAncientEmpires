@@ -162,7 +162,6 @@ public class ConnectActivity extends AppCompatActivity implements ConnectionServ
         listAdapter.addAll(bluetoothAdapter.getBondedDevices());
     }
 
-    // TODO make it cleaner?
     private class DevicesAdapter extends ArrayAdapter<BluetoothDevice> {
         public DevicesAdapter() {
             super(ConnectActivity.this, R.layout.item_device, devices);
