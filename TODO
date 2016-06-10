@@ -1,4 +1,3 @@
-- add more initial units
 - network: handle disconnections
 - Fix concurrency bugs in ConnectionService
 - BUG: duplicate BT devices
