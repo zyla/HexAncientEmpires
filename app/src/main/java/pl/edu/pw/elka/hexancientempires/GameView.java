@@ -134,14 +134,6 @@ public class GameView extends View {
         cameraOffset.y = Math.max(Math.min(y, -TILE_HEIGHT/2), -lastTile.y + TILE_HEIGHT/2 + getHeight());
     }
 
-    private void tileClicked(Point tilePos) {
-        doUpdate();
-
-        game.tileSelected(tilePos);
-
-        requestFrame();
-    }
-
     /** Squared magnitude of a two-dimensional vector (x, y) */
     private static float mag2(float x, float y) {
         return x*x + y*y;
@@ -180,17 +172,25 @@ public class GameView extends View {
         canvas.drawText(String.format("fps: %3d", 1000/Math.max(lastFrameTime, 1)), getWidth(), 30, paint);
     }
 
+    public int getMyPlayerID() {
+        return game.getMyPlayerID();
+    }
+
     public void onEventReceived(Event event) {
+        doUpdate();
         game.eventReceived(event);
         requestFrame();
     }
 
     public void finishTurnClicked() {
+        doUpdate();
         game.finishTurnClicked();
         requestFrame();
     }
 
-    public int getMyPlayerID() {
-        return game.getMyPlayerID();
+    private void tileClicked(Point tilePos) {
+        doUpdate();
+        game.tileSelected(tilePos);
+        requestFrame();
     }
 }
