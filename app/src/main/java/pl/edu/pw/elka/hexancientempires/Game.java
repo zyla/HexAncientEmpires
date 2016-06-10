@@ -176,10 +176,6 @@ public class Game {
 
     private void finishTurn() {
         startTurn(oppositePlayerID(gameLogic.playerID));
-
-        if(isMyTurn()) {
-            message.show("Go!", 2000);
-        }
     }
 
     private boolean isMyTurn() {
