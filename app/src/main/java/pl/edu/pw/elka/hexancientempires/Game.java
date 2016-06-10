@@ -334,10 +334,7 @@ public class Game {
     }
 
     public void update(long frameTime) {
-        long animationFrameTime = Math.min(frameTime, 16); // TODO fix this hack
-
-        unitAnimation.update(animationFrameTime);
-
+        unitAnimation.update(frameTime);
         message.update(frameTime);
     }
 

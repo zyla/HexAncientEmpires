@@ -26,8 +26,6 @@ public class GameView extends View {
     private PointF lastTouchDown = new PointF();
     private long lastFrameTime; // for FPS reporting
 
-    private boolean isWaitingForEvent = true;
-
     /** True if current touch stroke is a movement, not a click */
     private boolean isMovement;
 
@@ -36,8 +34,8 @@ public class GameView extends View {
 
     private Game game;
 
-    // DEBUG INFO
     private long lastFrameStartedAt;
+    private long lastRenderStartedAt;
     private boolean framePending;
 
     // java == wtf
@@ -100,32 +98,34 @@ public class GameView extends View {
         if(!framePending) {
             framePending = true;
             long now = System.currentTimeMillis();
-            postDelayed(processFrameRunnable, Math.max(0, 16 - (now - lastFrameStartedAt)));
+            postDelayed(processFrameRunnable, Math.max(0, 16 - (now - lastRenderStartedAt)));
         }
     }
 
     private void processFrame() {
         framePending = false;
-        long now = System.currentTimeMillis();
-        long frameTime = now - lastFrameStartedAt;
-        lastFrameTime = frameTime;
-        lastFrameStartedAt = now;
+        lastRenderStartedAt = System.currentTimeMillis();
 
-        if(isWaitingForEvent) {
-            isWaitingForEvent = false;
-        } else {
-            game.update(frameTime);
-        }
+        doUpdate();
         invalidate();
 
         long delay = game.nextFrameDelay();
         if (delay == Game.FRAME_WAIT_FOR_EVENT) {
-            isWaitingForEvent = true;
+            // nothing
         } else if (delay == Game.FRAME_IMMEDIATELY) {
             requestFrame();
         } else {
             postDelayed(requestFrameRunnable, delay); // TODO cancel the timer when frame arrives
         }
+    }
+
+    private void doUpdate() {
+        long now = System.currentTimeMillis();
+        long frameTime = now - lastFrameStartedAt;
+        lastFrameTime = frameTime;
+        lastFrameStartedAt = now;
+
+        game.update(frameTime);
     }
 
     private void setCameraOffset(float x, float y) {
@@ -136,6 +136,8 @@ public class GameView extends View {
     }
 
     private void tileClicked(Point tilePos) {
+        doUpdate();
+
         game.tileSelected(tilePos);
 
         requestFrame();
