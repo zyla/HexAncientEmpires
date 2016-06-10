@@ -1,5 +1,7 @@
 package pl.edu.pw.elka.hexancientempires;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -21,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,13 +83,28 @@ public class ConnectActivity extends AppCompatActivity implements ConnectionServ
         bluetoothAdapter.cancelDiscovery();
         setProgressBarIndeterminateVisibility(false);
 
-        new AsyncTask<Void, Void, Void>() {
-            protected Void doInBackground(Void... args) {
-                connectionService.connect(device);
-                return null;
+        final ProgressDialog dialog = ProgressDialog.show(this, "Connecting", "Connecting to " + device.getName(), true, false);
+
+        new AsyncTask<Void, Void, Boolean>() {
+            protected Boolean doInBackground(Void... args) {
+                try {
+                    connectionService.connect(device);
+                    return true;
+                } catch (IOException e) {
+                    return false;
+                }
             }
 
-            protected void onPostExecute(Void result) { }
+            protected void onPostExecute(Boolean result) {
+                dialog.dismiss();
+                if(!result) {
+                    new AlertDialog.Builder(ConnectActivity.this)
+                        .setTitle("Connection error")
+                        .setMessage("Error connecting to " + device.getName())
+                        .setPositiveButton("OK", null)
+                        .create().show();
+                }
+            }
         }.execute();
     }
 

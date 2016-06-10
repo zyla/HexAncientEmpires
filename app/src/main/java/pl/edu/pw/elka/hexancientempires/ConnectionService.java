@@ -55,7 +55,7 @@ public class ConnectionService extends Service {
         return new Binder();
     }
 
-    public void connect(BluetoothDevice device) {
+    public void connect(BluetoothDevice device) throws IOException {
         if(socket != null) {
             throw new IllegalStateException("Already connected");
         }
@@ -67,11 +67,12 @@ public class ConnectionService extends Service {
             Log.d("BT", "Connecting to " + device);
             socket.connect();
             Log.d("BT", "Connected");
-
-            connected(false);
         } catch (IOException e) {
-            e.printStackTrace();
+            socket = null;
+            throw e;
         }
+
+        connected(false);
     }
 
     public void send(String data) {
@@ -83,7 +84,7 @@ public class ConnectionService extends Service {
             Log.d("BT", "< " + data);
             socket.getOutputStream().write(data.getBytes());
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(); // TODO we're probably disconnected
         }
     }
 
