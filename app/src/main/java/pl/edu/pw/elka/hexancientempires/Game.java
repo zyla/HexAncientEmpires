@@ -153,17 +153,20 @@ public class Game {
 
         map = GameMap.loadFromString(GameMap.MAP1);
 
-        Point p = new Point (1,1);
-        Unit u = new Unit(1,SERVER_PLAYER_ID,p);
-        map.getTile(p).setUnit(u);
-        units.add(u);
+        placeUnit(new Unit(Unit.ARCHER, SERVER_PLAYER_ID, new Point(2, 7)));
+        placeUnit(new Unit(Unit.WARRIOR, SERVER_PLAYER_ID, new Point(3, 7)));
+        placeUnit(new Unit(Unit.WARRIOR, SERVER_PLAYER_ID, new Point(1, 7)));
 
-        Point p2 = new Point (2,2);
-        Unit u2 = new Unit(1,CLIENT_PLAYER_ID,p2);
-        map.getTile(p2).setUnit(u2);
-        units.add(u2);
+        placeUnit(new Unit(Unit.ARCHER, CLIENT_PLAYER_ID, new Point(10, 7)));
+        placeUnit(new Unit(Unit.WARRIOR, CLIENT_PLAYER_ID, new Point(11, 7)));
+        placeUnit(new Unit(Unit.WARRIOR, CLIENT_PLAYER_ID, new Point(9, 7)));
 
         startTurn(SERVER_PLAYER_ID);
+    }
+
+    private void placeUnit(Unit unit) {
+        map.getTile(unit.getLoc()).setUnit(unit);
+        units.add(unit);
     }
 
     private void startTurn(int playerID) {
