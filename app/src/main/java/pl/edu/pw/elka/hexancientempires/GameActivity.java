@@ -44,6 +44,8 @@ public class GameActivity extends AppCompatActivity implements ConnectionService
                 FrameLayout layout = new FrameLayout(GameActivity.this);
                 layout.addView(gameView);
                 setContentView(layout);
+
+                setTitle("Game [Player " + gameView.getPlayerID() + "]");
             }
 
             @Override
