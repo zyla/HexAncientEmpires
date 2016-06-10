@@ -5,3 +5,4 @@
 - Fix concurrency bugs in ConnectionService
 - fix UnitAttackRange algorithm
 - BUG: messages disappear too quickly
+- BUG: "Selected tile" appears from network events
