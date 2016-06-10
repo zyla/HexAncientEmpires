@@ -62,6 +62,30 @@ Rozgrywkę rozpoczyna gracz pierwszy. Do dyspozycji ma jednostki w kolorze odpow
 Jednostki poruszają się po mapie w nietrywialny sposób, ponieważ mogą znajdować się tylko na siatce, a koszt wejcia na konkretny typ podłoża jest rózny. Żeby poruszyć jednostką należy umiecić na niej kursor, a następnie wybrać pozycje z tych oznaczonych przez kolor niebieski. Tylko takie miejsca są w zasięgu poruszania danej jednostki. Jednostka następnie wykona płynny ruch reprezentowany animacją i znajdze się w wyznaczonym celu. Przy okazji zostanie wywietlony komunikat dotyczący ruchu jednostki. Od tego momentu nie może poruszyc się aż do końca tury. Jednostka jest zdolan do atku jeżeli w jej zasięgu znajduje się jednostka innego gracza. Fakt ten jest oznajmianyprzez podwietlenie pola z jednostką przeciwnika na czerwono, gdy umiecimy kursor na naszej jednosce. Gdy klikniemy na jednostkę przeciwnika i wykonanie ataku jest możliwe, nasza jednostka zada obrażenia jednostce przeciwnika. Jeżeli jednostka przeciwnika ma odpowiedni zasięg by odpowiedzieć na nasz atak naszej jednosce zadane zostaną odpowiednie obrażenia. Wartoć ataku, zasięg poruszanie i zasięg ataku jednostek zależy od ich typu. Jednostka będąc atakowana otrzymuje obrażenia zmniejszone o obrone pola, na którym stoi.
 %------------------------------------------------
 
+\section{Architektura}
+Aplikacja podzielona jest na trzy komponenty obsługiwane przez system Android:
+
+\begin{itemize}
+
+  \item \emph{ConnectActivity} - początkowy stan aplikacji. Wyświetla listę
+    urządzeń Bluetooth i pozwala użytkownikowy wybrać, z którym z nich się
+    połączyć.
+
+  \item \emph{ConnectionService} - serwis pracujący w tle zajmujący się obsługą
+    połączenia Bluetooth. Jego istnienie jest niezbędne, ponieważ system
+    Android nie pozwala na przekazanie otwartego gniazda sieciowego z jednego
+    \textit{Activity} do innego. Zamiast tego zarówno \textit{ConnectActivity}
+    i \textit{GameActivity} łączą się z serwisem i poprzez niego wysyłają i
+    odbierają komunikaty.
+
+  \item \emph{GameActivity} - ekran obsługujący właściwą grę.
+
+\end{itemize}
+
+
+
+%------------------------------------------------
+
 
 %------------------------------------------------
 \end{document}
