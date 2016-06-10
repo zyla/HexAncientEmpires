@@ -163,4 +163,15 @@ public class GameLogic {
     public boolean canAttack(Unit unit) {
         return unit.getPlayerID() == playerID && !unitInfos.get(unit.getLoc()).attacked;
     }
+
+    /** True if no moves are left. */
+    public boolean isTurnFinished() {
+        for(UnitInfo info: unitInfos.values()) {
+            if(info.unit.getPlayerID() == playerID && (!info.attacked || !info.moved)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

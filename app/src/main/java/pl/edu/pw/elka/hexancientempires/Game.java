@@ -219,7 +219,9 @@ public class Game {
             drawMessage(canvas, message.getText(), screenWidth, screenHeight, 120);
         }
         
-        String turnMessage = isMyTurn() ? "Your turn" : "Waiting for Player " + oppositePlayerID(myPlayerID);
+        String turnMessage = isMyTurn() ?
+            (gameLogic.isTurnFinished() ? "No moves left in this turn" : "Your turn") :
+            "Waiting for Player " + oppositePlayerID(myPlayerID);
         drawMessage(canvas, turnMessage, screenWidth, screenHeight, 30);
     }
 
