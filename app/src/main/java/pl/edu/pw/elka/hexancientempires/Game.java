@@ -157,7 +157,22 @@ public class Game {
     }
 
     private void startTurn(int playerID) {
+        Log.d("Game", "nextTurn, player=" + playerID);
         gameLogic = new GameLogic(units, playerID, map);
+    }
+
+    public void finishTurnClicked() {
+        if(isMyTurn()) {
+            finishTurn();
+        }
+    }
+
+    private void finishTurn() {
+        startTurn(oppositePlayerID(gameLogic.playerID));
+    }
+
+    private boolean isMyTurn() {
+        return gameLogic.playerID == myPlayerID;
     }
 
     private static int oppositePlayerID(int playerID) {

@@ -183,4 +183,9 @@ public class GameView extends View {
         game.eventReceived(event);
         requestFrame();
     }
+
+    public void finishTurnClicked() {
+        game.finishTurnClicked();
+        requestFrame();
+    }
 }
