@@ -170,6 +170,10 @@ public class Game {
 
     private void finishTurn() {
         startTurn(oppositePlayerID(gameLogic.playerID));
+
+        if(isMyTurn()) {
+            message.show("Go!", 2000);
+        }
     }
 
     private boolean isMyTurn() {
@@ -209,26 +213,30 @@ public class Game {
         }
         canvas.restore();
 
-        drawMessage(canvas, screenWidth, screenHeight);
+        if(message.isDisplaying()) {
+            drawMessage(canvas, message.getText(), screenWidth, screenHeight, 120);
+        }
+        
+        if(!isMyTurn()) {
+            drawMessage(canvas, "Waiting for Player " + oppositePlayerID(myPlayerID), screenWidth, screenHeight, 30);
+        }
     }
 
-    private void drawMessage(Canvas canvas, int screenWidth, int screenHeight) {
-        if(message.isDisplaying()) {
-            final int margin = 30;
-            final int textSize = 40;
-            final int padding = 30;
+    private void drawMessage(Canvas canvas, String text, int screenWidth, int screenHeight, int bottom) {
+        final int margin = 30;
+        final int textSize = 40;
+        final int padding = 30;
 
-            Paint paint = new Paint();
-            paint.setColor(0x80000000);
-            paint.setStyle(Paint.Style.FILL);
-            canvas.drawRect(margin, screenHeight - margin - textSize - padding, screenWidth - margin, screenHeight - margin, paint);
+        Paint paint = new Paint();
+        paint.setColor(0x80000000);
+        paint.setStyle(Paint.Style.FILL);
+        canvas.drawRect(margin, screenHeight - bottom - textSize - padding, screenWidth - margin, screenHeight - bottom, paint);
 
-            paint.setColor(0xffffffff);
-            paint.setTextSize(textSize);
-            paint.setTextAlign(Paint.Align.CENTER);
-            paint.setTypeface(Typeface.MONOSPACE);
-            canvas.drawText(message.getText(), screenWidth / 2, screenHeight - margin - padding, paint);
-        }
+        paint.setColor(0xffffffff);
+        paint.setTextSize(textSize);
+        paint.setTextAlign(Paint.Align.CENTER);
+        paint.setTypeface(Typeface.MONOSPACE);
+        canvas.drawText(text, screenWidth / 2, screenHeight - bottom - padding + 5, paint);
     }
 
 
