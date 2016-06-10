@@ -17,8 +17,15 @@ public abstract class Event {
         }
     }
 
+    public static class FinishTurn extends Event {
+        public <A> A accept(Visitor<A> visitor) {
+            return visitor.finishTurn(this);
+        }
+    }
+
     public static interface Visitor<A> {
         public A action(Action event);
+        public A finishTurn(FinishTurn event);
     }
 
     public abstract <A> A accept(Visitor<A> visitor);
@@ -32,6 +39,12 @@ public abstract class Event {
                     Integer.toString(event.from.y),
                     Integer.toString(event.to.x),
                     Integer.toString(event.to.y),
+                };
+            }
+
+            public String[] finishTurn(FinishTurn event) {
+                return new String[] {
+                    "finish_turn", 
                 };
             }
         });
@@ -49,6 +62,10 @@ public abstract class Event {
                 case "action":
                     requireNumArguments(input, 4);
                     return new Action(parsePoint(input[1], input[2]), parsePoint(input[3], input[4]));
+
+                case "finish_turn":
+                    requireNumArguments(input, 0);
+                    return new FinishTurn();
 
                 default:
                     throw invalidEvent(input, "Invalid command");

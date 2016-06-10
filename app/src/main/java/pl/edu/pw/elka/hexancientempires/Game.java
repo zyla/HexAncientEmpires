@@ -164,6 +164,7 @@ public class Game {
     public void finishTurnClicked() {
         if(isMyTurn()) {
             finishTurn();
+            connection.sendEvent(new Event.FinishTurn());
         }
     }
 
@@ -347,6 +348,13 @@ public class Game {
         event.accept(new Event.Visitor<Void>() {
             public Void action(Event.Action event) {
                 processAction(oppositePlayerID(myPlayerID), event.from, event.to);
+                return null;
+            }
+
+            public Void finishTurn(Event.FinishTurn event) {
+                if(!isMyTurn()) {
+                    Game.this.finishTurn();
+                }
                 return null;
             }
         });
