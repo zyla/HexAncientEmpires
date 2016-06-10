@@ -50,42 +50,42 @@
 %------------------------------------------------
 
 \section{Wstęp}
-Nasz projekt to odtworzenie częci aspektów gry Ancient Empires II wraz z naszymi modyfikacjami. Najpoważniejszą zmianą było zastąpienie planszy klasycznej przez mapę podzieloną na sześciokąty. Ograniczylimy niektóre zawiłe szczegóły rozgrywki, by gra była bardziej przystępna dla użytkownika. Gra działa pod systemem Android i pozwala na rozgrywkę typu multiplayer przy użyciu technologii \textit{Bluetooth}.
+Nasz projekt to odtworzenie części aspektów gry Ancient Empires II wraz z naszymi modyfikacjami. Najpoważniejszą zmianą było zastąpienie planszy klasycznej przez mapę podzieloną na sześciokąty. Ograniczyliśmy niektóre zawiłe szczegóły rozgrywki, by gra była bardziej przystępna dla użytkownika. Gra działa pod systemem Android i pozwala na rozgrywkę typu multiplayer przy użyciu technologii \textit{Bluetooth}.
 %------------------------------------------------
 
 \section{Opis Gry}
 HexAncientEmpires jest strategiczną grą turową. Celem gry jest wyeliminowanie wszystkich jednostek przeciwnika używając umiejętnie swoich.
 \subsection{Opis Tury}
 Rozgrywkę rozpoczyna gracz pierwszy. Do dyspozycji ma jednostki w kolorze odpowiadającym numerowi gracza. Są one rozmieszczone na mapie.
- W swojej turze gracz jednokrotnie poruszyć się i jednokrotnie zaatakować każdą ze swoich jednostek. Gdy gracz uzna za słuszne, by zakończyć turę powinien kliknąć przycisk "finish turn". Ani poruszenie i zaatakownie jednostką w czasie tury nie jest konieczne, a nawet po wykonaniu tych akcji warto jest przyjrzeć się polu bitwy, więc decyzję o zakończeniu tury pozastawiamy graczowi. 
+ W swojej turze gracz jednokrotnie poruszyć się i jednokrotnie zaatakować każdą ze swoich jednostek. Gdy gracz uzna za słuszne, by zakończyć turę powinien kliknąć przycisk "finish turn". Ani poruszenie i zaatakowanie jednostką w czasie tury nie jest konieczne, a nawet po wykonaniu tych akcji warto jest przyjrzeć się polu bitwy, więc decyzję o zakończeniu tury pozastawiamy graczowi. 
 \subsection{Poruszanie Jednostką}
-Jednostki poruszają się po mapie w nietrywialny sposób, ponieważ mogą znajdować się tylko na siatce, a koszt wejcia na konkretny typ podłoża jest różny. Żeby poruszyć jednostką należy umieścić na niej kursor, a następnie wybrać pozycję z tych oznaczonych przez kolor niebieski. Tylko takie miejsca są w zasięgu poruszania danej jednostki. Jednostka następnie wykona płynny ruch reprezentowany animacją i znajdzie się w wyznaczonym celu. Przy okazji zostanie wyświetlony komunikat dotyczący ruchu jednostki. Od tego momentu jednostka nie może poruszyc się aż do końca tury. 
+Jednostki poruszają się po mapie w nietrywialny sposób, ponieważ mogą znajdować się tylko na siatce, a koszt wejścia na konkretny typ podłoża jest różny. Żeby poruszyć jednostką należy umieścić na niej kursor, a następnie wybrać pozycję z tych oznaczonych przez kolor niebieski. Tylko takie miejsca są w zasięgu poruszania danej jednostki. Jednostka następnie wykona płynny ruch reprezentowany animacją i znajdzie się w wyznaczonym celu. Przy okazji zostanie wyświetlony komunikat dotyczący ruchu jednostki. Od tego momentu jednostka nie może poruszyć się aż do końca tury. 
 \subsection{Atak Jednostką}
-Jednostka jest zdolna do ataku jeżeli w jej zasięgu ataku znajduje się jednostka innego gracza. Fakt ten jest oznajmiany przez podświetlenie pola z jednostką przeciwnika na czerwono, gdy umieścimy kursor na naszej jednosce. Gdy klikniemy na jednostkę przeciwnika i wykonanie ataku jest możliwe, nasza jednostka zada obrażenia jednostce przeciwnika. Jeżeli jednostka przeciwnika ma odpowiedni zasięg by odpowiedzieć na nasz atak naszej jednosce, zadane zostaną odpowiednie obrażenia. Wartość ataku, zasięg poruszania się i zasięg ataku jednostek zależy od ich typu. Jednostka będąc atakowana otrzymuje obrażenia zmniejszone o wartość obrony pola, na którym stoi.
+Jednostka jest zdolna do ataku jeżeli w jej zasięgu ataku znajduje się jednostka innego gracza. Fakt ten jest oznajmiany przez podświetlenie pola z jednostką przeciwnika na czerwono, gdy umieścimy kursor na naszej jednostce. Gdy klikniemy na jednostkę przeciwnika i wykonanie ataku jest możliwe, nasza jednostka zada obrażenia jednostce przeciwnika. Jeżeli jednostka przeciwnika ma odpowiedni zasięg by odpowiedzieć na nasz atak naszej jednostce, zadane zostaną odpowiednie obrażenia. Wartość ataku, zasięg poruszania się i zasięg ataku jednostek zależy od ich typu. Jednostka będąc atakowana otrzymuje obrażenia zmniejszone o wartość obrony pola, na którym stoi.
 \subsection{Jednostki}
-Jednostki są to bohaterowie naszej rozgrywki. Wyróżniają się wartociami ataku i prędkoci poruszania, zatem otrzymały adekwatny wygląd. Indywidualna jednostka jest opisana wartocią punktów życia. W grze występują następujące typy jednostek:
+Jednostki są to bohaterowie naszej rozgrywki. Wyróżniają się wartościami ataku i prędkości poruszania, zatem otrzymały adekwatny wygląd. Indywidualna jednostka jest opisana wartością punktów życia. W grze występują następujące typy jednostek:
 \begin{itemize}
-\item{WARRIOR} wojownik, podstawowa jednostka dysponuje małym zasięgiem i standardową prędkocią poruszania
-\item{ARCHER} łucznik, dysponuje większym zasiegiem i niż wojownik
-\item{WOLF} wilk, cechuje się dużą prędkocią poruszania się po mapie
-\item{GOLEM} golem, powoli się porusza, ale dysponuje poteżną wartocią punktów ataku
-\item{CATAPULT} katapulta, jednostka o bardzo dużym zasięgu, ale małej prędkoci poruszania
+\item{WARRIOR} wojownik, podstawowa jednostka dysponuje małym zasięgiem i standardową prędkością poruszania
+\item{ARCHER} łucznik, dysponuje większym zasięgiem i niż wojownik
+\item{WOLF} wilk, cechuje się dużą prędkością poruszania się po mapie
+\item{GOLEM} golem, powoli się porusza, ale dysponuje potężną wartością punktów ataku
+\item{CATAPULT} katapulta, jednostka o bardzo dużym zasięgu, ale małej prędkości poruszania
 \end{itemize}
 
 \subsection{Teren}
-Poszczególne podłoża cechuja następujące właciwości:
+Poszczególne podłoża cechują następujące właściwości:
 \begin{itemize}
-\item{CASTLE} zamek, wejcie na niego okupione jest dużym kosztem, ale zyskujemy dzięki temu znaczną obronę
-\item{GRASS} trawa, jednostki moga po niej daleko się przemiecić, wartość obrony jest znikoma
-\item{MOUNTAIN} góra, stojąc na niej otrzymujemy solidną obronę, jednak wejcie na nią jest wymagające
+\item{CASTLE} zamek, wejście na niego okupione jest dużym kosztem, ale zyskujemy dzięki temu znaczną obronę
+\item{GRASS} trawa, jednostki mogą po niej daleko się przemieścić, wartość obrony jest znikoma
+\item{MOUNTAIN} góra, stojąc na niej otrzymujemy solidną obronę, jednak wejście na nią jest wymagające
 \item{ROAD} dróżka, pozwala na szybkie poruszanie, ale nie zapewnia obrony
-\item{TREE} las, stanowi świetny balans między obroną, a przedkocią poruszania się po podłożu
+\item{TREE} las, stanowi świetny balans między obroną, a prędkością poruszania się po podłożu
 \item{WATER} woda, nie zapewnia żadnej obrony spowalniając jednostki porównywalnie to gór
 \end{itemize}
 %------------------------------------------------
 
 \section{Warstwa Wizualna}
-Jesteśmy bardzo zadowoleni z wygladu naszej aplikacji. Stworzony przez nas wygląd terenu nadaje odpowiedni klimat grze, pasujący do całokształtu dowiadczeń. Wygląd postaci doskonale komponuje się z resztą grafik. Uwagę należy zwrócić na animacje poruszania się jednostek. Nie bez znaczenia jest również odpowiednia estetyka wyświetlanych komunikatów. To wszystko udało się osiągnąć przy zachowaniu płynnej animacji i adekwatnym zużyciu zasobów.
+Jesteśmy bardzo zadowoleni z wyglądu naszej aplikacji. Stworzony przez nas wygląd terenu nadaje odpowiedni klimat grze, pasujący do całokształtu doświadczeń. Wygląd postaci doskonale komponuje się z resztą grafik. Uwagę należy zwrócić na animacje poruszania się jednostek. Nie bez znaczenia jest również odpowiednia estetyka wyświetlanych komunikatów. To wszystko udało się osiągnąć przy zachowaniu płynnej animacji i adekwatnym zużyciu zasobów.
 
 %------------------------------------------------
 \section{Architektura}
@@ -94,7 +94,7 @@ Aplikacja podzielona jest na trzy komponenty obsługiwane przez system Android:
 \begin{itemize}
 
   \item \emph{ConnectActivity} - początkowy stan aplikacji. Wyświetla listę
-    urządzeń Bluetooth i pozwala użytkownikowy wybrać, z którym z nich się
+    urządzeń Bluetooth i pozwala użytkownikowi wybrać, z którym z nich się
     połączyć.
 
   \item \emph{ConnectionService} - serwis pracujący w tle zajmujący się obsługą
@@ -126,7 +126,7 @@ Dostępne są następujące komendy:
 
 %------------------------------------------------
 \section{Napotkane Trudności}
-Pierwszą napotkaną trudnością była instalacja środowiska Android Studio. Było to szczególnie trudne, bo momentami nie wiedzielimy czy winą za niepoprawne działanie obarczyć port USB czy Android Studio . Ostatecznie port USB w jednym z telefonów został wymieniony i udało się poprawnie skonfigórować rodowisko. Podczas pisania programu popełnilimy kilka błędów, ale dzięki narzędziom do debugowania udało nam się je usunąć. Problemy były również z przesyłaniem komunikatem przez \textit{Bluetooth}, ale naszczęście szybko udało się rozwiązać. Musielimy również zaimplementować kilka skomplikowanych algorytmów. \textit{tileHitTest} jest to metoda, która z pozycji w pixelach zwraca współrzędne w układzie współrzędnych mapy. Jest ona uogólnia dla przypadku ujemnych współrzędnych. \textit{UnitAttackRange} klasa, która udostępnia metodę zwracającą położenia jednostek wroga, które można zaatakować. Wykorzystuje ona algorytm przeszukiwania wszerz.  textit{UnitMovementRange} klasa, udostępniająca metodę zwracającą połorzenie pól na które może przejć jednostka. Zastosowanie znalazł tutaj algorytm Dijkstry. Swoistą trudność stanowiło stworzenie algorytmów odpowiednich dla mapy złożonej z sześciokątów, ale byliśmy gotowi na to wyzwanie. Skomplikowane okazała się również optymalizacja. Nowe klatki są generowane tylko wtedy, gdy zachodzi taka potrzeba, a rysowane są na nich wyłącznie widoczne elementy mapy.
+Pierwszą napotkaną trudnością była instalacja środowiska Android Studio. Było to szczególnie trudne, bo momentami nie wiedzieliśmy czy winą za niepoprawne działanie obarczyć port USB czy Android Studio . Ostatecznie port USB w jednym z telefonów został wymieniony i udało się poprawnie skonfigurować środowisko. Podczas pisania programu popełniliśmy kilka błędów, ale dzięki narzędziom do debugowania udało nam się je usunąć. Problemy były również z przesyłaniem komunikatem przez \textit{Bluetooth}, ale na szczęście szybko udało się rozwiązać. Musieliśmy również zaimplementować kilka skomplikowanych algorytmów. \textit{tileHitTest} jest to metoda, która z pozycji w pikselach zwraca współrzędne w układzie współrzędnych mapy. Jest ona uogólnia dla przypadku ujemnych współrzędnych. \textit{UnitAttackRange} klasa, która udostępnia metodę zwracającą położenia jednostek wroga, które można zaatakować. Wykorzystuje ona algorytm przeszukiwania wszerz.  \textit{UnitMovementRange} klasa, udostępniająca metodę zwracającą położenie pól na które może przejść jednostka. Zastosowanie znalazł tutaj algorytm Dijkstry. Swoistą trudność stanowiło stworzenie algorytmów odpowiednich dla mapy złożonej z sześciokątów, ale byliśmy gotowi na to wyzwanie. Skomplikowane okazała się również optymalizacja. Nowe klatki są generowane tylko wtedy, gdy zachodzi taka potrzeba, a rysowane są na nich wyłącznie widoczne elementy mapy.
 
 %------------------------------------------------
 \end{document}
