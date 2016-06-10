@@ -21,8 +21,8 @@ public class UnitMath {
         50,//WISP
         50,//WOLF
         50,//GOLEM
-        50,//CATEPULT
-        50,//DREGON
+        90,//CATAPULT
+        50,//DRAGON
         50,//KING
         50//SKELETON
 };
