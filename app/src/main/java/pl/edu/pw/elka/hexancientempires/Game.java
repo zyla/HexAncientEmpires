@@ -22,9 +22,6 @@ import static pl.edu.pw.elka.hexancientempires.TileMath.TILE_WIDTH;
 
 /**
  * Handles some game logic and other stuff
- * moreover is cool named, so no worries m8s
- * Side note ♪ we should have one for user input something like Controller
- * Created by tomek on 05.06.16.
  */
 public class Game {
     private static final long ANIMATION_TIME = 150;
@@ -59,6 +56,9 @@ public class Game {
     private Animation unitAnimation = new Animation();
     private Message message = new Message();
 
+    /**
+     * Handles user's selection of a tile.
+     */
     public void tileSelected(final Point newCursorPos) {
         if(unitAnimation.isRunning()) {
             unitAnimation.stop();
@@ -93,7 +93,9 @@ public class Game {
     }
 
     /**
-     * Returns whether an action happened.
+     * Sends action to GameLogic and displays the result in the UI.
+     *
+     * @return whether any action happened.
      */
     private boolean processAction(int playerID, final Point from, final Point to) {
         if(playerID != gameLogic.playerID) {
@@ -125,6 +127,12 @@ public class Game {
         connection.sendEvent(new Event.Action(from, to));
     }
 
+    /**
+     * Creates a Game.
+     *
+     * @param context Context to load assets from
+     * @param connection Connection to talk to
+     */
     public Game(Context context, Connection connection) {
         this.connection = connection;
         this.myPlayerID = connection.isServer()? SERVER_PLAYER_ID: CLIENT_PLAYER_ID;
@@ -180,6 +188,9 @@ public class Game {
         gameLogic = new GameLogic(units, playerID, map);
     }
 
+    /**
+     * Handles user's click of "Finish turn" button.
+     */
     public void finishTurnClicked() {
         if(isMyTurn()) {
             finishTurn();
@@ -211,7 +222,15 @@ public class Game {
     }
 
 
-
+    /**
+     * Renders the game.
+     *
+     * @param canvas Canvas to draw on
+     * @param cameraOffset camera offset
+     * @param visibleArea visible area of the map (in tile coordinates)
+     * @param screenWidth screen width in pixels
+     * @param screenHeight screen height in pixels
+     */
     public void draw(Canvas canvas, PointF cameraOffset, Rect visibleArea, int screenWidth, int screenHeight) {
         canvas.save();
         {
@@ -351,11 +370,21 @@ public class Game {
         return map.getHeight();
     }
 
+    /**
+     * Updates the game's animations.
+     *
+     * @param frameTime time elapsed since last update
+     */
     public void update(long frameTime) {
         unitAnimation.update(frameTime);
         message.update(frameTime);
     }
 
+    /**
+     * Returns desired time to next frame.
+     *
+     * This can be a time value in milliseconds or one of the special values (FRAME_IMMEDIATELY, FRAME_WAIT_FOR_EVENT).
+     */
     public long nextFrameDelay() {
         if(unitAnimation.isRunning()) {
             return FRAME_IMMEDIATELY;
@@ -366,6 +395,9 @@ public class Game {
         }
     }
 
+    /**
+     * Handles event coming from network connection.
+     */
     public void eventReceived(Event event) {
         event.accept(new Event.Visitor<Void>() {
             public Void action(Event.Action event) {
@@ -383,6 +415,9 @@ public class Game {
         updateTileState();
     }
 
+    /**
+     * @return local player ID
+     */
     public int getMyPlayerID() {
         return myPlayerID;
     }

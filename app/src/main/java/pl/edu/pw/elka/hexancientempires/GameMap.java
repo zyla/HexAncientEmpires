@@ -4,9 +4,7 @@ import java.util.ArrayList;
 
 
 /**
- * Class that represents board
- * loads map from string
- * Created by tomek on 29.04.16.
+ * Class that represents board.
  */
 public class GameMap {
     private ArrayList<Tile> tiles;
@@ -28,13 +26,20 @@ public class GameMap {
             "x t g g g t t t g g g t x " +
             "x x x x x x x x x x x x x ";
 
+    /**
+     * Constructs a GameMap
+     *
+     * @param width width
+     * @param height height
+     * @param tiles List of tiles (of length width * height), in column-major order.
+     */
     public GameMap(int width, int height, ArrayList<Tile> tiles) {
         this.mapWidth = width;
         this.mapHeight = height;
         this.tiles = tiles;
     }
 
-    /** Returns a mutable reference to tile at (mapX, mapY). */
+    /** @return a mutable reference to tile at (mapX, mapY). */
     public Tile getTile(int mapX, int mapY){
         if(mapX < 0 || mapY < 0 || mapX >= mapWidth || mapY >= mapHeight ) {
             return new Tile(Tile.NONE);
@@ -42,10 +47,12 @@ public class GameMap {
         return tiles.get(mapY * mapWidth +  mapX);
     }
 
+    /** @return a mutable reference to tile at loc. */
     public Tile getTile(Point loc){
         return getTile(loc.x, loc.y);
     }
 
+    /** @return a mutable reference to tile at given index in column-major order. */
     public Tile getTile(int index) {
         if(index < 0 || index >= tiles.size())
             throw new IndexOutOfBoundsException("Tile of this index don't exists in map");
@@ -64,6 +71,7 @@ public class GameMap {
         return mapHeight;
     }
 
+    /** @return index of given point in column-major order */
     public int getMapIndex(Point loc)
     {
         int index = loc.y * mapWidth + loc.x;
@@ -72,14 +80,21 @@ public class GameMap {
         return  index;
     }
 
+    /** @return true if given point is in range of the map */
     public boolean containsTile(Point loc) {
         return loc.x >= 0 && loc.y >= 0 && loc.x < mapWidth && loc.y < mapHeight;
     }
 
+    /** @return location of ith point in column-major order */
     public Point getMapLoc(int i) {
         return new Point(i % mapWidth, i / mapWidth);
     }
 
+    /**
+     * Parses a Map from textual representation.
+     *
+     * Map format is like {@link #MAP1}.
+     */
     public static GameMap loadFromString(String source) {
         String separators = "[ ]+";
         String[] tokens = source.split(separators);

@@ -22,6 +22,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.UUID;
 
+/**
+ * Activity handling the game.
+ */
 public class GameActivity extends AppCompatActivity implements ConnectionService.Listener, Connection {
     private GameView gameView;
     private ConnectionService connectionService;

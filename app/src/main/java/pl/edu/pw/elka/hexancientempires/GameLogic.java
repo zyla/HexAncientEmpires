@@ -7,8 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * to rename and refactor
- * Created by tomek on 08.06.16.
+ * Represents state of a game turn.
  */
 public class GameLogic {
     List<Unit> units;
@@ -28,6 +27,11 @@ public class GameLogic {
         }
     }
 
+    /**
+     * @param units all units in the game
+     * @param playerID ID of player whose turn it is
+     * @param map the map
+     */
     public GameLogic(List<Unit> units, int playerID, GameMap map) {
         this.units = units;
         unitInfos = new HashMap<>();
@@ -38,7 +42,7 @@ public class GameLogic {
         this.map = map;
     }
 
-    public boolean attack(Point attacking, Point defensing,int distance){
+    private boolean attack(Point attacking, Point defensing,int distance){
         Tile attacker = map.getTile(attacking);
         Tile attacked = map.getTile(defensing);
 
@@ -65,7 +69,7 @@ public class GameLogic {
         return true;
     }
 
-    public boolean move(Point from, Point to) {
+    private boolean move(Point from, Point to) {
         Tile tileFrom = map.getTile(from);
         Tile tileTo = map.getTile(to);
 
@@ -144,7 +148,7 @@ public class GameLogic {
         return range.get(tilePos).distance;
     }
 
-    public static List<Point> getPath(Map<Point, UnitMovementRange.Node> range, Point current) {
+    private static List<Point> getPath(Map<Point, UnitMovementRange.Node> range, Point current) {
         List<Point> way = new ArrayList<>();
 
         while (current != null) {
@@ -156,15 +160,17 @@ public class GameLogic {
         return way;
     }
 
+    /** @return true if the unit can be moved in this turn */
     public boolean canMove(Unit unit) {
         return unit.getPlayerID() == playerID && !unitInfos.get(unit.getLoc()).moved;
     }
 
+    /** @return true if the unit can attack in this turn */
     public boolean canAttack(Unit unit) {
         return unit.getPlayerID() == playerID && !unitInfos.get(unit.getLoc()).attacked;
     }
 
-    /** True if no moves are left. */
+    /** @return true if no moves are left. */
     public boolean isTurnFinished() {
         for(UnitInfo info: unitInfos.values()) {
             if(info.unit.getPlayerID() == playerID && (!info.attacked || !info.moved)) {

@@ -19,7 +19,7 @@ import static pl.edu.pw.elka.hexancientempires.TileMath.TILE_WIDTH;
 import static pl.edu.pw.elka.hexancientempires.TileMath.TILE_HEIGHT;
 
 /**
- * Created by zyla on 3/29/16.
+ * Android view for displaying the game.
  */
 public class GameView extends View {
     private PointF cameraOffset = new PointF(-TILE_WIDTH/4, -TILE_HEIGHT/2);
@@ -37,7 +37,6 @@ public class GameView extends View {
     private long lastRenderStartedAt;
     private boolean framePending;
 
-    // java == wtf
     private final Runnable processFrameRunnable = new Runnable() {
         public void run() {
             processFrame();
@@ -50,6 +49,12 @@ public class GameView extends View {
         }
     };
 
+    /**
+     * Construct a GameView
+     *
+     * @param context the Context
+     * @param connection the Connection game talks to
+     */
     public GameView(Context context, Connection connection) {
         super(context);
         game = new Game(context, connection);
@@ -155,22 +160,26 @@ public class GameView extends View {
         return TileMath.visibleTiles(visibleAreaInPixels);
     }
 
+    /** @return local player ID */
     public int getMyPlayerID() {
         return game.getMyPlayerID();
     }
 
+    /** Handles an event from the network */
     public void onEventReceived(Event event) {
         doUpdate();
         game.eventReceived(event);
         requestFrame();
     }
 
+    /** Handles "Finish turn" button click */
     public void finishTurnClicked() {
         doUpdate();
         game.finishTurnClicked();
         requestFrame();
     }
 
+    /** Handles tile click */
     private void tileClicked(Point tilePos) {
         doUpdate();
         game.tileSelected(tilePos);
