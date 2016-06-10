@@ -20,7 +20,7 @@ public class UnitMath {
         50,//WIZARD
         50,//WISP
         50,//WOLF
-        50,//GOLEM
+        80,//GOLEM
         90,//CATAPULT
         50,//DRAGON
         50,//KING
