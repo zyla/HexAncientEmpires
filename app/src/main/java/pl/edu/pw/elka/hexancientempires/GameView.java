@@ -188,4 +188,8 @@ public class GameView extends View {
         game.finishTurnClicked();
         requestFrame();
     }
+
+    public int getMyPlayerID() {
+        return game.getMyPlayerID();
+    }
 }

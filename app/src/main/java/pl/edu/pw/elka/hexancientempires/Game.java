@@ -366,4 +366,8 @@ public class Game {
             }
         });
     }
+
+    public int getMyPlayerID() {
+        return myPlayerID;
+    }
 }
