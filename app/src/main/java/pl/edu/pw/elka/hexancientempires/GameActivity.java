@@ -76,7 +76,7 @@ public class GameActivity extends AppCompatActivity implements ConnectionService
     }
 
     public void sendEvent(Event event) {
-        String data = Utils.join(" ", event.serialize());
+        String data = Utils.join(" ", event.serialize()) + "\n";
         connectionService.send(data);
     }
 
