@@ -105,7 +105,6 @@ public class Game {
             }
 
             public Boolean noAction() {
-                message.show("Selected tile " + to, 3000);
                 return false;
             }
         });
