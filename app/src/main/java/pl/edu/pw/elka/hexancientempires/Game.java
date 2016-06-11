@@ -172,7 +172,7 @@ public class Game {
         placeUnit(new Unit(Unit.WARRIOR, CLIENT_PLAYER_ID, new Point(11, 7)));
         placeUnit(new Unit(Unit.GOLEM, CLIENT_PLAYER_ID, new Point(9, 7)));
         placeUnit(new Unit(Unit.WOLF, CLIENT_PLAYER_ID, new Point(11, 8)));
-        placeUnit(new Unit(Unit.CATAPULT, CLIENT_PLAYER_ID, new Point(9, 7)));
+        placeUnit(new Unit(Unit.CATAPULT, CLIENT_PLAYER_ID, new Point(9, 8)));
 
 
         startTurn(SERVER_PLAYER_ID);
