@@ -1,3 +1,4 @@
 - network: handle disconnections
 - Fix concurrency bugs in ConnectionService
 - BUG: duplicate BT devices
+- make it looks good on higher resolutions

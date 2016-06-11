@@ -162,17 +162,17 @@ public class Game {
         map = GameMap.loadFromString(GameMap.MAP1);
 
         placeUnit(new Unit(Unit.ARCHER, SERVER_PLAYER_ID, new Point(2, 7)));
-        placeUnit(new Unit(Unit.WARRIOR, SERVER_PLAYER_ID, new Point(3, 7)));
-        placeUnit(new Unit(Unit.GOLEM, SERVER_PLAYER_ID, new Point(4, 7)));
-        placeUnit(new Unit(Unit.WOLF, SERVER_PLAYER_ID, new Point(2, 8)));
-        placeUnit(new Unit(Unit.CATAPULT, SERVER_PLAYER_ID, new Point(4, 8)));
+        placeUnit(new Unit(Unit.WARRIOR, SERVER_PLAYER_ID, new Point(1, 6)));
+        placeUnit(new Unit(Unit.GOLEM, SERVER_PLAYER_ID, new Point(3, 7)));
+        placeUnit(new Unit(Unit.WOLF, SERVER_PLAYER_ID, new Point(1, 7)));
+        placeUnit(new Unit(Unit.CATAPULT, SERVER_PLAYER_ID, new Point(1, 8)));
 
 
         placeUnit(new Unit(Unit.ARCHER, CLIENT_PLAYER_ID, new Point(10, 7)));
-        placeUnit(new Unit(Unit.WARRIOR, CLIENT_PLAYER_ID, new Point(11, 7)));
+        placeUnit(new Unit(Unit.WARRIOR, CLIENT_PLAYER_ID, new Point(11, 6)));
         placeUnit(new Unit(Unit.GOLEM, CLIENT_PLAYER_ID, new Point(9, 7)));
-        placeUnit(new Unit(Unit.WOLF, CLIENT_PLAYER_ID, new Point(11, 8)));
-        placeUnit(new Unit(Unit.CATAPULT, CLIENT_PLAYER_ID, new Point(9, 8)));
+        placeUnit(new Unit(Unit.WOLF, CLIENT_PLAYER_ID, new Point(11, 7)));
+        placeUnit(new Unit(Unit.CATAPULT, CLIENT_PLAYER_ID, new Point(11, 8)));
 
 
         startTurn(SERVER_PLAYER_ID);
