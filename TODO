@@ -2,3 +2,107 @@
 - Fix concurrency bugs in ConnectionService
 - BUG: duplicate BT devices
 - make it looks good on higher resolutions
+
+HAVE TO_DO:
+- Rework how we menage units to make them differ more ( inherits from unit class )
+    units should return their attack in their own int getAttack(tile.type type); method
+    units should have their special properties (more on that later)
+- Try to make 3 or 4 or more user multi_player
+    rework of the data sending protocol
+    rework of taking input from other devices
+    make possible to send map info thorough bluetooth for map editor and compatible issues
+    basically if host decides on everything it is possible to make it backward compatible
+    clients should calculate if initial unit placement is even and show message about it
+- Make gold distribution and gathering
+- Recruiting units in Castles
+    decide on what condition it is possible to recruit an unit
+    decide how gold is distributed
+    make possible to place unit after purchasing it
+- Health value displayed on unit ( bars are not suitable for our needs )
+- YouTube video with Tutorial ( or interactive tutorial mission )
+- End Game button that don't crush the game
+- Make our own units textures
+
+SHOULD TO_DO:
+- Before game menu to chose map and other game settings
+    map
+    gold on start
+    max unit count
+    units on start
+- Attack animations ( smoke / vibration / red splashed number )
+- Message about ripostes with attack values
+- Host sends
+- maps stored in files
+- Check if player lost and finish the game if happens
+- play_test game to figure out best attack damage constants
+- 1balance units speed and terrain move cost
+    wolf is too fast on ground
+    catapult is too slow
+    golem is too slow
+    roads are too fast ore there are too much of them on current map
+
+COULD TO_DO:
+- Refactor whole game to make testing possible
+- Make some tests
+- It is possible to make this MVC, but not necessary. This is how I understand MVC:
+    Controller  - takes input from user and stores it somewhere where model can take it
+    View        - takes info from model and draws it on the screen
+    Model       - stores all data about the game, it is basically everything else
+- Attack value pop-out splash effect
+- In game map editor
+- Campaign Mission
+
+
+UNITS UNIQUE FEATURES:
+WARRIOR
+- Is always facing one direction when attacked from that direction he has additional defense
+- Can collect gold
+- Can recruit units?
+
+ARCHER
+
+LIZARD
+- Moves faster on the water
+- Have additional defense on the water
+
+WIZARD
+- resurrecting skeletons from the graves placed when unit die
+- healing other units
+- no attacks
+
+WISP
+- make it like disruptor from StarCraft II before path
+    can't attack
+    needs to stay one turn before release damage
+    explodes hitting all adjacent (range == 1) units ( yes, your units too )
+    needs to charge one turn
+
+WOLF
+- Have an additional short move after attack (speed == 1 || speed == 2)
+
+GOLEM
+- Have its own build in small defense
+
+CATAPULT
+- Have to stay one turn in same place before attacking
+
+DRAGON
+- Don't care about terrain cost when moving ( flying )
+
+KING
+- The Objective of the game could be "Kill enemy KING"
+
+SKELETON
+- Can be raised from the grave by a WIZARD
+- Lives only few turns ( i <= 5 ) and then collapses no matter what
+- has only melee attack, and can't capture buildings, collect gold, recruit units etc
+
+TERRAIN TYPES TO CHANGE:
+CASTLE
+- Make possible to recruit units
+
+MINE
+- Spawns gold after announcing that fact
+
+HILL //Wzniesienie
+- Similar to trees
