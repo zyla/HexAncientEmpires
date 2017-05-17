@@ -20,10 +20,10 @@ public class Utils {
      * @param xs list of points in map geometry
      * @return List of offsets as a path
      */
-    public static List<PointF> pathToPixels(Iterable<Point> xs) {
+    public static List<PointF> pathToPixels(Iterable<Point> xs,int w ,int h) {
         ArrayList<PointF> result = new ArrayList<>();
         for(Point x: xs) {
-            result.add(toPointF(TileMath.tileLocation(x)));
+            result.add(toPointF(TileMath.tileLocation(x,w,h)));
         }
         return result;
     }

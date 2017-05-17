@@ -25,32 +25,32 @@ import java.util.UUID;
 /**
  * Activity handling the game.
  */
-public class GameActivity extends AppCompatActivity implements ConnectionService.Listener, Connection {
+public class GameActivity extends AppCompatActivity /*implements ConnectionService.Listener, Connection*/ {
     private GameView gameView;
-    private ConnectionService connectionService;
+    //private ConnectionService connectionService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Intent intent = new Intent(getApplicationContext(), ConnectionService.class);
+       // Intent intent = new Intent(getApplicationContext(), ConnectionService.class);
 
-        boolean bound = bindService(intent, new ServiceConnection() {
-            @Override
-            public void onServiceConnected(ComponentName name, IBinder binder) {
-                Log.d("GameActivity", "Service connected");
+       // boolean bound = bindService(intent, new ServiceConnection() {
+            //@Override
+            //public void onServiceConnected(ComponentName name, IBinder binder) {
+            //    Log.d("GameActivity", "Service connected");
 
-                connectionService = ((ConnectionService.Binder) binder).getService();
-                connectionService.setListener(GameActivity.this);
+                //connectionService = ((ConnectionService.Binder) binder).getService();
+                //connectionService.setListener(GameActivity.this);
 
-                gameView = new GameView(GameActivity.this, GameActivity.this);
+                gameView = new GameView(GameActivity.this/*, GameActivity.this*/);
                 FrameLayout layout = new FrameLayout(GameActivity.this);
                 layout.addView(gameView);
                 setContentView(layout);
 
                 setTitle("Game [Player " + gameView.getMyPlayerID() + "]");
-            }
-
+            //}
+/*
             @Override
             public void onServiceDisconnected(ComponentName name) {
                 Log.d("GameActivity", "Service disconnected");
@@ -58,25 +58,25 @@ public class GameActivity extends AppCompatActivity implements ConnectionService
         }, BIND_AUTO_CREATE);
 
         Log.d("GameActivity", "Binding service success=" + bound);
-    }
+  */  }
 
-    public void connected() {}
-
+ //   public void connected() {}
+/*
     @Override
     public void onStop() {
         super.onStop();
 
-        if(connectionService != null) {
-            connectionService.disconnect();
+     //   if(connectionService != null) {
+     //       connectionService.disconnect();
         }
-    }
-
+    }*/
+/*
     @Override
     public void disconnected() {
         finish();
     }
-
-    @Override
+*/
+   /* @Override
     public void lineReceived(String line) {
         Event event;
         try {
@@ -86,16 +86,16 @@ public class GameActivity extends AppCompatActivity implements ConnectionService
             return;
         }
         gameView.onEventReceived(event);
-    }
-
+    }*/
+/*
     public void sendEvent(Event event) {
         connectionService.send(event.serialize());
     }
-
-    public boolean isServer() {
+*/
+  /*  public boolean isServer() {
         return connectionService.isServer();
     }
-
+*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_game, menu);

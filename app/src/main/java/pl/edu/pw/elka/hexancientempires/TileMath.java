@@ -11,9 +11,9 @@ package pl.edu.pw.elka.hexancientempires;
  * It doesn't handle camera projection.
  */
 public class TileMath {
-    public static final int TILE_SIDE = 64;
-    public static final int TILE_WIDTH = TILE_SIDE * 2;
-    public static final int TILE_HEIGHT = (int) (TILE_SIDE * 1.73);
+    public int TILE_SIDE ;
+    public int TILE_WIDTH;
+    public int TILE_HEIGHT;
     public static final int MARGIN = 1;
 
     public static final int TOPSIDE = 0;
@@ -23,10 +23,20 @@ public class TileMath {
     public static final int BOTLEFT = 4;
     public static final int TOPLEFT = 5;
 
+    public TileMath(int TILE_SIDE) {
+        this.TILE_SIDE = TILE_SIDE;
+        TILE_WIDTH = TILE_SIDE * 2;
+        TILE_HEIGHT = (int) (TILE_SIDE * 1.732);
+    }
+    public void update(int TILE_SIDE) {
+        this.TILE_SIDE = TILE_SIDE;
+        TILE_WIDTH = TILE_SIDE * 2;
+        TILE_HEIGHT = (int) (TILE_SIDE * 1.732);
+    }
     /**
      * @return rect of visible hexagons in hexagon geometry
      */
-    public static Rect visibleTiles(Rect visibleArea) {
+    public  Rect visibleTiles(Rect visibleArea) {
         Point topLeft = tileHitTest(visibleArea.left, visibleArea.top);
         Point botRight = tileHitTest(visibleArea.right, visibleArea.bottom);
 
@@ -36,25 +46,25 @@ public class TileMath {
     /**
      * @return center of hexagon in pixels
      */
-    public static Point tileCenter(int mapX, int mapY) {
-        Point pt = tileLocation(mapX, mapY);
-        return new Point(pt.x + TILE_WIDTH / 2, pt.y + TILE_HEIGHT / 2);
+    public static Point tileCenter(int mapX, int mapY, int w, int h) {
+        Point pt = tileLocation(mapX, mapY, w, h);
+        return new Point(pt.x + w / 2, pt.y + h / 2);
     }
 
     /**
      * @return tile location in pixels based on tile position on the map
      */
-    public static Point tileLocation(int mapX, int mapY) {
-        return new Point(TILE_WIDTH * 3 / 4 * mapX,
-                TILE_HEIGHT * mapY + (mapX & 1) * TILE_HEIGHT / 2);
+    public static Point tileLocation(int mapX, int mapY, int w, int h) {
+        return new Point(w * 3 / 4 * mapX,
+                h * mapY + (mapX & 1) * h / 2);
     }
 
 
     /**
      * @return tile position based on index in map
      */
-    public static Point tileLocation(Point loc) {
-        return tileLocation(loc.x, loc.y);
+    public static Point tileLocation(Point loc, int w, int h) {
+        return tileLocation(loc.x, loc.y, w , h);
     }
 
 
@@ -86,7 +96,7 @@ public class TileMath {
     /**
      * @return map coordinate of tile under given pixels
      */
-    public static Point tileHitTest(int x, int y) {
+    public  Point tileHitTest(int x, int y) {
         int col = (int)Math.floor(((double) x) / (TILE_WIDTH * 3/4));
         int row = (int)Math.floor(((double)y - (col & 1)* TILE_HEIGHT/2) / TILE_HEIGHT);
        // +((y>=0)?1:-1)*

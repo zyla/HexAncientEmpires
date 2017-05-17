@@ -15,14 +15,12 @@ import android.view.View;
 
 import java.util.ArrayList;
 
-import static pl.edu.pw.elka.hexancientempires.TileMath.TILE_WIDTH;
-import static pl.edu.pw.elka.hexancientempires.TileMath.TILE_HEIGHT;
 
 /**
  * Android view for displaying the game.
  */
 public class GameView extends View {
-    private PointF cameraOffset = new PointF(-TILE_WIDTH/4, -TILE_HEIGHT/2);
+    private PointF cameraOffset;
     private PointF lastTouchDown = new PointF();
 
     /** True if current touch stroke is a movement, not a click */
@@ -32,6 +30,7 @@ public class GameView extends View {
     private static final float MAX_CLICK_EVENT_DISTANCE_SQ = 100;
 
     private Game game;
+    private TileMath tileMath;
 
     private long lastFrameStartedAt;
     private long lastRenderStartedAt;
@@ -53,11 +52,13 @@ public class GameView extends View {
      * Construct a GameView
      *
      * @param context the Context
-     * @param connection the Connection game talks to
+     //* @param connection the Connection game talks to
      */
-    public GameView(Context context, Connection connection) {
+    public GameView(Context context/*, Connection connection*/) {
         super(context);
-        game = new Game(context, connection);
+        tileMath = new TileMath((int)(getWidth()/11.25));
+        game = new Game(context/*, connection*/,tileMath.TILE_WIDTH,tileMath.TILE_HEIGHT );
+        cameraOffset = new PointF(-tileMath.TILE_WIDTH/4, -tileMath.TILE_HEIGHT/2);
     }
 
     @Override
@@ -84,7 +85,7 @@ public class GameView extends View {
                 return true;
             case MotionEvent.ACTION_UP:
                 if (!isMovement) {
-                    tileClicked(TileMath.tileHitTest((int) (event.getX() - cameraOffset.x), (int) (event.getY() - cameraOffset.y)));
+                    tileClicked(tileMath.tileHitTest((int) (event.getX() - cameraOffset.x), (int) (event.getY() - cameraOffset.y)));
                 }
                 return true;
         }
@@ -132,9 +133,9 @@ public class GameView extends View {
     }
 
     private void setCameraOffset(float x, float y) {
-        Point lastTile = TileMath.tileLocation(game.getWidth(), game.getHeight());
-        cameraOffset.x = Math.max(Math.min(x, -TILE_WIDTH/4), -lastTile.x + getWidth());
-        cameraOffset.y = Math.max(Math.min(y, -TILE_HEIGHT/2), -lastTile.y + TILE_HEIGHT/2 + getHeight());
+        Point lastTile = tileMath.tileLocation(game.getWidth(), game.getHeight(),tileMath.TILE_WIDTH,tileMath.TILE_HEIGHT);
+        cameraOffset.x = Math.max(Math.min(x, -tileMath.TILE_WIDTH/4), -lastTile.x + getWidth());
+        cameraOffset.y = Math.max(Math.min(y, -tileMath.TILE_HEIGHT/2), -lastTile.y + tileMath.TILE_HEIGHT/2 + getHeight());
     }
 
     /** Squared magnitude of a two-dimensional vector (x, y) */
@@ -144,6 +145,7 @@ public class GameView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        tileMath.update((int)(getWidth()/11.25));
         canvas.save();
         game.draw(canvas, cameraOffset, visibleArea(), getWidth(), getHeight());
         canvas.restore();
@@ -157,7 +159,7 @@ public class GameView extends View {
                 (int) -cameraOffset.y + getHeight()
         );
 
-        return TileMath.visibleTiles(visibleAreaInPixels);
+        return tileMath.visibleTiles(visibleAreaInPixels);
     }
 
     /** @return local player ID */

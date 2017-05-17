@@ -17,9 +17,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 
-import static pl.edu.pw.elka.hexancientempires.TileMath.TILE_HEIGHT;
-import static pl.edu.pw.elka.hexancientempires.TileMath.TILE_WIDTH;
-
 /**
  * Handles some game logic and other stuff
  */
@@ -35,10 +32,9 @@ public class Game {
     private static final int SERVER_PLAYER_ID = 1;
     private static final int CLIENT_PLAYER_ID = 2;
 
-    private final Connection connection;
+    //private final Connection connection;
 
     private final int myPlayerID;
-
     private GameMap map;
     private ArrayList<Drawable> terrain;
     private ArrayList<Bitmap> unitTextures;
@@ -48,7 +44,8 @@ public class Game {
     private List<Unit> units = new ArrayList<>();
 
     private Point cursorPos = new Point(0, 0);
-
+    private int TILE_WIDTH;
+    private int TILE_HEIGHT;
     //----------
     private Map<Point, UnitMovementRange.Node> movementRange = Collections.emptyMap();
     private Map<Point, UnitAttackRange.Node> attackRange = Collections.emptyMap();
@@ -63,11 +60,11 @@ public class Game {
         if(unitAnimation.isRunning()) {
             unitAnimation.stop();
         }
-
+/*
         if(processAction(myPlayerID, cursorPos, newCursorPos)) {
             sendAction(cursorPos, newCursorPos);
         }
-
+*/
         cursorPos = newCursorPos;
 
         updateTileState();
@@ -107,7 +104,7 @@ public class Game {
                 message.show(unit + " moved to " + path.get(path.size() - 1), 3000);
                 unitAnimation.start(unit,
                     ANIMATION_TIME, 
-                    Utils.pathToPixels(path)
+                    Utils.pathToPixels(path,TILE_WIDTH,TILE_HEIGHT)
                 );
                 return true;
             }
@@ -122,21 +119,23 @@ public class Game {
             }
         });
     }
-
+/*
     private void sendAction(Point from, Point to) {
         connection.sendEvent(new Event.Action(from, to));
     }
-
+*/
     /**
      * Creates a Game.
      *
      * @param context Context to load assets from
-     * @param connection Connection to talk to
+     //* @param connection Connection to talk to
      */
-    public Game(Context context, Connection connection) {
-        this.connection = connection;
-        this.myPlayerID = connection.isServer()? SERVER_PLAYER_ID: CLIENT_PLAYER_ID;
+    public Game(Context context/*, Connection connection*/, int w, int h ) {
+        //this.connection = connection;
+        TILE_WIDTH = w;
+        TILE_HEIGHT = h;
 
+        this.myPlayerID = /*connection.isServer()?*/ SERVER_PLAYER_ID;//: CLIENT_PLAYER_ID;
         Log.d("Game", "myPlayerId = " + myPlayerID);
 
         terrain = new ArrayList<>(7);
@@ -149,7 +148,7 @@ public class Game {
         terrain.add(context.getResources().getDrawable(R.drawable.w));
 
         for(int i = 0 ; i < terrain.size(); i++) {
-            terrain.get(i).setBounds(0, 0, TileMath.TILE_WIDTH, TileMath.TILE_HEIGHT);
+            terrain.get(i).setBounds(0, 0, TILE_WIDTH, TILE_HEIGHT);
         }
 
         unitTextures = new ArrayList<>(3);
@@ -194,7 +193,7 @@ public class Game {
     public void finishTurnClicked() {
         if(isMyTurn()) {
             finishTurn();
-            connection.sendEvent(new Event.FinishTurn());
+           // connection.sendEvent(new Event.FinishTurn());
         }
         updateTileState();
     }
@@ -232,6 +231,9 @@ public class Game {
      * @param screenHeight screen height in pixels
      */
     public void draw(Canvas canvas, PointF cameraOffset, Rect visibleArea, int screenWidth, int screenHeight) {
+        int TILE_SIDE = (int)(screenWidth/11.25);
+        TILE_WIDTH = TILE_SIDE * 2;
+        TILE_HEIGHT = (int) (TILE_SIDE * 1.732);
         canvas.save();
         {
             canvas.translate(cameraOffset.x, cameraOffset.y);
@@ -244,7 +246,7 @@ public class Game {
 
             drawAttackRange(canvas);
 
-            drawCursor(canvas, TileMath.tileCenter(cursorPos.x, cursorPos.y));
+            drawCursor(canvas, TileMath.tileCenter(cursorPos.x, cursorPos.y,TILE_WIDTH,TILE_HEIGHT ));
         }
         canvas.restore();
 
@@ -290,7 +292,7 @@ public class Game {
         paint.setStyle(Paint.Style.FILL);
 
         for(UnitMovementRange.Node node: movementRange.values()) {
-            Point loc = TileMath.tileLocation(node.loc.x, node.loc.y);
+            Point loc = TileMath.tileLocation(node.loc.x, node.loc.y,TILE_WIDTH,TILE_HEIGHT);
 
             canvas.translate(loc.x, loc.y);
             canvas.drawPath(tilePath, paint);
@@ -304,7 +306,7 @@ public class Game {
         paint.setStyle(Paint.Style.FILL);
 
         for(UnitAttackRange.Node node: attackRange.values()) {
-            Point loc = TileMath.tileLocation(node.loc.x, node.loc.y);
+            Point loc = TileMath.tileLocation(node.loc.x, node.loc.y,TILE_WIDTH,TILE_HEIGHT);
 
             canvas.translate(loc.x, loc.y);
             canvas.drawPath(tilePath, paint);
@@ -315,6 +317,8 @@ public class Game {
 
 
     private final Path tilePath;
+
+
     {
         float xgap = TILE_WIDTH / 4;
 
@@ -329,7 +333,7 @@ public class Game {
     }
 
     private void drawTile(Canvas canvas, int mapX, int mapY) {
-        Point loc = TileMath.tileLocation(mapX, mapY);
+        Point loc = TileMath.tileLocation(mapX, mapY,TILE_WIDTH,TILE_HEIGHT);
         Tile tile = map.getTile(mapX,mapY);
 
         canvas.save();
@@ -345,7 +349,7 @@ public class Game {
             PointF loc =
                 unitAnimation.isAnimating(unit) ?
                     unitAnimation.getCurrentPoint() :
-                    Utils.toPointF(TileMath.tileLocation(unit.getLoc().x, unit.getLoc().y));
+                    Utils.toPointF(TileMath.tileLocation(unit.getLoc().x, unit.getLoc().y,TILE_WIDTH,TILE_HEIGHT));
 
             drawUnit(canvas, unit, loc.x, loc.y);
         }
